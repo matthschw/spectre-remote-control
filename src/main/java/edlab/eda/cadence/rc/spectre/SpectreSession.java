@@ -1,6 +1,7 @@
 package edlab.eda.cadence.rc.spectre;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -113,6 +114,89 @@ public abstract class SpectreSession {
    */
   protected static String getNetlistName() {
     return NL_FILE_NAME + "." + NL_FILE_NAME_EXTENTION;
+  }
+
+  /**
+   * Check if a directory is added as include directory
+   * 
+   * @param includeDirectory directory to be checked
+   * @return <code>true</code> when already added, <code>false</code> otherwise
+   */
+  public boolean isIncludeDirectory(File includeDirectory) {
+    for (File dir : includeDirectories) {
+      if (dir.equals(includeDirectory)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Check if a directory is added as include directory
+   * 
+   * @param includeDirectory directory to be checked
+   * @return <code>true</code> when already added, <code>false</code> otherwise
+   */
+  public boolean isIncludeDirectory(String includeDirectory) {
+    if (includeDirectory instanceof String) {
+      return this.isIncludeDirectory(new File(includeDirectory));
+    } else {
+      return false;
+    }
+  }
+
+  /**
+   * Adding an include-directory for simulation
+   * 
+   * @param includeDirectory directory to be added
+   * @return <code>true</code> when the directory is added successfully,
+   *         <code>false</code> otherwise
+   * @throws FileNotFoundException Exception is thrown when the directory is not
+   *                               accessible
+   */
+  public abstract boolean addIncludeDirectory(File includeDirectory)
+      throws FileNotFoundException;
+
+  /**
+   * Adding an include-directory for simulation
+   * 
+   * @param includeDirectory directory to be added
+   * @return <code>true</code> when the directory is added successfully,
+   *         <code>false</code> otherwise
+   * @throws FileNotFoundException Exception is thrown when the directory is not
+   *                               accessible
+   */
+  public boolean addIncludeDirectory(String includeDirectory)
+      throws FileNotFoundException {
+    if (includeDirectory instanceof String) {
+      return this.addIncludeDirectory(new File(includeDirectory));
+    } else {
+      throw new FileNotFoundException("null");
+    }
+  }
+
+  /**
+   * Remove an include-directory for simulation
+   * 
+   * @param includeDirectory directory to be removed
+   * @return <code>true</code> when the directory is removed successfully,
+   *         <code>false</code> otherwise
+   */
+  public abstract boolean removeIncludeDirectory(File includeDirectory);
+
+  /**
+   * Remove an include-directory for simulation
+   * 
+   * @param includeDirectory directory to be removed
+   * @return <code>true</code> when the directory is removed successfully,
+   *         <code>false</code> otherwise
+   */
+  public boolean removeIncludeDirectory(String includeDirectory) {
+    if (includeDirectory instanceof String) {
+      return this.removeIncludeDirectory(new File(includeDirectory));
+    } else {
+      return false;
+    }
   }
 
   /**

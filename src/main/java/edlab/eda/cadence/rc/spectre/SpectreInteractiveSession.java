@@ -135,34 +135,43 @@ public class SpectreInteractiveSession extends SpectreSession {
     }
   }
 
-  /**
-   * Adding an include-directory for simulation
-   * 
-   * @param includeDirectory path to include-directory
-   * @throws FileNotFoundException Exception is thrown when the directory is not
-   *                               available
-   */
-  public void addIncludeDirectory(
-      File includeDirectory)
+  @Override
+  public boolean addIncludeDirectory(File includeDirectory)
       throws FileNotFoundException {
 
-    if (includeDirectory.isDirectory() && includeDirectory.canRead()) {
+    if (includeDirectory != null && includeDirectory.isDirectory()
+        && includeDirectory.canRead()) {
 
-      this.includeDirectories.add(includeDirectory);
+      if (!this.isIncludeDirectory(includeDirectory)) {
 
-      if (this.session.isActive()) {
+        this.includeDirectories.add(includeDirectory);
 
-        this.session.stop();
-
-        try {
-          this.session.start(this.parentThread);
-        } catch (Exception e) {
+        if (this.session.isActive()) {
+          this.session.stop();
         }
       }
+
+      return false;
 
     } else {
       throw new FileNotFoundException(includeDirectory.getAbsolutePath());
     }
+  }
+
+  @Override
+  public boolean removeIncludeDirectory(File includeDirectory) {
+
+    if (this.isIncludeDirectory(includeDirectory)) {
+
+      this.includeDirectories.remove(includeDirectory);
+
+      if (this.session.isActive()) {
+
+        this.session.stop();
+      }
+      return true;
+    }
+    return false;
   }
 
   /**
