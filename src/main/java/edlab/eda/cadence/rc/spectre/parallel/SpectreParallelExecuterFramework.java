@@ -1,4 +1,4 @@
-package edlab.eda.cadence.rc.spectre;
+package edlab.eda.cadence.rc.spectre.parallel;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -6,6 +6,7 @@ import java.util.Map.Entry;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import edlab.eda.cadence.rc.spectre.SpectreInteractiveSession;
 import me.tongfei.progressbar.ProgressBar;
 import me.tongfei.progressbar.ProgressBarStyle;
 
@@ -20,46 +21,49 @@ public class SpectreParallelExecuterFramework {
 
   public SpectreParallelExecuterFramework() {
     this.maxThreads = MAX_THREADS;
-    this.sessions = new HashMap<ParallelizableSession, SpectreSessionThread>(
+    this.sessions = new HashMap<>(
         this.maxThreads);
   }
 
   public SpectreParallelExecuterFramework(int maxThreads) {
     this.maxThreads = maxThreads;
-    this.sessions = new HashMap<ParallelizableSession, SpectreSessionThread>(
+    this.sessions = new HashMap<>(
         this.maxThreads);
   }
 
   public SpectreParallelExecuterFramework(boolean verbose) {
     this.maxThreads = MAX_THREADS;
-    this.sessions = new HashMap<ParallelizableSession, SpectreSessionThread>(
+    this.sessions = new HashMap<>(
         this.maxThreads);
     this.verbose = verbose;
   }
 
   public SpectreParallelExecuterFramework(int maxThreads, boolean verbose) {
     this.maxThreads = maxThreads;
-    this.sessions = new HashMap<ParallelizableSession, SpectreSessionThread>(
+    this.sessions = new HashMap<>(
         this.maxThreads);
     this.verbose = verbose;
   }
 
-  public void registerSession(SpectreInteractiveSession session) {
-    ParallelSpectreSession parallelSpectreSession = new ParallelSpectreSession(
-        session);
-    SpectreSessionThread thread = new SpectreSessionThread(
-        parallelSpectreSession);
-    this.sessions.put(parallelSpectreSession, thread);
-  }
+  public boolean registerSession(ParallelizableSession session) {
 
-  public void registerSession(ParallelizableSession session) {
+    for (ParallelizableSession iter : this.sessions.keySet()) {
+      if (session == null || iter == session
+          || iter.getSession() == session.getSession()) {
+        return false;
+      }
+    }
+
     SpectreSessionThread thread = new SpectreSessionThread(session);
+
     this.sessions.put(session, thread);
+
+    return true;
   }
 
   /**
    * Set the parent thread of the session
-   * 
+   *
    * @param thread parent thread
    */
   public void setParentThread(Thread thread) {
@@ -68,7 +72,7 @@ public class SpectreParallelExecuterFramework {
 
   /**
    * Get the parent thread of the session
-   * 
+   *
    * @return thread parent thread
    */
   Thread getParentThread() {
@@ -88,7 +92,11 @@ public class SpectreParallelExecuterFramework {
 
     for (Entry<ParallelizableSession, SpectreSessionThread> entry : this.sessions
         .entrySet()) {
-      entry.getKey().getSession().setParentThread(this.parentThread);
+
+      if (entry.getKey().getSession() instanceof SpectreInteractiveSession) {
+        ((SpectreInteractiveSession) entry.getKey().getSession())
+            .setParentThread(this.parentThread);
+      }
 
       executor.execute(entry.getValue());
     }

@@ -9,7 +9,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Factory for setup and creating {@link SpectreInteractiveSession}
+ * Factory for setup and creating {@link SpectreInteractiveSession} and
+ * {@link SpectreBatchSession}.
  */
 public class SpectreFactory {
 
@@ -21,6 +22,7 @@ public class SpectreFactory {
   private TimeUnit timeoutTimeUnit = TimeUnit.DAYS;
   private String simPrefix = null;
   private String command = DEFAULT_COMMAND;
+  //private Map<String, String> commandLineParameters;
 
   private SpectreFactory(String command, File simDirectory) {
     this.command = command;
@@ -29,14 +31,16 @@ public class SpectreFactory {
 
   /**
    * Create a Spectre factory
-   * 
-   * @param simDirectory directory where simulation results are stored
-   * @return SpectreFactory
+   *
+   * @param simDirectory directory where netlists and simulation results are
+   *                     stored
+   * @return factory
    */
   public static SpectreFactory getSpectreFactory(File simDirectory) {
 
-    if (isSpectreAvailable(DEFAULT_COMMAND) && simDirectory.isDirectory()
-        && simDirectory.canRead() && simDirectory.canWrite()) {
+    if (simDirectory != null && isSpectreAvailable(DEFAULT_COMMAND)
+        && simDirectory.isDirectory() && simDirectory.canRead()
+        && simDirectory.canWrite()) {
 
       return new SpectreFactory(DEFAULT_COMMAND, simDirectory);
     }
@@ -46,16 +50,20 @@ public class SpectreFactory {
 
   /**
    * Create a Spectre factory
-   * 
+   *
    * @param command      command for invoking the simulator
-   * @param simDirectory directory where simulation results are stored
-   * @return SpectreFactory
+   * @param simDirectory directory where netlists and simulation results are
+   *                     stored
+   *
+   * @return factory
    */
   public static SpectreFactory getSpectreFactory(String command,
       File simDirectory) {
 
-    if (isSpectreAvailable(command) && simDirectory.isDirectory()
-        && simDirectory.canRead() && simDirectory.canWrite()) {
+    if (command != null && simDirectory != null
+        && SpectreFactory.isSpectreAvailable(command)
+        && simDirectory.isDirectory() && simDirectory.canRead()
+        && simDirectory.canWrite()) {
 
       return new SpectreFactory(command, simDirectory);
     }
@@ -64,8 +72,9 @@ public class SpectreFactory {
   }
 
   /**
-   * Get simulation directory
-   * 
+   * Get simulation directory. The netlists and results are exported to this
+   * directory.
+   *
    * @return simDirectory
    */
   public File getSimDirectory() {
@@ -73,10 +82,14 @@ public class SpectreFactory {
   }
 
   /**
-   * Set timeout for spectre session
-   * 
+   * Set timeout for spectre session. This value is only relevant for
+   * {@link SpectreInteractiveSession}. When no simulation is executed for the
+   * specified time the license is released automatically. A negative timeout
+   * indicates that the license is never released (you must call
+   * {@link SpectreInteractiveSession#stop} explicitly).
+   *
    * @param timeout timeout
-   * @param unit    Time unit
+   * @param unit    time unit
    */
   public void setTimeout(long timeout, TimeUnit unit) {
     this.timeoutDuration = timeout;
@@ -85,8 +98,9 @@ public class SpectreFactory {
 
   /**
    * Get timeout duration
-   * 
+   *
    * @return timeout
+   * @see SpectreFactory#setTimeout
    */
   public long getTimeoutDuration() {
     return this.timeoutDuration;
@@ -94,16 +108,17 @@ public class SpectreFactory {
 
   /**
    * Get timeout time unit
-   * 
+   *
    * @return time unit
+   * @see SpectreFactory#setTimeout
    */
   public TimeUnit getTimeoutTimeUnit() {
     return this.timeoutTimeUnit;
   }
 
   /**
-   * Get prefix for simulation name
-   * 
+   * Get prefix for simulation name. The prefix will used
+   *
    * @return simPrefix prefix for simulation name
    */
   public String getSimPrefix() {
@@ -112,7 +127,7 @@ public class SpectreFactory {
 
   /**
    * Get prefix for simulation name
-   * 
+   *
    * @param simPrefix prefix for simulation name
    */
   public void setSimPrefix(String simPrefix) {
@@ -121,7 +136,7 @@ public class SpectreFactory {
 
   /**
    * Set path to library of global AHDL models
-   * 
+   *
    * @param dir library of global AHDL models
    */
   public void setAhdlShipDbdir(File dir) {
@@ -130,7 +145,7 @@ public class SpectreFactory {
 
   /**
    * Get path to library of global AHDL models
-   * 
+   *
    * @return library of global AHDL models
    */
   public File getAhdlShipDbdir() {
@@ -139,7 +154,7 @@ public class SpectreFactory {
 
   /**
    * Get the command to start the simulator
-   * 
+   *
    * @return command
    */
   public String getCommand() {
@@ -148,26 +163,38 @@ public class SpectreFactory {
 
   /**
    * Create a new {@link SpectreInteractiveSession}
-   * 
-   * @param name Name of session
-   * @return SpectreSession
+   *
+   * @param name name of session
+   * @return session
    */
   public SpectreInteractiveSession createInteractiveSession(String name) {
     return new SpectreInteractiveSession(this, name);
   }
 
   /**
-   * Create a new {@link SpectreInteractiveSession}
-   * 
-   * @return SpectreSession
+   * Create a new {@link SpectreBatchSession}
+   *
+   * @param name name of session
+   * @return session
    */
+  public SpectreBatchSession createBatchSession(String name) {
+    return new SpectreBatchSession(this, name);
+  }
+
+  /**
+   * Create a new {@link SpectreInteractiveSession}.
+   *
+   * @return session
+   */
+  @Deprecated
   public SpectreInteractiveSession createSession() {
     return new SpectreInteractiveSession(this, null);
   }
 
   /**
-   * Identify whether Spectre is available on the machine
-   * 
+   * Identify whether Spectre is available on the machine. The command "spectre
+   * -W" must return a valid version number.
+   *
    * @return <code>true</code> when Spectre is available, <code>false</code>
    *         otherwise
    */
@@ -176,8 +203,9 @@ public class SpectreFactory {
   }
 
   /**
-   * Identify whether Spectre is available on the machine
-   * 
+   * Identify whether Spectre is available on the machine. The command "$command
+   * -W" must return a valid version number.
+   *
    * @param command command for invoking the simulator
    * @return <code>true</code> when Spectre is available, <code>false</code>
    *         otherwise

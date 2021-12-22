@@ -15,19 +15,19 @@ import org.junit.jupiter.api.Test;
 import edlab.eda.cadence.rc.session.UnableToStartSession;
 import edlab.eda.reader.nutmeg.NutmegPlot;
 
-public class RCLowpassTest {
+public class RCLowpassInteractiveTest {
 
   @Test
   void test() throws IOException, UnableToStartSession {
 
-    Set<String> netsInNetlist = new HashSet<String>();
-    
+    Set<String> netsInNetlist = new HashSet<>();
+
     netsInNetlist.add("0");
     netsInNetlist.add("V0:p");
     netsInNetlist.add("I");
     netsInNetlist.add("O");
 
-    Set<String> analysesInNetlist = new HashSet<String>();
+    Set<String> analysesInNetlist = new HashSet<>();
     analysesInNetlist.add("dc1");
     analysesInNetlist.add("dc2");
     analysesInNetlist.add("tran");
@@ -71,7 +71,7 @@ public class RCLowpassTest {
         .equals(new BigDecimal("1000.0"))) {
       fail("\"r1\" incorrect");
     }
-    
+
 
     List<NutmegPlot> plots = session.simulate();
 
@@ -115,9 +115,9 @@ public class RCLowpassTest {
       fail("Simulation failed");
     }
 
-    Set<String> blacklistAnalysis = new HashSet<String>();
+    Set<String> blacklistAnalysis = new HashSet<>();
     blacklistAnalysis.add("tran");
-    
+
 
 
     try {

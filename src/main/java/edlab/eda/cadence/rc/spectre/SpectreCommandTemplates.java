@@ -47,7 +47,7 @@ public class SpectreCommandTemplates {
 
   private SpectreCommandTemplates() {
 
-    templates = new HashMap<String, SkillCommandTemplate>();
+    templates = new HashMap<>();
 
     templates.put(SCL_GET_PARAMETER,
         SkillCommandTemplate.build(SCL_GET_PARAMETER, 2));
@@ -57,7 +57,7 @@ public class SpectreCommandTemplates {
 
     templates.put(SCL_SET_ATTRIBUTE,
         SkillCommandTemplate.build(SCL_SET_ATTRIBUTE, 3));
-    
+
     templates.put(SCL_GET_ATTRIBUTE,
         SkillCommandTemplate.build(SCL_GET_ATTRIBUTE, 2));
 
@@ -79,7 +79,7 @@ public class SpectreCommandTemplates {
 
   /**
    * Get a {@link SkillCommandTemplate} by name
-   * 
+   *
    * @param name Name of the command
    * @return template when existing,<code>null</code> otherwise
    */

@@ -23,7 +23,7 @@ public abstract class SpectreSession {
 
   protected static enum MODE {
     BIT32, BIT64
-  };
+  }
 
   /**
    * Waveform formats supported by the {@link SpectreInteractiveSession}
@@ -38,7 +38,7 @@ public abstract class SpectreSession {
      * ASCII Nutmeg waveform format
      */
     NUTASCII
-  };
+  }
 
   protected String netlist;
   protected MODE mode;
@@ -47,7 +47,7 @@ public abstract class SpectreSession {
   protected File workingDir;
   protected int noOfThreads;
 
-  protected Set<File> includeDirectories = new HashSet<File>();
+  protected Set<File> includeDirectories = new HashSet<>();
 
   protected SpectreFactory factory;
 
@@ -79,7 +79,9 @@ public abstract class SpectreSession {
       this.workingDir = path.toFile();
     } catch (IOException e) {
     }
-
+    
+    this.rawFile = new File(workingDir.toString() + "/" + NL_FILE_NAME + "."
+        + RAW_FILE_NAME_EXTENTION);
   }
 
   protected boolean writeNetlist() {
@@ -100,7 +102,7 @@ public abstract class SpectreSession {
 
   /**
    * Get the path to the netlist
-   * 
+   *
    * @return path to netlist
    */
   protected String getNetlistPath() {
@@ -109,7 +111,7 @@ public abstract class SpectreSession {
 
   /**
    * Get name of the netlist
-   * 
+   *
    * @return name of netlist
    */
   protected static String getNetlistName() {
@@ -118,7 +120,7 @@ public abstract class SpectreSession {
 
   /**
    * Check if a directory is added as include directory
-   * 
+   *
    * @param includeDirectory directory to be checked
    * @return <code>true</code> when already added, <code>false</code> otherwise
    */
@@ -133,7 +135,7 @@ public abstract class SpectreSession {
 
   /**
    * Check if a directory is added as include directory
-   * 
+   *
    * @param includeDirectory directory to be checked
    * @return <code>true</code> when already added, <code>false</code> otherwise
    */
@@ -147,7 +149,7 @@ public abstract class SpectreSession {
 
   /**
    * Adding an include-directory for simulation
-   * 
+   *
    * @param includeDirectory directory to be added
    * @return <code>true</code> when the directory is added successfully,
    *         <code>false</code> otherwise
@@ -159,7 +161,7 @@ public abstract class SpectreSession {
 
   /**
    * Adding an include-directory for simulation
-   * 
+   *
    * @param includeDirectory directory to be added
    * @return <code>true</code> when the directory is added successfully,
    *         <code>false</code> otherwise
@@ -177,7 +179,7 @@ public abstract class SpectreSession {
 
   /**
    * Remove an include-directory for simulation
-   * 
+   *
    * @param includeDirectory directory to be removed
    * @return <code>true</code> when the directory is removed successfully,
    *         <code>false</code> otherwise
@@ -186,7 +188,7 @@ public abstract class SpectreSession {
 
   /**
    * Remove an include-directory for simulation
-   * 
+   *
    * @param includeDirectory directory to be removed
    * @return <code>true</code> when the directory is removed successfully,
    *         <code>false</code> otherwise
@@ -201,14 +203,14 @@ public abstract class SpectreSession {
 
   /**
    * Set the netlist for simulation
-   * 
+   *
    * @param netlist Spectre-compatible netlist
    */
   public abstract void setNetlist(String netlist);
 
   /**
    * Set the netlist for simulation
-   * 
+   *
    * @param netlist path to spectre-compatible netlist
    * @throws IOException Exception is thrown when the netlist is not available
    */
@@ -216,7 +218,7 @@ public abstract class SpectreSession {
 
   /**
    * Run a simulation
-   * 
+   *
    * @return list of resulting plots
    * @throws UnableToStartSession when the session cannot be started
    */

@@ -10,19 +10,20 @@ import org.junit.jupiter.api.Test;
 
 import edlab.eda.cadence.rc.session.UnableToStartSession;
 
-public class BuggyNetlistTest {
+public class BuggyNetlistBatchTest {
 
   @Test
   void test() throws IOException {
+
     SpectreFactory factory = SpectreFactory.getSpectreFactory(new File("/tmp"));
 
     factory.setTimeout(5, TimeUnit.SECONDS);
 
-    SpectreInteractiveSession session = factory.createInteractiveSession("test");
+    SpectreBatchSession session = factory.createBatchSession("test");
     session.setNetlist(new File("./src/test/resources/buggy_netlist.scs"));
 
     try {
-      session.start();
+      session.simulate();
       fail("Bug in netlist not detected");
     } catch (UnableToStartSession e) {
     }

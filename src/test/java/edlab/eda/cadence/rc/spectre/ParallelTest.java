@@ -1,6 +1,6 @@
 package edlab.eda.cadence.rc.spectre;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,6 +11,8 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 import edlab.eda.cadence.rc.session.UnableToStartSession;
+import edlab.eda.cadence.rc.spectre.parallel.SpectreInteractiveParallelHandle;
+import edlab.eda.cadence.rc.spectre.parallel.SpectreParallelExecuterFramework;
 import edlab.eda.reader.nutmeg.NutmegPlot;
 
 class ParallelTest {
@@ -26,9 +28,10 @@ class ParallelTest {
     SpectreInteractiveSession session;
     List<NutmegPlot> plots;
 
-    Set<SpectreInteractiveSession> sessions = new HashSet<SpectreInteractiveSession>(N);
-    Set<ParallelSpectreSession> parallelSessions;
-    ParallelSpectreSession parallelSession;
+    Set<SpectreInteractiveSession> sessions = new HashSet<>(
+        N);
+    Set<SpectreInteractiveParallelHandle> parallelSessions;
+    SpectreInteractiveParallelHandle parallelSession;
 
     for (int i = 0; i < N; i++) {
       session = factory.createInteractiveSession("test");
@@ -40,21 +43,21 @@ class ParallelTest {
 
       framework = new SpectreParallelExecuterFramework(2, false);
 
-      parallelSessions = new HashSet<ParallelSpectreSession>();
+      parallelSessions = new HashSet<>();
 
       for (SpectreInteractiveSession s : sessions) {
 
         s.setValueAttribute("r1", Math.random() * 4000 + 1000.0);
         s.setValueAttribute("r2", Math.random() * 90000 + 1000.0);
 
-        parallelSession = new ParallelSpectreSession(s);
+        parallelSession = new SpectreInteractiveParallelHandle(s);
         framework.registerSession(parallelSession);
         parallelSessions.add(parallelSession);
       }
 
       framework.run();
 
-      for (ParallelSpectreSession s : parallelSessions) {
+      for (SpectreInteractiveParallelHandle s : parallelSessions) {
 
         plots = s.getPlots();
 

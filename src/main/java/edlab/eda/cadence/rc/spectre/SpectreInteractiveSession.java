@@ -35,12 +35,12 @@ import edlab.eda.reader.nutmeg.NutReader;
 import edlab.eda.reader.nutmeg.NutmegPlot;
 
 /**
- * Cadence Spectre Interactive Session
+ * Interactive Session
  */
 public class SpectreInteractiveSession extends SpectreSession {
 
-  private Map<String, String> parameterMapping = new HashMap<String, String>();
-  private Map<String, SkillDataobject> parameterValues = new HashMap<String, SkillDataobject>();
+  private Map<String, String> parameterMapping = new HashMap<>();
+  private Map<String, SkillDataobject> parameterValues = new HashMap<>();
 
   private List<String> analyses = null;
   private Map<String, String> analysesMapping;
@@ -50,7 +50,7 @@ public class SpectreInteractiveSession extends SpectreSession {
 
   /**
    * Create a new Spectre session
-   * 
+   *
    * @param factory Factory that instantiated this session
    * @param name    Name of the session
    */
@@ -64,16 +64,13 @@ public class SpectreInteractiveSession extends SpectreSession {
     this.session = new SkillInteractiveSession(this.workingDir);
     this.session.setCommand(this.formatShellCommand());
 
-    this.rawFile = new File(workingDir.toString() + "/" + NL_FILE_NAME + "."
-        + RAW_FILE_NAME_EXTENTION);
-
     this.session.setTimeout(factory.getTimeoutDuration(),
         factory.getTimeoutTimeUnit());
   }
 
   /**
    * Set the parent thread of the session
-   * 
+   *
    * @param thread parent thread
    */
   public void setParentThread(Thread thread) {
@@ -82,7 +79,7 @@ public class SpectreInteractiveSession extends SpectreSession {
 
   /**
    * Get the parent thread of the session
-   * 
+   *
    * @return thread parent thread
    */
   Thread getParentThread() {
@@ -149,6 +146,7 @@ public class SpectreInteractiveSession extends SpectreSession {
         if (this.session.isActive()) {
           this.session.stop();
         }
+        return true;
       }
 
       return false;
@@ -162,28 +160,30 @@ public class SpectreInteractiveSession extends SpectreSession {
   public boolean removeIncludeDirectory(File includeDirectory) {
 
     if (this.isIncludeDirectory(includeDirectory)) {
-
-      this.includeDirectories.remove(includeDirectory);
-
-      if (this.session.isActive()) {
-
-        this.session.stop();
+      
+      if (this.isIncludeDirectory(includeDirectory)) {
+        
+        this.includeDirectories.remove(includeDirectory);
+        
+        if (this.session.isActive()) {
+          this.session.stop();
+        }
+        return true;
       }
-      return true;
     }
     return false;
   }
 
   /**
    * Format the shell command for simulation
-   * 
+   *
    * @return command for simulation
    */
   private String formatShellCommand() {
 
     String cmd = this.factory.getCommand();
 
-    if (mode == MODE.BIT64) {
+    if (this.mode == MODE.BIT64) {
       cmd += " -64";
     } else if (mode == MODE.BIT32) {
       cmd += " -32";
@@ -208,14 +208,14 @@ public class SpectreInteractiveSession extends SpectreSession {
       cmd += " -I" + file.getAbsolutePath();
     }
 
-    cmd += " " + SpectreInteractiveSession.getNetlistName();
+    cmd += " " + SpectreSession.getNetlistName();
 
     return cmd;
   }
 
   /**
    * Start {@link SkillInteractiveSession}
-   * 
+   *
    * @return <code>true</code> when the session is started successfully,
    *         <code>false</code> otherwise
    * @throws UnableToStartSession when the session cannot be started
@@ -233,7 +233,7 @@ public class SpectreInteractiveSession extends SpectreSession {
 
       this.session.start(this.parentThread);
       this.analyses = null;
-      this.parameterMapping = new HashMap<String, String>();
+      this.parameterMapping = new HashMap<>();
       this.analysesMapping = null;
 
     } catch (Exception e) {
@@ -251,7 +251,7 @@ public class SpectreInteractiveSession extends SpectreSession {
 
   /**
    * Set a simulation parameter to a particular value
-   * 
+   *
    * @param parameter Name of parameter
    * @param value     Value as String
    * @return <code>true</code> when the parameter was changed successfully,
@@ -265,7 +265,7 @@ public class SpectreInteractiveSession extends SpectreSession {
 
   /**
    * Set a simulation parameter to a particular value
-   * 
+   *
    * @param parameter Name of parameter
    * @param value     Value as {@link Double}
    * @return <code>true</code> when the parameter was changed successfully,
@@ -281,7 +281,7 @@ public class SpectreInteractiveSession extends SpectreSession {
 
   /**
    * Set a simulation parameter to a particular value
-   * 
+   *
    * @param parameter Name of parameter
    * @param value     Value as {@link Integer}
    * @return <code>true</code> when the parameter was changed successfully,
@@ -295,7 +295,7 @@ public class SpectreInteractiveSession extends SpectreSession {
 
   /**
    * Set a simulation parameter to a particular value
-   * 
+   *
    * @param parameter Name of parameter
    * @param value     Value as {@link BigDecimal}
    * @return <code>true</code> when the parameter was changed successfully,
@@ -309,7 +309,7 @@ public class SpectreInteractiveSession extends SpectreSession {
 
   /**
    * Set a simulation parameter to a particular value
-   * 
+   *
    * @param parameter Name of parameter
    * @param value     Value as {@link Object}
    * @return <code>true</code> when the parameter was changed successfully,
@@ -371,7 +371,7 @@ public class SpectreInteractiveSession extends SpectreSession {
 
   /**
    * Get a numeric value from the session
-   * 
+   *
    * @param parameter Name of the parameter
    * @return value when parameter is valid, <code>null</code> otherwise
    * @throws UnableToStartSession when the session cannot be started
@@ -503,13 +503,13 @@ public class SpectreInteractiveSession extends SpectreSession {
 
       return this.simulate(command);
     } catch (IncorrectSyntaxException e) {
-      return new LinkedList<NutmegPlot>();
+      return new LinkedList<>();
     }
   }
 
   /**
    * Run a simulation while preventing some analyses to be executed
-   * 
+   *
    * @param analysesBlacklist analyses that are not executed
    * @return plots list of plots
    * @throws UnableToStartSession when the session cannot be started
@@ -521,7 +521,7 @@ public class SpectreInteractiveSession extends SpectreSession {
       this.buildAnalysesMapping();
     }
 
-    List<String> identifiersToSimulate = new ArrayList<String>();
+    List<String> identifiersToSimulate = new ArrayList<>();
 
     for (String analyis : this.analyses) {
 
@@ -549,7 +549,7 @@ public class SpectreInteractiveSession extends SpectreSession {
       return this.simulate(command);
 
     } catch (IncorrectSyntaxException e) {
-      return new LinkedList<NutmegPlot>();
+      return new LinkedList<>();
     }
   }
 
@@ -562,7 +562,7 @@ public class SpectreInteractiveSession extends SpectreSession {
 
     if (this.session.isActive()) {
 
-      List<NutmegPlot> plots = new LinkedList<NutmegPlot>();
+      List<NutmegPlot> plots = new LinkedList<>();
 
       if (!this.setResultDir()) {
         System.err.println("Unable to set result dir");
@@ -616,7 +616,7 @@ public class SpectreInteractiveSession extends SpectreSession {
 
   /**
    * Get the process identifier (PID) of the Spectre session
-   * 
+   *
    * @return pid when running, <code>-1</code> otherwise
    */
   public int getPid() {
@@ -649,12 +649,12 @@ public class SpectreInteractiveSession extends SpectreSession {
 
   /**
    * Get all nets in the netlist
-   * 
+   *
    * @return set of all nets
    */
   public Set<String> getNets() {
 
-    Set<String> retval = new HashSet<String>();
+    Set<String> retval = new HashSet<>();
 
     SkillCommand command;
 
@@ -695,7 +695,7 @@ public class SpectreInteractiveSession extends SpectreSession {
     List<String> analysesNames = this.getAnalyses();
 
     String[] analysesNamesArray = new String[analysesNames.size()];
-    this.analysesMapping = new HashMap<String, String>();
+    this.analysesMapping = new HashMap<>();
 
     for (int i = 0; i < analysesNamesArray.length; i++) {
       analysesNamesArray[i] = analysesNames.get(i);
@@ -731,14 +731,14 @@ public class SpectreInteractiveSession extends SpectreSession {
 
   /**
    * Get a list of all analyses defined in the netlist.
-   * 
+   *
    * @return list of analyses
    */
   public List<String> getAnalyses() {
 
     if (this.analyses == null) {
 
-      List<String> retval = new LinkedList<String>();
+      List<String> retval = new LinkedList<>();
 
       SkillCommand command;
 
@@ -794,12 +794,12 @@ public class SpectreInteractiveSession extends SpectreSession {
   /**
    * Get a map of all instances defined in the netlist.The key identifies the
    * name of the instance and the value identifies the type.
-   * 
+   *
    * @return map of instances
    */
   public Map<String, String> getInstances() {
 
-    Map<String, String> retval = new HashMap<String, String>();
+    Map<String, String> retval = new HashMap<>();
 
     SkillCommand command;
 
@@ -858,13 +858,13 @@ public class SpectreInteractiveSession extends SpectreSession {
   /**
    * Get a map of plots from a list of plots. The key in the map corresponds to
    * the name of the plot/title of the analysis.
-   * 
+   *
    * @param plots list of plots
    * @return map of plots
    */
   public static Map<String, NutmegPlot> getMapOfPlots(List<NutmegPlot> plots) {
 
-    Map<String, NutmegPlot> retval = new HashMap<String, NutmegPlot>();
+    Map<String, NutmegPlot> retval = new HashMap<>();
 
     for (NutmegPlot nutmegPlot : plots) {
       retval.put(nutmegPlot.getPlotname(), nutmegPlot);
@@ -875,7 +875,7 @@ public class SpectreInteractiveSession extends SpectreSession {
 
   /**
    * Get the path to a resource in the JAR
-   * 
+   *
    * @param fileName Name of the file
    * @param suffix   Suffix of the temporaray file
    * @return reference to resource
