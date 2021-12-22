@@ -6,7 +6,9 @@ import java.util.Map.Entry;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import edlab.eda.cadence.rc.spectre.SpectreBatchSession;
 import edlab.eda.cadence.rc.spectre.SpectreInteractiveSession;
+import edlab.eda.cadence.rc.spectre.SpectreSession;
 import me.tongfei.progressbar.ProgressBar;
 import me.tongfei.progressbar.ProgressBarStyle;
 
@@ -19,32 +21,48 @@ public class SpectreParallelExecuterFramework {
   private Thread parentThread = Thread.currentThread();
   private boolean verbose = false;
 
+  /**
+   * 
+   */
   public SpectreParallelExecuterFramework() {
     this.maxThreads = MAX_THREADS;
-    this.sessions = new HashMap<>(
-        this.maxThreads);
+    this.sessions = new HashMap<>(this.maxThreads);
   }
 
+  /**
+   * @param maxThreads
+   */
   public SpectreParallelExecuterFramework(int maxThreads) {
     this.maxThreads = maxThreads;
-    this.sessions = new HashMap<>(
-        this.maxThreads);
+    this.sessions = new HashMap<>(this.maxThreads);
   }
 
+  /**
+   * @param verbose
+   */
   public SpectreParallelExecuterFramework(boolean verbose) {
     this.maxThreads = MAX_THREADS;
-    this.sessions = new HashMap<>(
-        this.maxThreads);
+    this.sessions = new HashMap<>(this.maxThreads);
     this.verbose = verbose;
   }
 
+  /**
+   * @param maxThreads
+   * @param verbose
+   */
   public SpectreParallelExecuterFramework(int maxThreads, boolean verbose) {
     this.maxThreads = maxThreads;
-    this.sessions = new HashMap<>(
-        this.maxThreads);
+    this.sessions = new HashMap<>(this.maxThreads);
     this.verbose = verbose;
   }
 
+  /**
+   * Register a {@link ParallelizableSession}
+   * 
+   * @param session session to be registered
+   * @return <code>true</code> when the session is registered,
+   *         <code>false</code> otherwise
+   */
   public boolean registerSession(ParallelizableSession session) {
 
     for (ParallelizableSession iter : this.sessions.keySet()) {
@@ -59,6 +77,36 @@ public class SpectreParallelExecuterFramework {
     this.sessions.put(session, thread);
 
     return true;
+  }
+
+  /**
+   * Register a {@link SpectreSession}
+   * 
+   * @param session session to be registered
+   * @return handle to parallel session
+   */
+  public ParallelizableSession registerSession(SpectreSession session) {
+
+    for (ParallelizableSession iter : this.sessions.keySet()) {
+      if (session == null || iter.getSession() == session) {
+        return null;
+      }
+    }
+
+    ParallelizableSession handle;
+
+    if (session instanceof SpectreInteractiveSession) {
+      handle = new SpectreInteractiveParallelHandle(
+          (SpectreInteractiveSession) session);
+    } else {
+      handle = new SpectreBatchParallelHandle((SpectreBatchSession) session);
+    }
+
+    SpectreSessionThread thread = new SpectreSessionThread(handle);
+
+    this.sessions.put(handle, thread);
+
+    return handle;
   }
 
   /**
@@ -79,6 +127,9 @@ public class SpectreParallelExecuterFramework {
     return this.parentThread;
   }
 
+  /**
+   * Execute the pool
+   */
   public void run() {
 
     ExecutorService executor = Executors.newFixedThreadPool(this.maxThreads);
