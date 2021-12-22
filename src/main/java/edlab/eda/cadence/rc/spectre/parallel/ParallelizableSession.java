@@ -12,5 +12,7 @@ public interface ParallelizableSession {
 
   public boolean simulate() throws UnableToStartSession;
 
+  public void simulateOnly() throws UnableToStartSession;
+
   public List<NutmegPlot> getPlots();
 }

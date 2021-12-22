@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.LinkedList;
 import java.util.List;
 
 import edlab.eda.cadence.rc.session.UnableToStartSession;
@@ -99,7 +100,12 @@ public class SpectreBatchSession extends SpectreSession {
 
   @Override
   public List<NutmegPlot> simulate() throws UnableToStartSession {
+    this.simulateOnly();
+    return this.readResults();
+  }
 
+  @Override
+  public void simulateOnly() throws UnableToStartSession {
     try {
 
       Process process = Runtime.getRuntime()
@@ -117,6 +123,17 @@ public class SpectreBatchSession extends SpectreSession {
             this.workingDir, new File(workingDir, LOG_FILENAME));
       }
 
+    } catch (IOException e) {
+      throw new UnableToStartSession(this.formatShellCommand(), this.workingDir,
+          new File(workingDir, LOG_FILENAME));
+    }
+
+  }
+
+  @Override
+  public List<NutmegPlot> readResults() {
+
+    if (this.rawFile.exists()) {
       NutReader reader = null;
 
       if (this.resultFmt == RESULT_FMT.NUTASCII) {
@@ -126,10 +143,8 @@ public class SpectreBatchSession extends SpectreSession {
       }
 
       return reader.read().parse().getPlots();
-
-    } catch (IOException e) {
-      throw new UnableToStartSession(this.formatShellCommand(), this.workingDir,
-          new File(workingDir, LOG_FILENAME));
+    } else {
+      return new LinkedList<NutmegPlot>();
     }
   }
 }

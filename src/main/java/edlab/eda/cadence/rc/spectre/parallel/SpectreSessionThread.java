@@ -8,17 +8,27 @@ import edlab.eda.cadence.rc.session.UnableToStartSession;
 class SpectreSessionThread implements Runnable {
 
   private ParallelizableSession session;
-  public boolean finished = false;
+  private boolean finished = false;
+  private boolean readResults = true;
 
   SpectreSessionThread(ParallelizableSession session) {
     this.session = session;
+  }
+
+  SpectreSessionThread(ParallelizableSession session, boolean readResults) {
+    this.session = session;
+    this.readResults = readResults;
   }
 
   @Override
   public void run() {
 
     try {
-      this.session.simulate();
+      if (this.readResults) {
+        this.session.simulate();
+      } else {
+        this.session.simulateOnly();
+      }
       this.finished = true;
     } catch (UnableToStartSession e) {
       e.printStackTrace();

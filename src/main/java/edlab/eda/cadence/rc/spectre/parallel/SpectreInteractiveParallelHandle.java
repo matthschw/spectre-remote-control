@@ -89,4 +89,9 @@ public class SpectreInteractiveParallelHandle implements ParallelizableSession {
   public SpectreInteractiveSession getSession() {
     return this.session;
   }
+
+  @Override
+  @Deprecated
+  public void simulateOnly() throws UnableToStartSession {
+  }
 }

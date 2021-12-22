@@ -160,11 +160,11 @@ public class SpectreInteractiveSession extends SpectreSession {
   public boolean removeIncludeDirectory(File includeDirectory) {
 
     if (this.isIncludeDirectory(includeDirectory)) {
-      
+
       if (this.isIncludeDirectory(includeDirectory)) {
-        
+
         this.includeDirectories.remove(includeDirectory);
-        
+
         if (this.session.isActive()) {
           this.session.stop();
         }
@@ -882,5 +882,16 @@ public class SpectreInteractiveSession extends SpectreSession {
    */
   public File getResourcePath(String fileName, String suffix) {
     return this.session.getResourcePath(fileName, suffix);
+  }
+
+  @Override
+  @Deprecated
+  public void simulateOnly() throws UnableToStartSession {
+  }
+
+  @Override
+  @Deprecated
+  public List<NutmegPlot> readResults() {
+    return null;
   }
 }

@@ -20,6 +20,7 @@ public class SpectreParallelExecuterFramework {
   private int maxThreads;
   private Thread parentThread = Thread.currentThread();
   private boolean verbose = false;
+  private boolean readResults = true;
 
   /**
    * Create a {@link SpectreParallelExecuterFramework} with default settings
@@ -63,6 +64,24 @@ public class SpectreParallelExecuterFramework {
     this.maxThreads = maxThreads;
     this.sessions = new HashMap<>(this.maxThreads);
     this.verbose = verbose;
+  }
+
+  /**
+   * Read results in parallel (this can be memory-consuming)
+   * 
+   * @param readResults read results
+   */
+  public void setReadResults(boolean readResults) {
+    this.readResults = readResults;
+  }
+
+  /**
+   * Check if results are read in parallel
+   * 
+   * @return readResults
+   */
+  public boolean getReadResults() {
+    return this.readResults;
   }
 
   /**
@@ -111,7 +130,8 @@ public class SpectreParallelExecuterFramework {
       handle = new SpectreBatchParallelHandle((SpectreBatchSession) session);
     }
 
-    SpectreSessionThread thread = new SpectreSessionThread(handle);
+    SpectreSessionThread thread = new SpectreSessionThread(handle,
+        this.readResults);
 
     this.sessions.put(handle, thread);
 

@@ -29,7 +29,7 @@ public abstract class SpectreSession {
    * Waveform formats supported by the {@link SpectreInteractiveSession}
    *
    */
-  protected static enum RESULT_FMT {
+  public static enum RESULT_FMT {
     /**
      * Binary Nutmeg waveform format (recommenced)
      */
@@ -79,7 +79,7 @@ public abstract class SpectreSession {
       this.workingDir = path.toFile();
     } catch (IOException e) {
     }
-    
+
     this.rawFile = new File(workingDir.toString() + "/" + NL_FILE_NAME + "."
         + RAW_FILE_NAME_EXTENTION);
   }
@@ -116,6 +116,25 @@ public abstract class SpectreSession {
    */
   protected static String getNetlistName() {
     return NL_FILE_NAME + "." + NL_FILE_NAME_EXTENTION;
+  }
+
+  /**
+   * Get result format of simulation
+   * 
+   * @return enum, either {@link RESULT_FMT#NUTBIN} or
+   *         {@link RESULT_FMT#NUTASCII}
+   */
+  public RESULT_FMT getResultFormat() {
+    return this.resultFmt;
+  }
+
+  /**
+   * Get raw file (file that contains the simulation results)
+   * 
+   * @return rawFile
+   */
+  public File getRawFile() {
+    return this.rawFile;
   }
 
   /**
@@ -217,10 +236,25 @@ public abstract class SpectreSession {
   public abstract void setNetlist(File netlist) throws IOException;
 
   /**
-   * Run a simulation
+   * Run a simulation, read and return results
    *
    * @return list of resulting plots
    * @throws UnableToStartSession when the session cannot be started
    */
   public abstract List<NutmegPlot> simulate() throws UnableToStartSession;
+
+  /**
+   * Run a simulation and dont read results
+   *
+   * @throws UnableToStartSession when the session cannot be started
+   */
+  public abstract void simulateOnly() throws UnableToStartSession;
+
+  /**
+   * Read results from simulation
+   *
+   * @return list of resulting plots
+   */
+  public abstract List<NutmegPlot> readResults();
+
 }
