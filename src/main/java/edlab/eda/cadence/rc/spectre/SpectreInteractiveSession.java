@@ -63,6 +63,7 @@ public class SpectreInteractiveSession extends SpectreSession {
 
     this.session = new SkillInteractiveSession(this.workingDir);
     this.session.setCommand(this.formatShellCommand());
+    this.session.setPrompt(">");
 
     this.session.setTimeout(factory.getTimeoutDuration(),
         factory.getTimeoutTimeUnit());
