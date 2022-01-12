@@ -22,7 +22,6 @@ public class SpectreFactory {
   private TimeUnit timeoutTimeUnit = TimeUnit.DAYS;
   private String simPrefix = null;
   private String command = DEFAULT_COMMAND;
-  //private Map<String, String> commandLineParameters;
 
   private SpectreFactory(String command, File simDirectory) {
     this.command = command;
