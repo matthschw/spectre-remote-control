@@ -43,9 +43,8 @@ public class SpectreParallelExecuterFramework {
   /**
    * Create a {@link SpectreParallelExecuterFramework}
    * 
-   * @param maxThreads maximal number of parallel threads
-   * @param verbose    <code>true</code> when a status bar should be printed to
-   *                   stdout, <code>false</code> otherwise
+   * @param verbose <code>true</code> when a status bar should be printed to
+   *                stdout, <code>false</code> otherwise
    */
   public SpectreParallelExecuterFramework(boolean verbose) {
     this.maxThreads = MAX_THREADS;
@@ -56,7 +55,7 @@ public class SpectreParallelExecuterFramework {
   /**
    * Create a {@link SpectreParallelExecuterFramework}
    * 
-   * @param maxThreads
+   * @param maxThreads maximal number of threads
    * @param verbose    <code>true</code> when a status bar should be printed to
    *                   stdout, <code>false</code> otherwise
    */

@@ -1,20 +1,30 @@
 # spectre-remote-control
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
-Remote-Control for Cadence Spectre in Interactive-Mode
+Remote-Control for Cadence Spectre in Interactive and Batch Mode.
 
 ## Dependencies
 
 Please install the following dependencies manually:
 
-- [nutmeg-reader](https://github.com/electronics-and-drives/nutmeg-reader) 
-- [cadence-remote-control](https://github.com/electronics-and-drives/cadence-remote-control) 
+- [nutmeg-reader](https://github.com/matthschw/nutmeg-reader) 
+- [cadence-remote-control](https://github.com/matthschw/cadence-remote-control) 
 
 Clone the corresponding repositories, enter the directory and execute
 
 ```bash
-$ mvn install
+mvn install
 ```
+
+The documentation can be created with
+
+```bash
+mvn javadoc:javadoc
+```
+
+and accessed at  `./target/apidocs/index.html`.
+
+
 
 ## License
 
