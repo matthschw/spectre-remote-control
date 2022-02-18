@@ -16,14 +16,14 @@ public class SpectreFactory {
 
   public static final String DEFAULT_COMMAND = "spectre";
 
-  private File simDirectory;
+  private final File simDirectory;
   private File ahdlShipDbDir;
   private long timeoutDuration = Long.MAX_VALUE;
   private TimeUnit timeoutTimeUnit = TimeUnit.DAYS;
   private String simPrefix = null;
   private String command = DEFAULT_COMMAND;
 
-  private SpectreFactory(String command, File simDirectory) {
+  private SpectreFactory(final String command, final File simDirectory) {
     this.command = command;
     this.simDirectory = simDirectory;
   }
@@ -35,9 +35,9 @@ public class SpectreFactory {
    *                     stored
    * @return factory
    */
-  public static SpectreFactory getSpectreFactory(File simDirectory) {
+  public static SpectreFactory getSpectreFactory(final File simDirectory) {
 
-    if (simDirectory != null && isSpectreAvailable(DEFAULT_COMMAND)
+    if ((simDirectory != null) && isSpectreAvailable(DEFAULT_COMMAND)
         && simDirectory.isDirectory() && simDirectory.canRead()
         && simDirectory.canWrite()) {
 
@@ -56,10 +56,10 @@ public class SpectreFactory {
    *
    * @return factory
    */
-  public static SpectreFactory getSpectreFactory(String command,
-      File simDirectory) {
+  public static SpectreFactory getSpectreFactory(final String command,
+      final File simDirectory) {
 
-    if (command != null && simDirectory != null
+    if ((command != null) && (simDirectory != null)
         && SpectreFactory.isSpectreAvailable(command)
         && simDirectory.isDirectory() && simDirectory.canRead()
         && simDirectory.canWrite()) {
@@ -90,7 +90,7 @@ public class SpectreFactory {
    * @param timeout timeout
    * @param unit    time unit
    */
-  public void setTimeout(long timeout, TimeUnit unit) {
+  public void setTimeout(final long timeout, final TimeUnit unit) {
     this.timeoutDuration = timeout;
     this.timeoutTimeUnit = unit;
   }
@@ -129,7 +129,7 @@ public class SpectreFactory {
    *
    * @param simPrefix prefix for simulation name
    */
-  public void setSimPrefix(String simPrefix) {
+  public void setSimPrefix(final String simPrefix) {
     this.simPrefix = simPrefix;
   }
 
@@ -138,7 +138,7 @@ public class SpectreFactory {
    *
    * @param dir library of global AHDL models
    */
-  public void setAhdlShipDbdir(File dir) {
+  public void setAhdlShipDbdir(final File dir) {
     this.ahdlShipDbDir = dir;
   }
 
@@ -166,7 +166,7 @@ public class SpectreFactory {
    * @param name name of session
    * @return session
    */
-  public SpectreInteractiveSession createInteractiveSession(String name) {
+  public SpectreInteractiveSession createInteractiveSession(final String name) {
     return new SpectreInteractiveSession(this, name);
   }
 
@@ -176,7 +176,7 @@ public class SpectreFactory {
    * @param name name of session
    * @return session
    */
-  public SpectreBatchSession createBatchSession(String name) {
+  public SpectreBatchSession createBatchSession(final String name) {
     return new SpectreBatchSession(this, name);
   }
 
@@ -209,28 +209,28 @@ public class SpectreFactory {
    * @return <code>true</code> when Spectre is available, <code>false</code>
    *         otherwise
    */
-  public static boolean isSpectreAvailable(String command) {
+  public static boolean isSpectreAvailable(final String command) {
 
-    Runtime runtime = Runtime.getRuntime();
+    final Runtime runtime = Runtime.getRuntime();
     Process process = null;
 
     try {
 
       process = runtime.exec(command + " -W");
-      BufferedReader stdError = new BufferedReader(
+      final BufferedReader stdError = new BufferedReader(
           new InputStreamReader(process.getErrorStream()));
 
-      String retval = stdError.readLine();
+      final String retval = stdError.readLine();
 
-      Pattern pattern = Pattern
+      final Pattern pattern = Pattern
           .compile("sub-version[  ]+[0-9]+.[0-9]+.[0-9]+.[0-9]");
 
-      Matcher matcher = pattern.matcher(retval);
+      final Matcher matcher = pattern.matcher(retval);
 
       if (matcher.find()) {
         return true;
       }
-    } catch (IOException e) {
+    } catch (final IOException e) {
       e.printStackTrace();
     }
 

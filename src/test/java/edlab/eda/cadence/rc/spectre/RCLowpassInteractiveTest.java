@@ -20,47 +20,47 @@ public class RCLowpassInteractiveTest {
   @Test
   void test() throws IOException, UnableToStartSession {
 
-    Set<String> netsInNetlist = new HashSet<>();
+    final Set<String> netsInNetlist = new HashSet<>();
 
     netsInNetlist.add("0");
     netsInNetlist.add("V0:p");
     netsInNetlist.add("I");
     netsInNetlist.add("O");
 
-    Set<String> analysesInNetlist = new HashSet<>();
+    final Set<String> analysesInNetlist = new HashSet<>();
     analysesInNetlist.add("dc1");
     analysesInNetlist.add("dc2");
     analysesInNetlist.add("tran");
     analysesInNetlist.add("ac");
 
-    SpectreFactory factory = SpectreFactory.getSpectreFactory(new File("/tmp"));
+    final SpectreFactory factory = SpectreFactory.getSpectreFactory(new File("/tmp"));
 
     factory.setTimeout(5, TimeUnit.SECONDS);
 
-    SpectreInteractiveSession session = factory.createInteractiveSession("test");
+    final SpectreInteractiveSession session = factory.createInteractiveSession("test");
 
     session.setNetlist(new File("./src/test/resources/rc_lowpass.scs"));
 
     session.start();
 
-    int pid = session.getPid();
+    final int pid = session.getPid();
 
     if (pid < 0) {
       fail("Getting of PID failed");
     }
 
-    Set<String> nets = session.getNets();
+    final Set<String> nets = session.getNets();
 
-    for (String net : netsInNetlist) {
+    for (final String net : netsInNetlist) {
 
       if (!nets.contains(net)) {
         fail("Nets \"" + net + "\" not in schematic");
       }
     }
 
-    List<String> analyses = session.getAnalyses();
+    final List<String> analyses = session.getAnalyses();
 
-    for (String name : analysesInNetlist) {
+    for (final String name : analysesInNetlist) {
 
       if (!analyses.contains(name)) {
         fail("Analysis " + name + " not in entlist");
@@ -102,7 +102,7 @@ public class RCLowpassInteractiveTest {
 
     try {
       Thread.sleep(10000);
-    } catch (InterruptedException e) {
+    } catch (final InterruptedException e) {
     }
 
     if (!session.setValueAttribute("r2", 18e3)) {
@@ -115,14 +115,14 @@ public class RCLowpassInteractiveTest {
       fail("Simulation failed");
     }
 
-    Set<String> blacklistAnalysis = new HashSet<>();
+    final Set<String> blacklistAnalysis = new HashSet<>();
     blacklistAnalysis.add("tran");
 
 
 
     try {
       Thread.sleep(10000);
-    } catch (InterruptedException e) {
+    } catch (final InterruptedException e) {
     }
 
     plots = session.simulate(blacklistAnalysis);

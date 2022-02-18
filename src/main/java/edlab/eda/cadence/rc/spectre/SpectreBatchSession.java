@@ -17,14 +17,14 @@ import edlab.eda.reader.nutmeg.NutmegPlot;
  */
 public class SpectreBatchSession extends SpectreSession {
 
-  protected SpectreBatchSession(SpectreFactory factory, String name) {
+  protected SpectreBatchSession(final SpectreFactory factory, final String name) {
     super(factory, name);
   }
 
   @Override
-  public boolean addIncludeDirectory(File includeDirectory)
+  public boolean addIncludeDirectory(final File includeDirectory)
       throws FileNotFoundException {
-    if (includeDirectory != null && includeDirectory.isDirectory()
+    if ((includeDirectory != null) && includeDirectory.isDirectory()
         && includeDirectory.canRead()) {
 
       if (!this.isIncludeDirectory(includeDirectory)) {
@@ -36,7 +36,7 @@ public class SpectreBatchSession extends SpectreSession {
   }
 
   @Override
-  public boolean removeIncludeDirectory(File includeDirectory) {
+  public boolean removeIncludeDirectory(final File includeDirectory) {
 
     if (this.isIncludeDirectory(includeDirectory)) {
 
@@ -49,13 +49,13 @@ public class SpectreBatchSession extends SpectreSession {
   }
 
   @Override
-  public void setNetlist(String netlist) {
+  public void setNetlist(final String netlist) {
     this.netlist = netlist;
     this.writeNetlist();
   }
 
   @Override
-  public void setNetlist(File netlist) throws IOException {
+  public void setNetlist(final File netlist) throws IOException {
     this.netlist = new String(Files.readAllBytes(netlist.toPath()),
         StandardCharsets.US_ASCII);
     this.writeNetlist();
@@ -68,34 +68,34 @@ public class SpectreBatchSession extends SpectreSession {
    */
   private String formatShellCommand() {
 
-    String cmd = this.factory.getCommand();
+    StringBuilder cmd = new StringBuilder().append(this.factory.getCommand());
 
     if (this.mode == MODE.BIT64) {
-      cmd += " -64";
+      cmd.append(" -64");
     } else if (this.mode == MODE.BIT32) {
-      cmd += " -32";
+      cmd.append(" -32");
     }
 
     if (this.resultFmt == RESULT_FMT.NUTBIN) {
-      cmd += " -format nutbin";
+      cmd.append(" -format nutbin");
     } else if (this.resultFmt == RESULT_FMT.NUTASCII) {
-      cmd += " -format nutascii";
+      cmd.append(" -format nutascii");
     }
 
     if (this.noOfThreads > 1) {
-      cmd += " +multithread=" + this.noOfThreads;
+      cmd.append(" +multithread=").append(this.noOfThreads);
     }
 
-    cmd += " -ahdllibdir ./" + AHDLLIB_DIRNAME;
-    cmd += " =log " + LOG_FILENAME;
+    cmd.append(" -ahdllibdir ./").append(AHDLLIB_DIRNAME);
+    cmd.append(" =log ").append(LOG_FILENAME);
 
-    for (File file : this.includeDirectories) {
-      cmd += " -I" + file.getAbsolutePath();
+    for (final File file : this.includeDirectories) {
+      cmd.append(" -I").append(file.getAbsolutePath());
     }
 
-    cmd += " " + SpectreSession.getNetlistName();
+    cmd.append(" ").append(SpectreSession.getNetlistName());
 
-    return cmd;
+    return cmd.toString();
   }
 
   @Override
@@ -108,24 +108,24 @@ public class SpectreBatchSession extends SpectreSession {
   public void simulateOnly() throws UnableToStartSession {
     try {
 
-      Process process = Runtime.getRuntime()
+      final Process process = Runtime.getRuntime()
           .exec(this.formatShellCommand() + "\n", null, this.workingDir);
 
       while (process.isAlive()) {
         try {
           Thread.sleep(1);
-        } catch (InterruptedException e) {
+        } catch (final InterruptedException e) {
         }
       }
 
       if (process.exitValue() > 0) {
         throw new UnableToStartSession(this.formatShellCommand(),
-            this.workingDir, new File(workingDir, LOG_FILENAME));
+            this.workingDir, new File(this.workingDir, LOG_FILENAME));
       }
 
-    } catch (IOException e) {
+    } catch (final IOException e) {
       throw new UnableToStartSession(this.formatShellCommand(), this.workingDir,
-          new File(workingDir, LOG_FILENAME));
+          new File(this.workingDir, LOG_FILENAME));
     }
 
   }
@@ -144,7 +144,7 @@ public class SpectreBatchSession extends SpectreSession {
 
       return reader.read().parse().getPlots();
     } else {
-      return new LinkedList<NutmegPlot>();
+      return new LinkedList<>();
     }
   }
 }

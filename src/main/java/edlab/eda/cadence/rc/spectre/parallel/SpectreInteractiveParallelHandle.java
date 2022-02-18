@@ -12,39 +12,39 @@ import edlab.eda.reader.nutmeg.NutmegPlot;
 
 public class SpectreInteractiveParallelHandle implements ParallelizableSession {
 
-  private SpectreInteractiveSession session;
+  private final SpectreInteractiveSession session;
   private List<NutmegPlot> plots;
   private Set<String> blacklistAnalyses;
   private Map<String, Object> valueAttributes;
 
-  public SpectreInteractiveParallelHandle(SpectreInteractiveSession session) {
+  public SpectreInteractiveParallelHandle(final SpectreInteractiveSession session) {
     this.session = session;
     this.blacklistAnalyses = null;
     this.valueAttributes = new HashMap<>();
   }
 
-  public SpectreInteractiveParallelHandle(SpectreInteractiveSession session,
-      Set<String> blacklistAnalyses) {
+  public SpectreInteractiveParallelHandle(final SpectreInteractiveSession session,
+      final Set<String> blacklistAnalyses) {
     this.session = session;
     this.blacklistAnalyses = blacklistAnalyses;
     this.valueAttributes = new HashMap<>();
   }
 
-  public SpectreInteractiveParallelHandle(SpectreInteractiveSession session,
-      Map<String, Object> valueAttributes) {
+  public SpectreInteractiveParallelHandle(final SpectreInteractiveSession session,
+      final Map<String, Object> valueAttributes) {
     this.session = session;
     this.blacklistAnalyses = null;
     this.valueAttributes = valueAttributes;
   }
 
-  public SpectreInteractiveParallelHandle(SpectreInteractiveSession session,
-      Set<String> blacklistAnalyses, Map<String, Object> valueAttributes) {
+  public SpectreInteractiveParallelHandle(final SpectreInteractiveSession session,
+      final Set<String> blacklistAnalyses, final Map<String, Object> valueAttributes) {
     this.session = session;
     this.blacklistAnalyses = blacklistAnalyses;
     this.valueAttributes = valueAttributes;
   }
 
-  public void setBlackListAnalyses(Set<String> blacklistAnalyses) {
+  public void setBlackListAnalyses(final Set<String> blacklistAnalyses) {
     this.blacklistAnalyses = blacklistAnalyses;
   }
 
@@ -56,18 +56,18 @@ public class SpectreInteractiveParallelHandle implements ParallelizableSession {
     return this.valueAttributes;
   }
 
-  public void setValueAttributes(Map<String, Object> valueAttributes) {
+  public void setValueAttributes(final Map<String, Object> valueAttributes) {
     this.valueAttributes = valueAttributes;
   }
 
   @Override
   public boolean simulate() throws UnableToStartSession {
 
-    for (Entry<String, Object> entry : this.valueAttributes.entrySet()) {
+    for (final Entry<String, Object> entry : this.valueAttributes.entrySet()) {
       this.session.setValueAttribute(entry.getKey(), entry.getValue());
     }
 
-    if (this.blacklistAnalyses == null || this.blacklistAnalyses.isEmpty()) {
+    if ((this.blacklistAnalyses == null) || this.blacklistAnalyses.isEmpty()) {
       this.plots = this.session.simulate();
     } else {
       this.plots = this.session.simulate(this.blacklistAnalyses);

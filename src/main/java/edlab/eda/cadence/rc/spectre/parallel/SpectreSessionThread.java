@@ -7,15 +7,15 @@ import edlab.eda.cadence.rc.session.UnableToStartSession;
  */
 class SpectreSessionThread implements Runnable {
 
-  private ParallelizableSession session;
+  private final ParallelizableSession session;
   private boolean finished = false;
   private boolean readResults = true;
 
-  SpectreSessionThread(ParallelizableSession session) {
+  SpectreSessionThread(final ParallelizableSession session) {
     this.session = session;
   }
 
-  SpectreSessionThread(ParallelizableSession session, boolean readResults) {
+  SpectreSessionThread(final ParallelizableSession session, final boolean readResults) {
     this.session = session;
     this.readResults = readResults;
   }
@@ -30,7 +30,7 @@ class SpectreSessionThread implements Runnable {
         this.session.simulateOnly();
       }
       this.finished = true;
-    } catch (UnableToStartSession e) {
+    } catch (final UnableToStartSession e) {
       e.printStackTrace();
     }
   }

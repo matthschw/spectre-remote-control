@@ -40,12 +40,12 @@ import edlab.eda.reader.nutmeg.NutmegPlot;
 public class SpectreInteractiveSession extends SpectreSession {
 
   private Map<String, String> parameterMapping = new HashMap<>();
-  private Map<String, SkillDataobject> parameterValues = new HashMap<>();
+  private final Map<String, SkillDataobject> parameterValues = new HashMap<>();
 
   private List<String> analyses = null;
   private Map<String, String> analysesMapping;
 
-  private SkillInteractiveSession session;
+  private final SkillInteractiveSession session;
   private Thread parentThread;
 
   /**
@@ -54,7 +54,7 @@ public class SpectreInteractiveSession extends SpectreSession {
    * @param factory Factory that instantiated this session
    * @param name    Name of the session
    */
-  SpectreInteractiveSession(SpectreFactory factory, String name) {
+  SpectreInteractiveSession(final SpectreFactory factory, final String name) {
 
     super(factory, name);
 
@@ -74,7 +74,7 @@ public class SpectreInteractiveSession extends SpectreSession {
    *
    * @param thread parent thread
    */
-  public void setParentThread(Thread thread) {
+  public void setParentThread(final Thread thread) {
     this.parentThread = thread;
   }
 
@@ -88,7 +88,7 @@ public class SpectreInteractiveSession extends SpectreSession {
   }
 
   @Override
-  public void setNetlist(String netlist) {
+  public void setNetlist(final String netlist) {
 
     boolean restart = false;
 
@@ -104,13 +104,13 @@ public class SpectreInteractiveSession extends SpectreSession {
     if (restart) {
       try {
         this.session.start(this.parentThread);
-      } catch (Exception e) {
+      } catch (final Exception e) {
       }
     }
   }
 
   @Override
-  public void setNetlist(File netlist) throws IOException {
+  public void setNetlist(final File netlist) throws IOException {
 
     this.netlist = new String(Files.readAllBytes(netlist.toPath()),
         StandardCharsets.US_ASCII);
@@ -127,17 +127,17 @@ public class SpectreInteractiveSession extends SpectreSession {
     if (restart) {
       try {
         this.session.start(this.parentThread);
-      } catch (Exception e) {
+      } catch (final Exception e) {
 
       }
     }
   }
 
   @Override
-  public boolean addIncludeDirectory(File includeDirectory)
+  public boolean addIncludeDirectory(final File includeDirectory)
       throws FileNotFoundException {
 
-    if (includeDirectory != null && includeDirectory.isDirectory()
+    if ((includeDirectory != null) && includeDirectory.isDirectory()
         && includeDirectory.canRead()) {
 
       if (!this.isIncludeDirectory(includeDirectory)) {
@@ -158,7 +158,7 @@ public class SpectreInteractiveSession extends SpectreSession {
   }
 
   @Override
-  public boolean removeIncludeDirectory(File includeDirectory) {
+  public boolean removeIncludeDirectory(final File includeDirectory) {
 
     if (this.isIncludeDirectory(includeDirectory)) {
 
@@ -182,36 +182,36 @@ public class SpectreInteractiveSession extends SpectreSession {
    */
   private String formatShellCommand() {
 
-    String cmd = this.factory.getCommand();
+    StringBuilder cmd = new StringBuilder().append(this.factory.getCommand());
 
     if (this.mode == MODE.BIT64) {
-      cmd += " -64";
-    } else if (mode == MODE.BIT32) {
-      cmd += " -32";
+      cmd.append(" -64");
+    } else if (this.mode == MODE.BIT32) {
+      cmd.append(" -32");
     }
 
-    cmd += " +interactive";
+    cmd.append(" +interactive");
 
-    if (resultFmt == RESULT_FMT.NUTBIN) {
-      cmd += " -format nutbin";
-    } else if (resultFmt == RESULT_FMT.NUTASCII) {
-      cmd += " -format nutascii";
+    if (this.resultFmt == RESULT_FMT.NUTBIN) {
+      cmd.append(" -format nutbin");
+    } else if (this.resultFmt == RESULT_FMT.NUTASCII) {
+      cmd.append(" -format nutascii");
     }
 
     if (this.noOfThreads > 1) {
-      cmd += " +multithread=" + this.noOfThreads;
+      cmd.append(" +multithread=").append(this.noOfThreads);
     }
 
-    cmd += " -ahdllibdir ./" + AHDLLIB_DIRNAME;
-    cmd += " =log " + LOG_FILENAME;
+    cmd.append(" -ahdllibdir ./").append(AHDLLIB_DIRNAME);
+    cmd.append(" =log ").append(LOG_FILENAME);
 
-    for (File file : this.includeDirectories) {
-      cmd += " -I" + file.getAbsolutePath();
+    for (final File file : this.includeDirectories) {
+      cmd.append(" -I").append(file.getAbsolutePath());
     }
 
-    cmd += " " + SpectreSession.getNetlistName();
+    cmd.append(" ").append(SpectreSession.getNetlistName());
 
-    return cmd;
+    return cmd.toString();
   }
 
   /**
@@ -225,7 +225,7 @@ public class SpectreInteractiveSession extends SpectreSession {
 
     if (!this.writeNetlist()) {
       throw new UnableToStartSession(this.formatShellCommand(), this.workingDir,
-          new File(workingDir, LOG_FILENAME));
+          new File(this.workingDir, LOG_FILENAME));
     }
 
     try {
@@ -237,12 +237,12 @@ public class SpectreInteractiveSession extends SpectreSession {
       this.parameterMapping = new HashMap<>();
       this.analysesMapping = null;
 
-    } catch (Exception e) {
+    } catch (final Exception e) {
       throw new UnableToStartSession(this.formatShellCommand(), this.workingDir,
-          new File(workingDir, LOG_FILENAME));
+          new File(this.workingDir, LOG_FILENAME));
     }
 
-    for (Entry<String, SkillDataobject> param : this.parameterValues
+    for (final Entry<String, SkillDataobject> param : this.parameterValues
         .entrySet()) {
       this.setValueAttribute(param.getKey(), param.getValue());
     }
@@ -259,7 +259,7 @@ public class SpectreInteractiveSession extends SpectreSession {
    *         <code>false</code> otherwise
    * @throws UnableToStartSession when the session cannot be started
    */
-  public boolean setValueAttribute(String parameter, String value)
+  public boolean setValueAttribute(final String parameter, final String value)
       throws UnableToStartSession {
     return this.setValueAttribute(parameter, new SkillString(value));
   }
@@ -273,7 +273,7 @@ public class SpectreInteractiveSession extends SpectreSession {
    *         <code>false</code> otherwise
    * @throws UnableToStartSession when the session cannot be started
    */
-  public boolean setValueAttribute(String parameter, double value)
+  public boolean setValueAttribute(final String parameter, final double value)
       throws UnableToStartSession {
 
     return this.setValueAttribute(parameter,
@@ -289,7 +289,7 @@ public class SpectreInteractiveSession extends SpectreSession {
    *         <code>false</code> otherwise
    * @throws UnableToStartSession when the session cannot be started
    */
-  public boolean setValueAttribute(String parameter, int value)
+  public boolean setValueAttribute(final String parameter, final int value)
       throws UnableToStartSession {
     return this.setValueAttribute(parameter, new SkillFixnum(value));
   }
@@ -303,7 +303,7 @@ public class SpectreInteractiveSession extends SpectreSession {
    *         <code>false</code> otherwise
    * @throws UnableToStartSession when the session cannot be started
    */
-  public boolean setValueAttribute(String parameter, BigDecimal value)
+  public boolean setValueAttribute(final String parameter, final BigDecimal value)
       throws UnableToStartSession {
     return this.setValueAttribute(parameter, new SkillFlonum(value));
   }
@@ -317,12 +317,12 @@ public class SpectreInteractiveSession extends SpectreSession {
    *         <code>false</code> otherwise
    * @throws UnableToStartSession when the session cannot be started
    */
-  public boolean setValueAttribute(String parameter, Object value)
+  public boolean setValueAttribute(final String parameter, final Object value)
       throws UnableToStartSession {
     return this.setValueAttribute(parameter, new SkillString(value.toString()));
   }
 
-  private boolean setValueAttribute(String parameter, SkillDataobject value)
+  private boolean setValueAttribute(final String parameter, final SkillDataobject value)
       throws UnableToStartSession {
 
     if (!this.session.isActive()) {
@@ -330,7 +330,7 @@ public class SpectreInteractiveSession extends SpectreSession {
     }
 
     if (!this.parameterMapping.containsKey(parameter)) {
-      if (!readParameterIdentififer(parameter)) {
+      if (!this.readParameterIdentififer(parameter)) {
 
         System.err.println(
             "Parameter=" + parameter + " is not defined in the netlist");
@@ -351,21 +351,21 @@ public class SpectreInteractiveSession extends SpectreSession {
 
       try {
 
-        returnValue = session.evaluate(command, this.parentThread);
+        returnValue = this.session.evaluate(command, this.parentThread);
 
-      } catch (UnableToStartSession e) {
-      } catch (EvaluationFailedException e) {
-      } catch (InvalidDataobjectReferenceExecption e) {
+      } catch (final UnableToStartSession e) {
+      } catch (final EvaluationFailedException e) {
+      } catch (final InvalidDataobjectReferenceExecption e) {
       }
 
-      if (returnValue != null && returnValue.isTrue()) {
+      if ((returnValue != null) && returnValue.isTrue()) {
         this.parameterValues.put(parameter, value);
         return true;
       } else {
         return false;
       }
 
-    } catch (IncorrectSyntaxException e) {
+    } catch (final IncorrectSyntaxException e) {
       return false;
     }
   }
@@ -377,9 +377,9 @@ public class SpectreInteractiveSession extends SpectreSession {
    * @return value when parameter is valid, <code>null</code> otherwise
    * @throws UnableToStartSession when the session cannot be started
    */
-  public BigDecimal getNumericValueAttribute(String parameter)
+  public BigDecimal getNumericValueAttribute(final String parameter)
       throws UnableToStartSession {
-    SkillDataobject obj = this.getValueAttribute(parameter);
+    final SkillDataobject obj = this.getValueAttribute(parameter);
     if (obj instanceof SkillFlonum) {
       return ((SkillFlonum) obj).getFlonum();
     } else {
@@ -387,7 +387,7 @@ public class SpectreInteractiveSession extends SpectreSession {
     }
   }
 
-  private SkillDataobject getValueAttribute(String parameter)
+  private SkillDataobject getValueAttribute(final String parameter)
       throws UnableToStartSession {
 
     if (!this.session.isActive()) {
@@ -415,21 +415,21 @@ public class SpectreInteractiveSession extends SpectreSession {
 
       try {
 
-        return session.evaluate(command, this.parentThread);
+        return this.session.evaluate(command, this.parentThread);
 
-      } catch (UnableToStartSession e) {
-      } catch (EvaluationFailedException e) {
-      } catch (InvalidDataobjectReferenceExecption e) {
+      } catch (final UnableToStartSession e) {
+      } catch (final EvaluationFailedException e) {
+      } catch (final InvalidDataobjectReferenceExecption e) {
       }
 
-    } catch (IncorrectSyntaxException e) {
+    } catch (final IncorrectSyntaxException e) {
     }
 
     return SkillBoolean.getFalse();
 
   }
 
-  private boolean readParameterIdentififer(String parameter) {
+  private boolean readParameterIdentififer(final String parameter) {
 
     SkillCommand command = null;
 
@@ -443,19 +443,19 @@ public class SpectreInteractiveSession extends SpectreSession {
                   .buildCommand(new SkillString("")),
               new SkillString(parameter) });
 
-    } catch (IncorrectSyntaxException e) {
+    } catch (final IncorrectSyntaxException e) {
     }
 
     SkillDataobject returnValue = null;
     try {
-      returnValue = session.evaluate(command, this.parentThread);
-    } catch (UnableToStartSession e) {
-    } catch (EvaluationFailedException e) {
-    } catch (InvalidDataobjectReferenceExecption e) {
+      returnValue = this.session.evaluate(command, this.parentThread);
+    } catch (final UnableToStartSession e) {
+    } catch (final EvaluationFailedException e) {
+    } catch (final InvalidDataobjectReferenceExecption e) {
     }
 
-    if (returnValue != null && returnValue.isTrue()) {
-      SkillString identifier = (SkillString) returnValue;
+    if ((returnValue != null) && returnValue.isTrue()) {
+      final SkillString identifier = (SkillString) returnValue;
       this.parameterMapping.put(parameter, identifier.getString());
       return true;
 
@@ -474,18 +474,18 @@ public class SpectreInteractiveSession extends SpectreSession {
           .getTemplate(SpectreCommandTemplates.SCL_SET_RES_DIR)
           .buildCommand(new SkillString("./"));
 
-    } catch (IncorrectSyntaxException e) {
+    } catch (final IncorrectSyntaxException e) {
       return false;
     }
 
     SkillDataobject returnValue;
     try {
-      returnValue = session.evaluate(command, this.parentThread);
-    } catch (Exception e) {
+      returnValue = this.session.evaluate(command, this.parentThread);
+    } catch (final Exception e) {
       return false;
     }
 
-    if (returnValue != null && returnValue.isTrue()) {
+    if ((returnValue != null) && returnValue.isTrue()) {
       return true;
     } else {
       return false;
@@ -503,7 +503,7 @@ public class SpectreInteractiveSession extends SpectreSession {
           .buildCommand(new SkillString("all"));
 
       return this.simulate(command);
-    } catch (IncorrectSyntaxException e) {
+    } catch (final IncorrectSyntaxException e) {
       return new LinkedList<>();
     }
   }
@@ -515,23 +515,23 @@ public class SpectreInteractiveSession extends SpectreSession {
    * @return plots list of plots
    * @throws UnableToStartSession when the session cannot be started
    */
-  public List<NutmegPlot> simulate(Set<String> analysesBlacklist)
+  public List<NutmegPlot> simulate(final Set<String> analysesBlacklist)
       throws UnableToStartSession {
 
     if (this.analysesMapping == null) {
       this.buildAnalysesMapping();
     }
 
-    List<String> identifiersToSimulate = new ArrayList<>();
+    final List<String> identifiersToSimulate = new ArrayList<>();
 
-    for (String analyis : this.analyses) {
+    for (final String analyis : this.analyses) {
 
       if (!analysesBlacklist.contains(analyis)) {
         identifiersToSimulate.add(this.analysesMapping.get(analyis));
       }
     }
 
-    String[] identifiersToSimulateArray = new String[identifiersToSimulate
+    final String[] identifiersToSimulateArray = new String[identifiersToSimulate
         .size()];
 
     for (int i = 0; i < identifiersToSimulateArray.length; i++) {
@@ -541,7 +541,7 @@ public class SpectreInteractiveSession extends SpectreSession {
 
     try {
 
-      SkillCommand command = GenericSkillCommandTemplates
+      final SkillCommand command = GenericSkillCommandTemplates
           .getTemplate(GenericSkillCommandTemplates.MAPCAR)
           .buildCommand(new EvaluableToSkill[] {
               new SkillSymbol(SpectreCommandTemplates.SCL_RUN_ANALYSIS),
@@ -549,12 +549,12 @@ public class SpectreInteractiveSession extends SpectreSession {
 
       return this.simulate(command);
 
-    } catch (IncorrectSyntaxException e) {
+    } catch (final IncorrectSyntaxException e) {
       return new LinkedList<>();
     }
   }
 
-  private List<NutmegPlot> simulate(SkillCommand command)
+  private List<NutmegPlot> simulate(final SkillCommand command)
       throws UnableToStartSession {
 
     if (!this.session.isActive()) {
@@ -580,7 +580,7 @@ public class SpectreInteractiveSession extends SpectreSession {
 
       if (resultValue.isTrue()) {
 
-        if (rawFile.exists()) {
+        if (this.rawFile.exists()) {
 
           NutReader reader = null;
 
@@ -601,7 +601,7 @@ public class SpectreInteractiveSession extends SpectreSession {
       } else {
         System.err.println(resultValue.toSkill());
         throw new UnableToStartSession(this.formatShellCommand(),
-            this.workingDir, new File(workingDir, LOG_FILENAME));
+            this.workingDir, new File(this.workingDir, LOG_FILENAME));
       }
 
       if (this.rawFile.exists()) {
@@ -629,19 +629,19 @@ public class SpectreInteractiveSession extends SpectreSession {
       command = SpectreCommandTemplates
           .getTemplate(SpectreCommandTemplates.SCL_GET_PID).buildCommand();
 
-    } catch (IncorrectSyntaxException e) {
+    } catch (final IncorrectSyntaxException e) {
       return -1;
     }
 
     SkillDataobject returnValue;
     try {
       returnValue = this.session.evaluate(command, this.parentThread);
-    } catch (Exception e) {
+    } catch (final Exception e) {
       return -1;
     }
 
     if (returnValue instanceof SkillFixnum) {
-      SkillFixnum pid = (SkillFixnum) returnValue;
+      final SkillFixnum pid = (SkillFixnum) returnValue;
       return pid.getFixnum();
     } else {
       return -1;
@@ -655,14 +655,14 @@ public class SpectreInteractiveSession extends SpectreSession {
    */
   public Set<String> getNets() {
 
-    Set<String> retval = new HashSet<>();
+    final Set<String> retval = new HashSet<>();
 
     SkillCommand command;
 
     try {
       command = SpectreCommandTemplates
           .getTemplate(SpectreCommandTemplates.SCL_LIST_NET).buildCommand();
-    } catch (IncorrectSyntaxException e) {
+    } catch (final IncorrectSyntaxException e) {
       return retval;
     }
 
@@ -670,20 +670,20 @@ public class SpectreInteractiveSession extends SpectreSession {
 
     try {
       returnValue = this.session.evaluate(command, this.parentThread);
-    } catch (Exception e) {
+    } catch (final Exception e) {
     }
 
     SkillList nets;
 
     try {
       nets = (SkillList) returnValue;
-    } catch (Exception e) {
+    } catch (final Exception e) {
       return retval;
     }
 
     SkillString net;
 
-    for (SkillDataobject obj : nets) {
+    for (final SkillDataobject obj : nets) {
       net = (SkillString) obj;
       retval.add(net.getString());
     }
@@ -693,9 +693,9 @@ public class SpectreInteractiveSession extends SpectreSession {
 
   private void buildAnalysesMapping() {
 
-    List<String> analysesNames = this.getAnalyses();
+    final List<String> analysesNames = this.getAnalyses();
 
-    String[] analysesNamesArray = new String[analysesNames.size()];
+    final String[] analysesNamesArray = new String[analysesNames.size()];
     this.analysesMapping = new HashMap<>();
 
     for (int i = 0; i < analysesNamesArray.length; i++) {
@@ -704,29 +704,29 @@ public class SpectreInteractiveSession extends SpectreSession {
 
     try {
 
-      SkillCommand cmd = GenericSkillCommandTemplates
+      final SkillCommand cmd = GenericSkillCommandTemplates
           .getTemplate(GenericSkillCommandTemplates.MAPCAR)
           .buildCommand(new EvaluableToSkill[] {
               new SkillSymbol(SpectreCommandTemplates.SCL_GET_ANALYSIS),
               new SkillList(analysesNamesArray) });
 
-      SkillList identifiers = (SkillList) this.session.evaluate(cmd,
+      final SkillList identifiers = (SkillList) this.session.evaluate(cmd,
           this.parentThread);
       SkillString identifier;
 
       int i = 0;
 
-      for (SkillDataobject obj : identifiers) {
+      for (final SkillDataobject obj : identifiers) {
         identifier = (SkillString) obj;
         this.analysesMapping.put(analysesNamesArray[i], identifier.getString());
         i++;
       }
 
-    } catch (Error e) {
-    } catch (IncorrectSyntaxException e) {
-    } catch (UnableToStartSession e) {
-    } catch (EvaluationFailedException e) {
-    } catch (InvalidDataobjectReferenceExecption e) {
+    } catch (final Error e) {
+    } catch (final IncorrectSyntaxException e) {
+    } catch (final UnableToStartSession e) {
+    } catch (final EvaluationFailedException e) {
+    } catch (final InvalidDataobjectReferenceExecption e) {
     }
   }
 
@@ -739,7 +739,7 @@ public class SpectreInteractiveSession extends SpectreSession {
 
     if (this.analyses == null) {
 
-      List<String> retval = new LinkedList<>();
+      final List<String> retval = new LinkedList<>();
 
       SkillCommand command;
 
@@ -748,7 +748,7 @@ public class SpectreInteractiveSession extends SpectreSession {
         command = SpectreCommandTemplates
             .getTemplate(SpectreCommandTemplates.SCL_LIST_ANALYSIS)
             .buildCommand();
-      } catch (IncorrectSyntaxException e) {
+      } catch (final IncorrectSyntaxException e) {
         return retval;
       }
 
@@ -756,7 +756,7 @@ public class SpectreInteractiveSession extends SpectreSession {
 
       try {
         returnValue = this.session.evaluate(command, this.parentThread);
-      } catch (Exception e) {
+      } catch (final Exception e) {
       }
 
       SkillList analyses;
@@ -770,7 +770,7 @@ public class SpectreInteractiveSession extends SpectreSession {
         @SuppressWarnings("unused")
         SkillString type;
 
-        for (SkillDataobject obj : analyses) {
+        for (final SkillDataobject obj : analyses) {
 
           analysis = (SkillList) obj;
 
@@ -779,7 +779,7 @@ public class SpectreInteractiveSession extends SpectreSession {
 
           retval.add(name.getString());
         }
-      } catch (Exception e) {
+      } catch (final Exception e) {
         return retval;
       }
 
@@ -800,7 +800,7 @@ public class SpectreInteractiveSession extends SpectreSession {
    */
   public Map<String, String> getInstances() {
 
-    Map<String, String> retval = new HashMap<>();
+    final Map<String, String> retval = new HashMap<>();
 
     SkillCommand command;
 
@@ -808,7 +808,7 @@ public class SpectreInteractiveSession extends SpectreSession {
       command = SpectreCommandTemplates
           .getTemplate(SpectreCommandTemplates.SCL_LIST_INSTANCE)
           .buildCommand();
-    } catch (IncorrectSyntaxException e) {
+    } catch (final IncorrectSyntaxException e) {
       return retval;
     }
 
@@ -816,7 +816,7 @@ public class SpectreInteractiveSession extends SpectreSession {
 
     try {
       returnValue = this.session.evaluate(command, this.parentThread);
-    } catch (Exception e) {
+    } catch (final Exception e) {
     }
 
     SkillList analyses;
@@ -828,7 +828,7 @@ public class SpectreInteractiveSession extends SpectreSession {
       SkillString name;
       SkillString type;
 
-      for (SkillDataobject obj : analyses) {
+      for (final SkillDataobject obj : analyses) {
 
         analysis = (SkillList) obj;
 
@@ -837,7 +837,7 @@ public class SpectreInteractiveSession extends SpectreSession {
 
         retval.put(name.getString(), type.getString());
       }
-    } catch (Exception e) {
+    } catch (final Exception e) {
       return retval;
     }
 
@@ -863,11 +863,11 @@ public class SpectreInteractiveSession extends SpectreSession {
    * @param plots list of plots
    * @return map of plots
    */
-  public static Map<String, NutmegPlot> getMapOfPlots(List<NutmegPlot> plots) {
+  public static Map<String, NutmegPlot> getMapOfPlots(final List<NutmegPlot> plots) {
 
-    Map<String, NutmegPlot> retval = new HashMap<>();
+    final Map<String, NutmegPlot> retval = new HashMap<>();
 
-    for (NutmegPlot nutmegPlot : plots) {
+    for (final NutmegPlot nutmegPlot : plots) {
       retval.put(nutmegPlot.getPlotname(), nutmegPlot);
     }
 
@@ -881,7 +881,7 @@ public class SpectreInteractiveSession extends SpectreSession {
    * @param suffix   Suffix of the temporaray file
    * @return reference to resource
    */
-  public File getResourcePath(String fileName, String suffix) {
+  public File getResourcePath(final String fileName, final String suffix) {
     return this.session.getResourcePath(fileName, suffix);
   }
 

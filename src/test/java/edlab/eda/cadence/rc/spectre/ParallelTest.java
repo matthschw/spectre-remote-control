@@ -23,12 +23,12 @@ class ParallelTest {
   @Test
   void test() throws IOException, UnableToStartSession {
 
-    SpectreFactory factory = SpectreFactory.getSpectreFactory(new File("/tmp"));
+    final SpectreFactory factory = SpectreFactory.getSpectreFactory(new File("/tmp"));
     SpectreParallelExecuterFramework framework;
     SpectreInteractiveSession session;
     List<NutmegPlot> plots;
 
-    Set<SpectreInteractiveSession> sessions = new HashSet<>(
+    final Set<SpectreInteractiveSession> sessions = new HashSet<>(
         N);
     Set<SpectreInteractiveParallelHandle> parallelSessions;
     SpectreInteractiveParallelHandle parallelSession;
@@ -45,10 +45,10 @@ class ParallelTest {
 
       parallelSessions = new HashSet<>();
 
-      for (SpectreInteractiveSession s : sessions) {
+      for (final SpectreInteractiveSession s : sessions) {
 
-        s.setValueAttribute("r1", Math.random() * 4000 + 1000.0);
-        s.setValueAttribute("r2", Math.random() * 90000 + 1000.0);
+        s.setValueAttribute("r1", (Math.random() * 4000) + 1000.0);
+        s.setValueAttribute("r2", (Math.random() * 90000) + 1000.0);
 
         parallelSession = new SpectreInteractiveParallelHandle(s);
         framework.registerSession(parallelSession);
@@ -57,7 +57,7 @@ class ParallelTest {
 
       framework.run();
 
-      for (SpectreInteractiveParallelHandle s : parallelSessions) {
+      for (final SpectreInteractiveParallelHandle s : parallelSessions) {
 
         plots = s.getPlots();
 

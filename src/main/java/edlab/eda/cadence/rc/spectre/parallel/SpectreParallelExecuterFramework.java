@@ -16,8 +16,8 @@ public class SpectreParallelExecuterFramework {
 
   private static final int MAX_THREADS = 10;
 
-  private Map<ParallelizableSession, SpectreSessionThread> sessions;
-  private int maxThreads;
+  private final Map<ParallelizableSession, SpectreSessionThread> sessions;
+  private final int maxThreads;
   private Thread parentThread = Thread.currentThread();
   private boolean verbose = false;
   private boolean readResults = true;
@@ -35,7 +35,7 @@ public class SpectreParallelExecuterFramework {
    * 
    * @param maxThreads maximal number of parallel threads
    */
-  public SpectreParallelExecuterFramework(int maxThreads) {
+  public SpectreParallelExecuterFramework(final int maxThreads) {
     this.maxThreads = maxThreads;
     this.sessions = new HashMap<>(this.maxThreads);
   }
@@ -46,7 +46,7 @@ public class SpectreParallelExecuterFramework {
    * @param verbose <code>true</code> when a status bar should be printed to
    *                stdout, <code>false</code> otherwise
    */
-  public SpectreParallelExecuterFramework(boolean verbose) {
+  public SpectreParallelExecuterFramework(final boolean verbose) {
     this.maxThreads = MAX_THREADS;
     this.sessions = new HashMap<>(this.maxThreads);
     this.verbose = verbose;
@@ -59,7 +59,7 @@ public class SpectreParallelExecuterFramework {
    * @param verbose    <code>true</code> when a status bar should be printed to
    *                   stdout, <code>false</code> otherwise
    */
-  public SpectreParallelExecuterFramework(int maxThreads, boolean verbose) {
+  public SpectreParallelExecuterFramework(final int maxThreads, final boolean verbose) {
     this.maxThreads = maxThreads;
     this.sessions = new HashMap<>(this.maxThreads);
     this.verbose = verbose;
@@ -70,7 +70,7 @@ public class SpectreParallelExecuterFramework {
    * 
    * @param readResults read results
    */
-  public void setReadResults(boolean readResults) {
+  public void setReadResults(final boolean readResults) {
     this.readResults = readResults;
   }
 
@@ -90,16 +90,16 @@ public class SpectreParallelExecuterFramework {
    * @return <code>true</code> when the session is registered,
    *         <code>false</code> otherwise
    */
-  public boolean registerSession(ParallelizableSession session) {
+  public boolean registerSession(final ParallelizableSession session) {
 
-    for (ParallelizableSession iter : this.sessions.keySet()) {
-      if (session == null || iter == session
-          || iter.getSession() == session.getSession()) {
+    for (final ParallelizableSession iter : this.sessions.keySet()) {
+      if ((session == null) || (iter == session)
+          || (iter.getSession() == session.getSession())) {
         return false;
       }
     }
 
-    SpectreSessionThread thread = new SpectreSessionThread(session);
+    final SpectreSessionThread thread = new SpectreSessionThread(session);
 
     this.sessions.put(session, thread);
 
@@ -112,10 +112,10 @@ public class SpectreParallelExecuterFramework {
    * @param session session to be registered
    * @return handle to parallel session
    */
-  public ParallelizableSession registerSession(SpectreSession session) {
+  public ParallelizableSession registerSession(final SpectreSession session) {
 
-    for (ParallelizableSession iter : this.sessions.keySet()) {
-      if (session == null || iter.getSession() == session) {
+    for (final ParallelizableSession iter : this.sessions.keySet()) {
+      if ((session == null) || (iter.getSession() == session)) {
         return null;
       }
     }
@@ -129,7 +129,7 @@ public class SpectreParallelExecuterFramework {
       handle = new SpectreBatchParallelHandle((SpectreBatchSession) session);
     }
 
-    SpectreSessionThread thread = new SpectreSessionThread(handle,
+    final SpectreSessionThread thread = new SpectreSessionThread(handle,
         this.readResults);
 
     this.sessions.put(handle, thread);
@@ -142,7 +142,7 @@ public class SpectreParallelExecuterFramework {
    *
    * @param thread parent thread
    */
-  public void setParentThread(Thread thread) {
+  public void setParentThread(final Thread thread) {
     this.parentThread = thread;
   }
 
@@ -160,7 +160,7 @@ public class SpectreParallelExecuterFramework {
    */
   public void run() {
 
-    ExecutorService executor = Executors.newFixedThreadPool(this.maxThreads);
+    final ExecutorService executor = Executors.newFixedThreadPool(this.maxThreads);
 
     ProgressBar pb = null;
 
@@ -169,7 +169,7 @@ public class SpectreParallelExecuterFramework {
           ProgressBarStyle.ASCII);
     }
 
-    for (Entry<ParallelizableSession, SpectreSessionThread> entry : this.sessions
+    for (final Entry<ParallelizableSession, SpectreSessionThread> entry : this.sessions
         .entrySet()) {
 
       if (entry.getKey().getSession() instanceof SpectreInteractiveSession) {
@@ -188,10 +188,10 @@ public class SpectreParallelExecuterFramework {
 
       try {
         Thread.sleep(1);
-      } catch (InterruptedException e) {
+      } catch (final InterruptedException e) {
       }
 
-      for (SpectreSessionThread thread : this.sessions.values()) {
+      for (final SpectreSessionThread thread : this.sessions.values()) {
         if (thread.isFinished()) {
           accomplished++;
         }
@@ -210,13 +210,13 @@ public class SpectreParallelExecuterFramework {
 
     try {
       Thread.sleep(1);
-    } catch (InterruptedException e) {
+    } catch (final InterruptedException e) {
     }
 
     while (!executor.isTerminated()) {
       try {
         Thread.sleep(1);
-      } catch (InterruptedException e) {
+      } catch (final InterruptedException e) {
       }
     }
   }

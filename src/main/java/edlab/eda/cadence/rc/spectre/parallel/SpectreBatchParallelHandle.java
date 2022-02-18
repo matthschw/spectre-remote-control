@@ -11,10 +11,10 @@ import edlab.eda.reader.nutmeg.NutmegPlot;
 
 public class SpectreBatchParallelHandle implements ParallelizableSession {
 
-  private SpectreBatchSession session;
+  private final SpectreBatchSession session;
   private List<NutmegPlot> plots = null;
 
-  public SpectreBatchParallelHandle(SpectreBatchSession session) {
+  public SpectreBatchParallelHandle(final SpectreBatchSession session) {
     this.session = session;
   }
 
