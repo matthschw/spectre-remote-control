@@ -131,6 +131,7 @@ public class SpectreFactory {
    * Get prefix for simulation name
    *
    * @param simPrefix prefix for simulation name
+   * @return this
    */
   public SpectreFactory setSimPrefix(final String simPrefix) {
     this.simPrefix = simPrefix;
