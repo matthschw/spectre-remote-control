@@ -81,7 +81,7 @@ public class SpectreFactory {
   }
 
   /**
-   * Set timeout for spectre session. This value is only relevant for
+   * Set timeout for Spectre session. This value is only relevant for
    * {@link SpectreInteractiveSession}. When no simulation is executed for the
    * specified time the license is released automatically. A negative timeout
    * indicates that the license is never released (you must call
@@ -89,10 +89,12 @@ public class SpectreFactory {
    *
    * @param timeout timeout
    * @param unit    time unit
+   * @return this
    */
-  public void setTimeout(final long timeout, final TimeUnit unit) {
+  public SpectreFactory setTimeout(final long timeout, final TimeUnit unit) {
     this.timeoutDuration = timeout;
     this.timeoutTimeUnit = unit;
+    return this;
   }
 
   /**
@@ -116,7 +118,8 @@ public class SpectreFactory {
   }
 
   /**
-   * Get prefix for simulation name. The prefix will used
+   * Get prefix for simulation name. The prefix will be annotated to the
+   * simulation directory
    *
    * @return simPrefix prefix for simulation name
    */
@@ -129,17 +132,20 @@ public class SpectreFactory {
    *
    * @param simPrefix prefix for simulation name
    */
-  public void setSimPrefix(final String simPrefix) {
+  public SpectreFactory setSimPrefix(final String simPrefix) {
     this.simPrefix = simPrefix;
+    return this;
   }
 
   /**
    * Set path to library of global AHDL models
    *
    * @param dir library of global AHDL models
+   * @return this
    */
-  public void setAhdlShipDbdir(final File dir) {
+  public SpectreFactory setAhdlShipDbdir(final File dir) {
     this.ahdlShipDbDir = dir;
+    return this;
   }
 
   /**

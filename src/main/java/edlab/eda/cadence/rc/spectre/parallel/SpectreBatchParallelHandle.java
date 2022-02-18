@@ -9,11 +9,20 @@ import edlab.eda.cadence.rc.spectre.SpectreSession.RESULT_FMT;
 import edlab.eda.reader.nutmeg.NutReader;
 import edlab.eda.reader.nutmeg.NutmegPlot;
 
+/**
+ * Wrapper of a {@link SpectreBatchSession} that can be executed in a
+ * {@link SpectreParallelPool}
+ */
 public class SpectreBatchParallelHandle implements ParallelizableSession {
 
   private final SpectreBatchSession session;
   private List<NutmegPlot> plots = null;
 
+  /**
+   * Create a new wrapper
+   * 
+   * @param session Batch-Session
+   */
   public SpectreBatchParallelHandle(final SpectreBatchSession session) {
     this.session = session;
   }

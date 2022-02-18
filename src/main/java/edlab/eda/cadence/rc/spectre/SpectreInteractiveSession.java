@@ -58,7 +58,6 @@ public class SpectreInteractiveSession extends SpectreSession {
 
     super(factory, name);
 
-    // this.parentThread = Thread.currentThread();
     this.parentThread = null;
 
     this.session = new SkillInteractiveSession(this.workingDir);
@@ -303,8 +302,8 @@ public class SpectreInteractiveSession extends SpectreSession {
    *         <code>false</code> otherwise
    * @throws UnableToStartSession when the session cannot be started
    */
-  public boolean setValueAttribute(final String parameter, final BigDecimal value)
-      throws UnableToStartSession {
+  public boolean setValueAttribute(final String parameter,
+      final BigDecimal value) throws UnableToStartSession {
     return this.setValueAttribute(parameter, new SkillFlonum(value));
   }
 
@@ -322,8 +321,8 @@ public class SpectreInteractiveSession extends SpectreSession {
     return this.setValueAttribute(parameter, new SkillString(value.toString()));
   }
 
-  private boolean setValueAttribute(final String parameter, final SkillDataobject value)
-      throws UnableToStartSession {
+  private boolean setValueAttribute(final String parameter,
+      final SkillDataobject value) throws UnableToStartSession {
 
     if (!this.session.isActive()) {
       this.start();
@@ -863,7 +862,8 @@ public class SpectreInteractiveSession extends SpectreSession {
    * @param plots list of plots
    * @return map of plots
    */
-  public static Map<String, NutmegPlot> getMapOfPlots(final List<NutmegPlot> plots) {
+  public static Map<String, NutmegPlot> getMapOfPlots(
+      final List<NutmegPlot> plots) {
 
     final Map<String, NutmegPlot> retval = new HashMap<>();
 
@@ -878,7 +878,7 @@ public class SpectreInteractiveSession extends SpectreSession {
    * Get the path to a resource in the JAR
    *
    * @param fileName Name of the file
-   * @param suffix   Suffix of the temporaray file
+   * @param suffix   Suffix of the temporary file
    * @return reference to resource
    */
   public File getResourcePath(final String fileName, final String suffix) {
@@ -888,11 +888,14 @@ public class SpectreInteractiveSession extends SpectreSession {
   @Override
   @Deprecated
   public void simulateOnly() throws UnableToStartSession {
+    System.err.println("Simulate-Only of Interactive Session not supported");
   }
 
   @Override
   @Deprecated
   public List<NutmegPlot> readResults() {
-    return null;
+    System.err
+        .println("Results from an interactive session are read automatically");
+    return new LinkedList<NutmegPlot>();
   }
 }

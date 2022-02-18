@@ -84,10 +84,10 @@ public class SpectreCommandTemplates {
    * @return template when existing,<code>null</code> otherwise
    */
   public static SkillCommandTemplate getTemplate(final String name) {
-    if (commandTemplates == null) {
-      commandTemplates = new SpectreCommandTemplates();
+    if (SpectreCommandTemplates.commandTemplates == null) {
+      SpectreCommandTemplates.commandTemplates = new SpectreCommandTemplates();
     }
 
-    return commandTemplates.templates.get(name);
+    return SpectreCommandTemplates.commandTemplates.templates.get(name);
   }
 }
