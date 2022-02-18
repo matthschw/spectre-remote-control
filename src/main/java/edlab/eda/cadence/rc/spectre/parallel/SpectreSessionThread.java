@@ -44,6 +44,7 @@ final class SpectreSessionThread implements Runnable {
       }
       this.terminated = true;
     } catch (final UnableToStartSession e) {
+      this.terminated = true;
     }
   }
 

@@ -20,7 +20,7 @@ public abstract class SpectreSession {
 
   protected static final String NL_FILE_NAME = "input";
   protected static final String NL_FILE_NAME_EXTENTION = "scs";
-  protected static final String LOG_FILENAME = "spectre.out";
+  public static final String LOG_FILENAME = "spectre.out";
   protected static final String RAW_FILE_NAME_EXTENTION = "raw";
   protected static final String AHDLLIB_DIRNAME = "ahdl";
 
@@ -109,6 +109,15 @@ public abstract class SpectreSession {
     } else {
       return false;
     }
+  }
+
+  /**
+   * Get the working directory of the simulator
+   * 
+   * @return path to working directory
+   */
+  public String getWorkingDir() {
+    return this.workingDir.toString();
   }
 
   /**
