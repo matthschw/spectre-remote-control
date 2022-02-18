@@ -3,7 +3,7 @@
 
 Remote-Control for [Cadence Spectre](https://www.cadence.com/ko_KR/home/tools/custom-ic-analog-rf-design/circuit-simulation/spectre-simulation-platform.html) in Interactive and Batch Mode.
 
-This software was created with [OpenJDK 1.8](https://openjdk.java.net) 
+This software was developed for [OpenJDK 1.8](https://openjdk.java.net) 
 and [Apache Maven 3.6.3](https://maven.apache.org).
 The documentation can be created with 
 ```bash
