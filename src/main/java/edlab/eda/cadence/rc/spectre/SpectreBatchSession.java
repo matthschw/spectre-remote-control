@@ -13,11 +13,12 @@ import edlab.eda.reader.nutmeg.NutReader;
 import edlab.eda.reader.nutmeg.NutmegPlot;
 
 /**
- * Batch Session
+ * Batch Session for Cadence Spectre
  */
-public class SpectreBatchSession extends SpectreSession {
+public final class SpectreBatchSession extends SpectreSession {
 
-  protected SpectreBatchSession(final SpectreFactory factory, final String name) {
+  protected SpectreBatchSession(final SpectreFactory factory,
+      final String name) {
     super(factory, name);
   }
 
@@ -49,16 +50,18 @@ public class SpectreBatchSession extends SpectreSession {
   }
 
   @Override
-  public void setNetlist(final String netlist) {
+  public SpectreBatchSession setNetlist(final String netlist) {
     this.netlist = netlist;
     this.writeNetlist();
+    return this;
   }
 
   @Override
-  public void setNetlist(final File netlist) throws IOException {
+  public SpectreBatchSession setNetlist(final File netlist) throws IOException {
     this.netlist = new String(Files.readAllBytes(netlist.toPath()),
         StandardCharsets.US_ASCII);
     this.writeNetlist();
+    return this;
   }
 
   /**
@@ -105,7 +108,7 @@ public class SpectreBatchSession extends SpectreSession {
   }
 
   @Override
-  public void simulateOnly() throws UnableToStartSession {
+  public SpectreBatchSession simulateOnly() throws UnableToStartSession {
     try {
 
       final Process process = Runtime.getRuntime()
@@ -127,7 +130,7 @@ public class SpectreBatchSession extends SpectreSession {
       throw new UnableToStartSession(this.formatShellCommand(), this.workingDir,
           new File(this.workingDir, LOG_FILENAME));
     }
-
+    return this;
   }
 
   @Override

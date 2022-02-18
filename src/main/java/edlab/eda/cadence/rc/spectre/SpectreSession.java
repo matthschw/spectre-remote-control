@@ -13,6 +13,9 @@ import java.util.Set;
 import edlab.eda.cadence.rc.session.UnableToStartSession;
 import edlab.eda.reader.nutmeg.NutmegPlot;
 
+/**
+ * Simulation Session for Cadence Spectre
+ */
 public abstract class SpectreSession {
 
   protected static final String NL_FILE_NAME = "input";
@@ -21,6 +24,9 @@ public abstract class SpectreSession {
   protected static final String RAW_FILE_NAME_EXTENTION = "raw";
   protected static final String AHDLLIB_DIRNAME = "ahdl";
 
+  /**
+   * Mode of simulation (32bit, 64 bit)
+   */
   protected static enum MODE {
     BIT32, BIT64
   }
@@ -48,7 +54,6 @@ public abstract class SpectreSession {
   protected int noOfThreads;
 
   protected Set<File> includeDirectories = new HashSet<>();
-
   protected SpectreFactory factory;
 
   protected SpectreSession(final SpectreFactory factory, final String name) {
@@ -73,17 +78,23 @@ public abstract class SpectreSession {
 
     try {
 
-      final Path path = Files.createTempDirectory(factory.getSimDirectory().toPath(),
-          dirName.toString());
+      final Path path = Files.createTempDirectory(
+          factory.getSimDirectory().toPath(), dirName.toString());
 
       this.workingDir = path.toFile();
     } catch (final IOException e) {
     }
 
-    this.rawFile = new File(this.workingDir.toString() + "/" + NL_FILE_NAME + "."
-        + RAW_FILE_NAME_EXTENTION);
+    this.rawFile = new File(this.workingDir.toString() + "/" + NL_FILE_NAME
+        + "." + RAW_FILE_NAME_EXTENTION);
   }
 
+  /**
+   * Write the netlist to the simulation directory
+   * 
+   * @return <code>true</code> when writing of the netlist is successful,
+   *         <code>false</code> otherwise
+   */
   protected boolean writeNetlist() {
 
     if (this.netlist != null) {
@@ -224,16 +235,20 @@ public abstract class SpectreSession {
    * Set the netlist for simulation
    *
    * @param netlist Spectre-compatible netlist
+   * 
+   * @return this
    */
-  public abstract void setNetlist(String netlist);
+  public abstract SpectreSession setNetlist(String netlist);
 
   /**
    * Set the netlist for simulation
    *
    * @param netlist path to spectre-compatible netlist
    * @throws IOException Exception is thrown when the netlist is not available
+   * 
+   * @return this
    */
-  public abstract void setNetlist(File netlist) throws IOException;
+  public abstract SpectreSession setNetlist(File netlist) throws IOException;
 
   /**
    * Run a simulation, read and return results
@@ -247,8 +262,9 @@ public abstract class SpectreSession {
    * Run a simulation and dont read results
    *
    * @throws UnableToStartSession when the session cannot be started
+   * @return this
    */
-  public abstract void simulateOnly() throws UnableToStartSession;
+  public abstract SpectreSession simulateOnly() throws UnableToStartSession;
 
   /**
    * Read results from simulation

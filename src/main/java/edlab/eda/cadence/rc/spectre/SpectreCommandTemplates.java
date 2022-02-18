@@ -8,7 +8,7 @@ import edlab.eda.cadence.rc.api.SkillCommandTemplate;
 /**
  * Command Templates for Spectre Interactive
  */
-public class SpectreCommandTemplates {
+final class SpectreCommandTemplates {
 
   static final String SCL_GET_PARAMETER = "sclGetParameter";
   static final String SCL_LIST_PARAMETER = "sclListParameter";
@@ -81,9 +81,9 @@ public class SpectreCommandTemplates {
    * Get a {@link SkillCommandTemplate} by name
    *
    * @param name Name of the command
-   * @return template when existing,<code>null</code> otherwise
+   * @return template when existing, <code>null</code> otherwise
    */
-  public static SkillCommandTemplate getTemplate(final String name) {
+  static SkillCommandTemplate getTemplate(final String name) {
     if (SpectreCommandTemplates.commandTemplates == null) {
       SpectreCommandTemplates.commandTemplates = new SpectreCommandTemplates();
     }

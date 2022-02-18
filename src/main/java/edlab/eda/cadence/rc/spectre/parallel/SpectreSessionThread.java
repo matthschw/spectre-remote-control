@@ -5,7 +5,7 @@ import edlab.eda.cadence.rc.session.UnableToStartSession;
 /**
  * Thread that handles a {@link ParallelizableSession}.
  */
-class SpectreSessionThread implements Runnable {
+final class SpectreSessionThread implements Runnable {
 
   private final ParallelizableSession session;
   private boolean terminated = false;

@@ -35,9 +35,9 @@ import edlab.eda.reader.nutmeg.NutReader;
 import edlab.eda.reader.nutmeg.NutmegPlot;
 
 /**
- * Interactive Session
+ * Interactive Session for Cadence Spectre
  */
-public class SpectreInteractiveSession extends SpectreSession {
+public final class SpectreInteractiveSession extends SpectreSession {
 
   private Map<String, String> parameterMapping = new HashMap<>();
   private final Map<String, SkillDataobject> parameterValues = new HashMap<>();
@@ -72,9 +72,11 @@ public class SpectreInteractiveSession extends SpectreSession {
    * Set the parent thread of the session
    *
    * @param thread parent thread
+   * @return this
    */
-  public void setParentThread(final Thread thread) {
+  public SpectreInteractiveSession setParentThread(final Thread thread) {
     this.parentThread = thread;
+    return this;
   }
 
   /**
@@ -87,7 +89,7 @@ public class SpectreInteractiveSession extends SpectreSession {
   }
 
   @Override
-  public void setNetlist(final String netlist) {
+  public SpectreInteractiveSession setNetlist(final String netlist) {
 
     boolean restart = false;
 
@@ -106,10 +108,12 @@ public class SpectreInteractiveSession extends SpectreSession {
       } catch (final Exception e) {
       }
     }
+    return this;
   }
 
   @Override
-  public void setNetlist(final File netlist) throws IOException {
+  public SpectreInteractiveSession setNetlist(final File netlist)
+      throws IOException {
 
     this.netlist = new String(Files.readAllBytes(netlist.toPath()),
         StandardCharsets.US_ASCII);
@@ -130,6 +134,7 @@ public class SpectreInteractiveSession extends SpectreSession {
 
       }
     }
+    return this;
   }
 
   @Override
@@ -845,9 +850,12 @@ public class SpectreInteractiveSession extends SpectreSession {
 
   /**
    * Stop the session
+   * 
+   * @return this;
    */
-  public void stop() {
+  public SpectreInteractiveSession stop() {
     this.session.stop();
+    return this;
   }
 
   @Override
@@ -887,8 +895,9 @@ public class SpectreInteractiveSession extends SpectreSession {
 
   @Override
   @Deprecated
-  public void simulateOnly() throws UnableToStartSession {
+  public SpectreInteractiveSession simulateOnly() throws UnableToStartSession {
     System.err.println("Simulate-Only of Interactive Session not supported");
+    return this;
   }
 
   @Override

@@ -14,7 +14,7 @@ import edlab.eda.reader.nutmeg.NutmegPlot;
  * Wrapper of a {@link SpectreInteractiveSession} that can be executed in a
  * {@link SpectreParallelPool}
  */
-public class SpectreInteractiveParallelHandle implements ParallelizableSession {
+public final class SpectreInteractiveParallelHandle implements ParallelizableSession {
 
   private final SpectreInteractiveSession session;
   private List<NutmegPlot> plots;

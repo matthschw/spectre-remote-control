@@ -1,4 +1,4 @@
-//Voltage Divider
+//input.scs
 global 0
 
 parameters r1=1k r2=2k

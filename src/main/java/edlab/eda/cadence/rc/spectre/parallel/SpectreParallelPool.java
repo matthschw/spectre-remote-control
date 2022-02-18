@@ -15,7 +15,7 @@ import me.tongfei.progressbar.ProgressBarStyle;
 /**
  * Pool for parallel execution of Spectre simulations
  */
-public class SpectreParallelPool {
+public final class SpectreParallelPool {
 
   private static final int MAX_THREADS = 10;
 

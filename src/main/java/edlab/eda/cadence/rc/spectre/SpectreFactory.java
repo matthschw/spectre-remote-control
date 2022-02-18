@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
  * Factory for setup and creating {@link SpectreInteractiveSession} and
  * {@link SpectreBatchSession}.
  */
-public class SpectreFactory {
+public final class SpectreFactory {
 
   public static final String DEFAULT_COMMAND = "spectre";
 
