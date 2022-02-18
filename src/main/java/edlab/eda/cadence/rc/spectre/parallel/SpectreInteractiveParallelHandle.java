@@ -14,7 +14,8 @@ import edlab.eda.reader.nutmeg.NutmegPlot;
  * Wrapper of a {@link SpectreInteractiveSession} that can be executed in a
  * {@link SpectreParallelPool}
  */
-public final class SpectreInteractiveParallelHandle implements ParallelizableSession {
+public final class SpectreInteractiveParallelHandle
+    implements ParallelizableSession {
 
   private final SpectreInteractiveSession session;
   private List<NutmegPlot> plots;
@@ -133,7 +134,34 @@ public final class SpectreInteractiveParallelHandle implements ParallelizableSes
   }
 
   @Override
-  public boolean simulate() throws UnableToStartSession {
+  public boolean simulate() {
+
+    try {
+      this.simulateInner();
+    } catch (Exception e) {
+      this.session.stop();
+      try {
+        Thread.sleep(10);
+      } catch (InterruptedException e1) {
+      }
+    }
+
+    if (this.plots == null || this.plots.isEmpty()) {
+      // simulate again when previous run threw an error
+      try {
+        this.simulateInner();
+        return true;
+      } catch (Exception e) {
+        return false;
+      }
+
+    } else {
+      return true;
+    }
+  }
+
+  private SpectreInteractiveParallelHandle simulateInner()
+      throws UnableToStartSession {
 
     for (final Entry<String, Object> entry : this.valueAttributes.entrySet()) {
       this.session.setValueAttribute(entry.getKey(), entry.getValue());
@@ -145,11 +173,7 @@ public final class SpectreInteractiveParallelHandle implements ParallelizableSes
       this.plots = this.session.simulate(this.blacklistAnalyses);
     }
 
-    if (this.plots != null) {
-      return true;
-    } else {
-      return false;
-    }
+    return this;
   }
 
   @Override
