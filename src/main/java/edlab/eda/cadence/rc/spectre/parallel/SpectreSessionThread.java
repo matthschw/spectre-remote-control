@@ -5,17 +5,30 @@ import edlab.eda.cadence.rc.session.UnableToStartSession;
 /**
  * Thread that handles a {@link ParallelizableSession}.
  */
-class SpectreSessionThread implements Runnable {
+final class SpectreSessionThread implements Runnable {
 
-  private ParallelizableSession session;
-  private boolean finished = false;
+  private final ParallelizableSession session;
+  private boolean terminated = false;
   private boolean readResults = true;
 
-  SpectreSessionThread(ParallelizableSession session) {
+  /**
+   * Create a {@link SpectreSessionThread}
+   * 
+   * @param session Session used for simulating
+   */
+  SpectreSessionThread(final ParallelizableSession session) {
     this.session = session;
   }
 
-  SpectreSessionThread(ParallelizableSession session, boolean readResults) {
+  /**
+   * Create a {@link SpectreSessionThread}
+   * 
+   * @param session     Session used for simulating
+   * @param readResults <code>true</code> when the simulation results are read
+   *                    in the thread, <code>false</code> otherwise
+   */
+  SpectreSessionThread(final ParallelizableSession session,
+      final boolean readResults) {
     this.session = session;
     this.readResults = readResults;
   }
@@ -29,13 +42,19 @@ class SpectreSessionThread implements Runnable {
       } else {
         this.session.simulateOnly();
       }
-      this.finished = true;
-    } catch (UnableToStartSession e) {
-      e.printStackTrace();
+      this.terminated = true;
+    } catch (final UnableToStartSession e) {
+      this.terminated = true;
     }
   }
 
-  boolean isFinished() {
-    return this.finished;
+  /**
+   * Is the thread terminated
+   * 
+   * @return <code>true</code> when the thread is terminated, <code>false</code>
+   *         otherwise
+   */
+  boolean isTerminated() {
+    return this.terminated;
   }
 }

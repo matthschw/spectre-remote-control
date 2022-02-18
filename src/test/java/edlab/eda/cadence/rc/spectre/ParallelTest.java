@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import edlab.eda.cadence.rc.session.UnableToStartSession;
 import edlab.eda.cadence.rc.spectre.parallel.SpectreInteractiveParallelHandle;
-import edlab.eda.cadence.rc.spectre.parallel.SpectreParallelExecuterFramework;
+import edlab.eda.cadence.rc.spectre.parallel.SpectreParallelPool;
 import edlab.eda.reader.nutmeg.NutmegPlot;
 
 class ParallelTest {
@@ -23,12 +23,12 @@ class ParallelTest {
   @Test
   void test() throws IOException, UnableToStartSession {
 
-    SpectreFactory factory = SpectreFactory.getSpectreFactory(new File("/tmp"));
-    SpectreParallelExecuterFramework framework;
+    final SpectreFactory factory = SpectreFactory.getSpectreFactory(new File("/tmp"));
+    SpectreParallelPool framework;
     SpectreInteractiveSession session;
     List<NutmegPlot> plots;
 
-    Set<SpectreInteractiveSession> sessions = new HashSet<>(
+    final Set<SpectreInteractiveSession> sessions = new HashSet<>(
         N);
     Set<SpectreInteractiveParallelHandle> parallelSessions;
     SpectreInteractiveParallelHandle parallelSession;
@@ -41,14 +41,14 @@ class ParallelTest {
 
     for (int i = 0; i < TRIALS; i++) {
 
-      framework = new SpectreParallelExecuterFramework(2, false);
+      framework = new SpectreParallelPool(2, false);
 
       parallelSessions = new HashSet<>();
 
-      for (SpectreInteractiveSession s : sessions) {
+      for (final SpectreInteractiveSession s : sessions) {
 
-        s.setValueAttribute("r1", Math.random() * 4000 + 1000.0);
-        s.setValueAttribute("r2", Math.random() * 90000 + 1000.0);
+        s.setValueAttribute("r1", (Math.random() * 4000) + 1000.0);
+        s.setValueAttribute("r2", (Math.random() * 90000) + 1000.0);
 
         parallelSession = new SpectreInteractiveParallelHandle(s);
         framework.registerSession(parallelSession);
@@ -57,7 +57,7 @@ class ParallelTest {
 
       framework.run();
 
-      for (SpectreInteractiveParallelHandle s : parallelSessions) {
+      for (final SpectreInteractiveParallelHandle s : parallelSessions) {
 
         plots = s.getPlots();
 

@@ -15,17 +15,17 @@ public class BuggyNetlistBatchTest {
   @Test
   void test() throws IOException {
 
-    SpectreFactory factory = SpectreFactory.getSpectreFactory(new File("/tmp"));
+    final SpectreFactory factory = SpectreFactory.getSpectreFactory(new File("/tmp"));
 
     factory.setTimeout(5, TimeUnit.SECONDS);
 
-    SpectreBatchSession session = factory.createBatchSession("test");
+    final SpectreBatchSession session = factory.createBatchSession("test");
     session.setNetlist(new File("./src/test/resources/buggy_netlist.scs"));
 
     try {
       session.simulate();
       fail("Bug in netlist not detected");
-    } catch (UnableToStartSession e) {
+    } catch (final UnableToStartSession e) {
     }
   }
 }

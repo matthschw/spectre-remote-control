@@ -15,17 +15,17 @@ import edlab.eda.reader.nutmeg.NutmegPlot;
 public class RCLowpassBatchTest {
 
   @Test
-  void test() throws IOException, UnableToStartSession { 
+  void test() throws IOException, UnableToStartSession {
 
-    SpectreFactory factory = SpectreFactory.getSpectreFactory(new File("/tmp"));
+    final SpectreFactory factory = SpectreFactory.getSpectreFactory(new File("/tmp"));
 
     factory.setTimeout(5, TimeUnit.SECONDS);
 
-    SpectreBatchSession session = factory.createBatchSession("test");
+    final SpectreBatchSession session = factory.createBatchSession("test");
 
     session.setNetlist(new File("./src/test/resources/rc_lowpass.scs"));
 
-    List<NutmegPlot> plots = session.simulate();
+    final List<NutmegPlot> plots = session.simulate();
 
     if (plots.size() != 4) {
       fail("Simulation failed");

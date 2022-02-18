@@ -13,14 +13,20 @@ import java.util.Set;
 import edlab.eda.cadence.rc.session.UnableToStartSession;
 import edlab.eda.reader.nutmeg.NutmegPlot;
 
+/**
+ * Simulation Session for Cadence Spectre
+ */
 public abstract class SpectreSession {
 
   protected static final String NL_FILE_NAME = "input";
   protected static final String NL_FILE_NAME_EXTENTION = "scs";
-  protected static final String LOG_FILENAME = "spectre.out";
+  public static final String LOG_FILENAME = "spectre.out";
   protected static final String RAW_FILE_NAME_EXTENTION = "raw";
   protected static final String AHDLLIB_DIRNAME = "ahdl";
 
+  /**
+   * Mode of simulation (32bit, 64 bit)
+   */
   protected static enum MODE {
     BIT32, BIT64
   }
@@ -48,56 +54,70 @@ public abstract class SpectreSession {
   protected int noOfThreads;
 
   protected Set<File> includeDirectories = new HashSet<>();
-
   protected SpectreFactory factory;
 
-  protected SpectreSession(SpectreFactory factory, String name) {
+  protected SpectreSession(final SpectreFactory factory, final String name) {
 
     this.factory = factory;
     this.mode = MODE.BIT64;
     this.noOfThreads = 1;
 
-    String username = System.getProperty("user.name");
+    final String username = System.getProperty("user.name");
 
-    String dirName = "";
+    StringBuilder dirName = new StringBuilder();
 
     if (factory.getSimPrefix() != null) {
-      dirName += factory.getSimPrefix() + "_";
+      dirName.append(factory.getSimPrefix()).append("_");
     }
 
     if (name != null) {
-      dirName += name + "_";
+      dirName.append(name).append("_");
     }
 
-    dirName += "spectre" + "_" + username + "_";
+    dirName.append("spectre").append("_").append(username).append("_");
 
     try {
 
-      Path path = Files.createTempDirectory(factory.getSimDirectory().toPath(),
-          dirName);
+      final Path path = Files.createTempDirectory(
+          factory.getSimDirectory().toPath(), dirName.toString());
 
       this.workingDir = path.toFile();
-    } catch (IOException e) {
+    } catch (final IOException e) {
     }
 
-    this.rawFile = new File(workingDir.toString() + "/" + NL_FILE_NAME + "."
-        + RAW_FILE_NAME_EXTENTION);
+    this.rawFile = new File(this.workingDir.toString() + "/" + NL_FILE_NAME
+        + "." + RAW_FILE_NAME_EXTENTION);
   }
 
+  /**
+   * Write the netlist to the simulation directory
+   * 
+   * @return <code>true</code> when writing of the netlist is successful,
+   *         <code>false</code> otherwise
+   */
   protected boolean writeNetlist() {
 
     if (this.netlist != null) {
       try {
-        FileWriter writer = new FileWriter(this.getNetlistPath(), false);
+        final FileWriter writer = new FileWriter(this.getNetlistPath(), false);
         writer.write(this.netlist);
         writer.close();
         return true;
-      } catch (IOException e) {
+      } catch (final IOException e) {
         return false;
       }
     } else {
       return false;
     }
+  }
+
+  /**
+   * Get the working directory of the simulator
+   * 
+   * @return path to working directory
+   */
+  public String getWorkingDir() {
+    return this.workingDir.toString();
   }
 
   /**
@@ -143,8 +163,8 @@ public abstract class SpectreSession {
    * @param includeDirectory directory to be checked
    * @return <code>true</code> when already added, <code>false</code> otherwise
    */
-  public boolean isIncludeDirectory(File includeDirectory) {
-    for (File dir : includeDirectories) {
+  public boolean isIncludeDirectory(final File includeDirectory) {
+    for (final File dir : this.includeDirectories) {
       if (dir.equals(includeDirectory)) {
         return true;
       }
@@ -158,7 +178,7 @@ public abstract class SpectreSession {
    * @param includeDirectory directory to be checked
    * @return <code>true</code> when already added, <code>false</code> otherwise
    */
-  public boolean isIncludeDirectory(String includeDirectory) {
+  public boolean isIncludeDirectory(final String includeDirectory) {
     if (includeDirectory instanceof String) {
       return this.isIncludeDirectory(new File(includeDirectory));
     } else {
@@ -187,7 +207,7 @@ public abstract class SpectreSession {
    * @throws FileNotFoundException Exception is thrown when the directory is not
    *                               accessible
    */
-  public boolean addIncludeDirectory(String includeDirectory)
+  public boolean addIncludeDirectory(final String includeDirectory)
       throws FileNotFoundException {
     if (includeDirectory instanceof String) {
       return this.addIncludeDirectory(new File(includeDirectory));
@@ -212,7 +232,7 @@ public abstract class SpectreSession {
    * @return <code>true</code> when the directory is removed successfully,
    *         <code>false</code> otherwise
    */
-  public boolean removeIncludeDirectory(String includeDirectory) {
+  public boolean removeIncludeDirectory(final String includeDirectory) {
     if (includeDirectory instanceof String) {
       return this.removeIncludeDirectory(new File(includeDirectory));
     } else {
@@ -224,16 +244,20 @@ public abstract class SpectreSession {
    * Set the netlist for simulation
    *
    * @param netlist Spectre-compatible netlist
+   * 
+   * @return this
    */
-  public abstract void setNetlist(String netlist);
+  public abstract SpectreSession setNetlist(String netlist);
 
   /**
    * Set the netlist for simulation
    *
    * @param netlist path to spectre-compatible netlist
    * @throws IOException Exception is thrown when the netlist is not available
+   * 
+   * @return this
    */
-  public abstract void setNetlist(File netlist) throws IOException;
+  public abstract SpectreSession setNetlist(File netlist) throws IOException;
 
   /**
    * Run a simulation, read and return results
@@ -247,8 +271,9 @@ public abstract class SpectreSession {
    * Run a simulation and dont read results
    *
    * @throws UnableToStartSession when the session cannot be started
+   * @return this
    */
-  public abstract void simulateOnly() throws UnableToStartSession;
+  public abstract SpectreSession simulateOnly() throws UnableToStartSession;
 
   /**
    * Read results from simulation

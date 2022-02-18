@@ -1,0 +1,11 @@
+//input.scs
+global 0
+
+parameters r1=1k r2=2k
+
+save O
+V0 (I 0) vsource type=dc mag=1 dc=1
+R1 (I O) resistor r=r1
+R2 (O 0) resistor r=r2
+
+dcop dc
