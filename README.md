@@ -1,7 +1,7 @@
 # spectre-remote-control
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
-Remote-Control for Cadence Spectre in Interactive and Batch Mode.
+Remote-Control for [Cadence Spectre](https://www.cadence.com/ko_KR/home/tools/custom-ic-analog-rf-design/circuit-simulation/spectre-simulation-platform.html) in Interactive and Batch Mode.
 
 This software was created with [OpenJDK 1.8](https://openjdk.java.net) 
 and [Apache Maven 3.6.3](https://maven.apache.org).
