@@ -41,7 +41,7 @@ R2 (O 0) resistor r=r2
 dcop dc
 ```
 can be simulated with this remote control as described 
-in  `./src/test/java/edlab/eda/cadence/rc/spectre/VoltageDivider.java'
+in  `./src/test/java/edlab/eda/cadence/rc/spectre/VoltageDivider.java`
 
 ```java
 package edlab.eda.cadence.rc.spectre;
