@@ -8,8 +8,6 @@ import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.Test;
 
-import edlab.eda.cadence.rc.session.UnableToStartSession;
-
 public class BuggyNetlistInteractiveTest {
 
   @Test
@@ -25,7 +23,7 @@ public class BuggyNetlistInteractiveTest {
     try {
       session.start();
       fail("Bug in netlist not detected");
-    } catch (final UnableToStartSession e) {
+    } catch (final UnableToStartSpectreSession e) {
     }
   }
 }

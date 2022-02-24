@@ -64,7 +64,7 @@ public abstract class SpectreSession {
 
     final String username = System.getProperty("user.name");
 
-    StringBuilder dirName = new StringBuilder();
+    final StringBuilder dirName = new StringBuilder();
 
     if (factory.getSimPrefix() != null) {
       dirName.append(factory.getSimPrefix()).append("_");
@@ -265,7 +265,7 @@ public abstract class SpectreSession {
    * @return list of resulting plots
    * @throws UnableToStartSession when the session cannot be started
    */
-  public abstract List<NutmegPlot> simulate() throws UnableToStartSession;
+  public abstract List<NutmegPlot> simulate() throws UnableToStartSpectreSession;
 
   /**
    * Run a simulation and dont read results
@@ -273,7 +273,7 @@ public abstract class SpectreSession {
    * @throws UnableToStartSession when the session cannot be started
    * @return this
    */
-  public abstract SpectreSession simulateOnly() throws UnableToStartSession;
+  public abstract SpectreSession simulateOnly() throws UnableToStartSpectreSession;
 
   /**
    * Read results from simulation

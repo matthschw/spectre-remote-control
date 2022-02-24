@@ -8,7 +8,6 @@ import java.nio.file.Files;
 import java.util.LinkedList;
 import java.util.List;
 
-import edlab.eda.cadence.rc.session.UnableToStartSession;
 import edlab.eda.reader.nutmeg.NutReader;
 import edlab.eda.reader.nutmeg.NutmegPlot;
 
@@ -71,7 +70,7 @@ public final class SpectreBatchSession extends SpectreSession {
    */
   private String formatShellCommand() {
 
-    StringBuilder cmd = new StringBuilder().append(this.factory.getCommand());
+    final StringBuilder cmd = new StringBuilder().append(this.factory.getCommand());
 
     if (this.mode == MODE.BIT64) {
       cmd.append(" -64");
@@ -102,13 +101,13 @@ public final class SpectreBatchSession extends SpectreSession {
   }
 
   @Override
-  public List<NutmegPlot> simulate() throws UnableToStartSession {
+  public List<NutmegPlot> simulate() throws UnableToStartSpectreSession {
     this.simulateOnly();
     return this.readResults();
   }
 
   @Override
-  public SpectreBatchSession simulateOnly() throws UnableToStartSession {
+  public SpectreBatchSession simulateOnly() throws UnableToStartSpectreSession {
     try {
 
       final Process process = Runtime.getRuntime()
@@ -122,12 +121,12 @@ public final class SpectreBatchSession extends SpectreSession {
       }
 
       if (process.exitValue() > 0) {
-        throw new UnableToStartSession(this.formatShellCommand(),
+        throw new UnableToStartSpectreSession(this.formatShellCommand(),
             this.workingDir, new File(this.workingDir, LOG_FILENAME));
       }
 
     } catch (final IOException e) {
-      throw new UnableToStartSession(this.formatShellCommand(), this.workingDir,
+      throw new UnableToStartSpectreSession(this.formatShellCommand(), this.workingDir,
           new File(this.workingDir, LOG_FILENAME));
     }
     return this;

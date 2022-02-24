@@ -10,7 +10,6 @@ import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
-import edlab.eda.cadence.rc.session.UnableToStartSession;
 import edlab.eda.cadence.rc.spectre.parallel.SpectreInteractiveParallelHandle;
 import edlab.eda.cadence.rc.spectre.parallel.SpectreParallelPool;
 import edlab.eda.reader.nutmeg.NutmegPlot;
@@ -21,7 +20,7 @@ class ParallelTest {
   public static final int TRIALS = 50;
 
   @Test
-  void test() throws IOException, UnableToStartSession {
+  void test() throws IOException, UnableToStartSpectreSession {
 
     final SpectreFactory factory = SpectreFactory.getSpectreFactory(new File("/tmp"));
     SpectreParallelPool framework;

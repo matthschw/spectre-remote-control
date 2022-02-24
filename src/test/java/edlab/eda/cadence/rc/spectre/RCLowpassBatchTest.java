@@ -9,13 +9,12 @@ import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.Test;
 
-import edlab.eda.cadence.rc.session.UnableToStartSession;
 import edlab.eda.reader.nutmeg.NutmegPlot;
 
 public class RCLowpassBatchTest {
 
   @Test
-  void test() throws IOException, UnableToStartSession {
+  void test() throws IOException, UnableToStartSpectreSession {
 
     final SpectreFactory factory = SpectreFactory.getSpectreFactory(new File("/tmp"));
 

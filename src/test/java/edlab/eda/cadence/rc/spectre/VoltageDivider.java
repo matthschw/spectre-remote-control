@@ -4,14 +4,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import edlab.eda.cadence.rc.session.UnableToStartSession;
 import edlab.eda.reader.nutmeg.NutmegPlot;
 import edlab.eda.reader.nutmeg.NutmegRealPlot;
 
 public class VoltageDivider {
 
-  public static void main(String[] args)
-      throws IOException, UnableToStartSession {
+  public static void main(final String[] args)
+      throws IOException, UnableToStartSpectreSession {
 
     // Create a factory for creating new Spectre Sessions. Simulation results
     // are stored at '/tmp'
@@ -32,13 +31,13 @@ public class VoltageDivider {
       session.setValueAttribute("r1", r1);
 
       // simulate and read plots
-      List<NutmegPlot> plots = session.simulate();
+      final List<NutmegPlot> plots = session.simulate();
 
       // get first plot from list of plots
-      NutmegRealPlot plot = (NutmegRealPlot) plots.get(0);
+      final NutmegRealPlot plot = (NutmegRealPlot) plots.get(0);
 
       // Read wave from plot
-      double[] wave = plot.getWave("O");
+      final double[] wave = plot.getWave("O");
 
       // Write results to console
       System.out.println("O = " + wave[0] + "V for r1=" + r1 + " Ohm");
