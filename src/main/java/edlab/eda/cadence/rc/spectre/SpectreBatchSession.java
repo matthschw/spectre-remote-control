@@ -70,7 +70,8 @@ public final class SpectreBatchSession extends SpectreSession {
    */
   private String formatShellCommand() {
 
-    final StringBuilder cmd = new StringBuilder().append(this.factory.getCommand());
+    final StringBuilder cmd = new StringBuilder()
+        .append(this.factory.getCommand());
 
     if (this.mode == MODE.BIT64) {
       cmd.append(" -64");
@@ -126,8 +127,8 @@ public final class SpectreBatchSession extends SpectreSession {
       }
 
     } catch (final IOException e) {
-      throw new UnableToStartSpectreSession(this.formatShellCommand(), this.workingDir,
-          new File(this.workingDir, LOG_FILENAME));
+      throw new UnableToStartSpectreSession(this.formatShellCommand(),
+          this.workingDir, new File(this.workingDir, LOG_FILENAME));
     }
     return this;
   }

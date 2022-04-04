@@ -13,11 +13,13 @@ public class BuggyNetlistInteractiveTest {
   @Test
   void test() throws IOException {
 
-    final SpectreFactory factory = SpectreFactory.getSpectreFactory(new File("/tmp"));
+    final SpectreFactory factory = SpectreFactory
+        .getSpectreFactory(new File("/tmp"));
 
     factory.setTimeout(5, TimeUnit.SECONDS);
 
-    final SpectreInteractiveSession session = factory.createInteractiveSession("test");
+    final SpectreInteractiveSession session = factory
+        .createInteractiveSession("test");
     session.setNetlist(new File("./src/test/resources/buggy_netlist.scs"));
 
     try {

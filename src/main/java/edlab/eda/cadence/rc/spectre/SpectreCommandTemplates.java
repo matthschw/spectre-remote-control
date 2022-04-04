@@ -84,6 +84,7 @@ final class SpectreCommandTemplates {
    * @return template when existing, <code>null</code> otherwise
    */
   static SkillCommandTemplate getTemplate(final String name) {
+
     if (SpectreCommandTemplates.commandTemplates == null) {
       SpectreCommandTemplates.commandTemplates = new SpectreCommandTemplates();
     }

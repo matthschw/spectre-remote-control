@@ -94,13 +94,19 @@ public final class SpectreFactory {
    *
    * @param watchdogTimeout  timeout
    * @param watchdogTimeUnit time unit
-   * @return this
+   * @return this when the parameters are valid, <code>null</code> otherwise
    */
   public SpectreFactory setWatchogTimeout(final long watchdogTimeout,
       final TimeUnit watchdogTimeUnit) {
-    this.watchogTimeoutDuration = watchdogTimeout;
-    this.watchogTimeoutTimeUnit = watchdogTimeUnit;
-    return this;
+
+    if (watchdogTimeUnit instanceof TimeUnit) {
+
+      this.watchogTimeoutDuration = watchdogTimeout;
+      this.watchogTimeoutTimeUnit = watchdogTimeUnit;
+      return this;
+    } else {
+      return null;
+    }
   }
 
   /**
@@ -127,15 +133,21 @@ public final class SpectreFactory {
    * Set timeout for Spectre session. This is the maximum time the tool will
    * wait for the simulation to finish
    *
-   * @param watchdogTimeout  timeout
-   * @param watchdogTimeUnit time unit
-   * @return this
+   * @param timeoutDuration timeout
+   * @param timeoutTimeUnit time unit
+   * @return this when the parameters are valid, <code>null</code> otherwise
    */
   public SpectreFactory setTimeout(final long timeoutDuration,
       final TimeUnit timeoutTimeUnit) {
-    this.timeoutDuration = timeoutDuration;
-    this.timeoutTimeUnit = timeoutTimeUnit;
-    return this;
+
+    if ((timeoutDuration > 0) && (timeoutTimeUnit instanceof TimeUnit)) {
+
+      this.timeoutDuration = timeoutDuration;
+      this.timeoutTimeUnit = timeoutTimeUnit;
+      return this;
+    } else {
+      return null;
+    }
   }
 
   /**

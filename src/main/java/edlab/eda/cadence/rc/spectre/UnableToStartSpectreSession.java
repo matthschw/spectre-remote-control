@@ -10,8 +10,8 @@ public class UnableToStartSpectreSession extends Exception {
   private final File workingDir;
   private final File logfile;
 
-  public UnableToStartSpectreSession(final String command, final File workingDir,
-      final File logfile) {
+  public UnableToStartSpectreSession(final String command,
+      final File workingDir, final File logfile) {
     super(
         "Unable to start session with command \"" + command + "\" in directory "
             + workingDir.getAbsolutePath() + ". " + "\nPlease investigate \""

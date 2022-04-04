@@ -22,13 +22,13 @@ class ParallelTest {
   @Test
   void test() throws IOException, UnableToStartSpectreSession {
 
-    final SpectreFactory factory = SpectreFactory.getSpectreFactory(new File("/tmp"));
+    final SpectreFactory factory = SpectreFactory
+        .getSpectreFactory(new File("/tmp"));
     SpectreParallelPool framework;
     SpectreInteractiveSession session;
     List<NutmegPlot> plots;
 
-    final Set<SpectreInteractiveSession> sessions = new HashSet<>(
-        N);
+    final Set<SpectreInteractiveSession> sessions = new HashSet<>(N);
     Set<SpectreInteractiveParallelHandle> parallelSessions;
     SpectreInteractiveParallelHandle parallelSession;
 

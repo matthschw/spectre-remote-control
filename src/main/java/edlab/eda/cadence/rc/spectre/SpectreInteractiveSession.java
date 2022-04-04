@@ -112,6 +112,7 @@ public final class SpectreInteractiveSession extends SpectreSession {
       } catch (final Exception e) {
       }
     }
+
     return this;
   }
 
@@ -331,6 +332,15 @@ public final class SpectreInteractiveSession extends SpectreSession {
     return this.setValueAttribute(parameter, new SkillString(value.toString()));
   }
 
+  /**
+   * Set a value attribute in the session
+   * 
+   * @param parameter Name of the parameter
+   * @param value     value of the parameter
+   * @return <code>true</code> when the parameter was set, <code>false</code>
+   *         otherwise
+   * @throws UnableToStartSpectreSession when the session did not start
+   */
   private boolean setValueAttribute(final String parameter,
       final SkillDataobject value) throws UnableToStartSpectreSession {
 
@@ -399,6 +409,13 @@ public final class SpectreInteractiveSession extends SpectreSession {
     }
   }
 
+  /**
+   * Get a value attribute
+   * 
+   * @param parameter Name of the parameter
+   * @return value of the parameter
+   * @throws UnableToStartSpectreSession when the session did not start
+   */
   private SkillDataobject getValueAttribute(final String parameter)
       throws UnableToStartSpectreSession {
 
@@ -441,6 +458,13 @@ public final class SpectreInteractiveSession extends SpectreSession {
 
   }
 
+  /**
+   * Get the identififer of a parameter
+   * 
+   * @param parameter Name of a parameter
+   * @return <code>true</code> when the parameter is existing,
+   *         <code>false</code> otherwise
+   */
   private boolean readParameterIdentififer(final String parameter) {
 
     SkillCommand command = null;
@@ -476,6 +500,13 @@ public final class SpectreInteractiveSession extends SpectreSession {
     }
   }
 
+  /**
+   * Set the result directory for simulation. This function is triggered every
+   * new simulation run
+   * 
+   * @return <code>true</code> when the result directory was set successfully,
+   *         <code>false</code> otherwise
+   */
   private boolean setResultDir() {
 
     SkillCommand command = null;

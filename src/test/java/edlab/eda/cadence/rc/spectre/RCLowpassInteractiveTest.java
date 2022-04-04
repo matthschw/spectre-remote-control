@@ -32,11 +32,13 @@ public class RCLowpassInteractiveTest {
     analysesInNetlist.add("tran");
     analysesInNetlist.add("ac");
 
-    final SpectreFactory factory = SpectreFactory.getSpectreFactory(new File("/tmp"));
+    final SpectreFactory factory = SpectreFactory
+        .getSpectreFactory(new File("/tmp"));
 
     factory.setTimeout(5, TimeUnit.SECONDS);
 
-    final SpectreInteractiveSession session = factory.createInteractiveSession("test");
+    final SpectreInteractiveSession session = factory
+        .createInteractiveSession("test");
 
     session.setNetlist(new File("./src/test/resources/rc_lowpass.scs"));
 
@@ -71,7 +73,6 @@ public class RCLowpassInteractiveTest {
       fail("\"r1\" incorrect");
     }
 
-
     List<NutmegPlot> plots = session.simulate();
 
     if (plots.size() != 4) {
@@ -98,7 +99,6 @@ public class RCLowpassInteractiveTest {
       fail("Simulation failed");
     }
 
-
     try {
       Thread.sleep(10000);
     } catch (final InterruptedException e) {
@@ -116,8 +116,6 @@ public class RCLowpassInteractiveTest {
 
     final Set<String> blacklistAnalysis = new HashSet<>();
     blacklistAnalysis.add("tran");
-
-
 
     try {
       Thread.sleep(10000);

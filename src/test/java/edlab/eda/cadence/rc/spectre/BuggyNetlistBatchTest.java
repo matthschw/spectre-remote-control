@@ -13,7 +13,8 @@ public class BuggyNetlistBatchTest {
   @Test
   void test() throws IOException {
 
-    final SpectreFactory factory = SpectreFactory.getSpectreFactory(new File("/tmp"));
+    final SpectreFactory factory = SpectreFactory
+        .getSpectreFactory(new File("/tmp"));
 
     factory.setTimeout(5, TimeUnit.SECONDS);
 
