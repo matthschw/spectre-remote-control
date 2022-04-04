@@ -67,6 +67,9 @@ public final class SpectreInteractiveSession extends SpectreSession {
 
     this.session.setTimeout(factory.getTimeoutDuration(),
         factory.getTimeoutTimeUnit());
+
+    this.session.setWatchdogTimeout(factory.getWatchdogTimeoutDuration(),
+        factory.getWatchdogTimeoutTimeUnit());
   }
 
   /**
@@ -187,7 +190,8 @@ public final class SpectreInteractiveSession extends SpectreSession {
    */
   private String formatShellCommand() {
 
-    final StringBuilder cmd = new StringBuilder().append(this.factory.getCommand());
+    final StringBuilder cmd = new StringBuilder()
+        .append(this.factory.getCommand());
 
     if (this.mode == MODE.BIT64) {
       cmd.append(" -64");
@@ -376,10 +380,11 @@ public final class SpectreInteractiveSession extends SpectreSession {
   }
 
   /**
-   * Get a numeric value from the session
+   * Get a real or integer numeric value from the session
    *
    * @param parameter Name of the parameter
-   * @return value when parameter is valid, <code>null</code> otherwise
+   * @return value when parameter is available and a real or integer numeric,
+   *         <code>null</code> otherwise
    * @throws UnableToStartSession when the session cannot be started
    */
   public BigDecimal getNumericValueAttribute(final String parameter)
@@ -387,6 +392,8 @@ public final class SpectreInteractiveSession extends SpectreSession {
     final SkillDataobject obj = this.getValueAttribute(parameter);
     if (obj instanceof SkillFlonum) {
       return ((SkillFlonum) obj).getFlonum();
+    } else if (obj instanceof SkillFixnum) {
+      return new BigDecimal(((SkillFixnum) obj).getFixnum());
     } else {
       return null;
     }

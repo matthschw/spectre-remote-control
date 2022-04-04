@@ -265,7 +265,8 @@ public abstract class SpectreSession {
    * @return list of resulting plots
    * @throws UnableToStartSession when the session cannot be started
    */
-  public abstract List<NutmegPlot> simulate() throws UnableToStartSpectreSession;
+  public abstract List<NutmegPlot> simulate()
+      throws UnableToStartSpectreSession;
 
   /**
    * Run a simulation and dont read results
@@ -273,7 +274,8 @@ public abstract class SpectreSession {
    * @throws UnableToStartSession when the session cannot be started
    * @return this
    */
-  public abstract SpectreSession simulateOnly() throws UnableToStartSpectreSession;
+  public abstract SpectreSession simulateOnly()
+      throws UnableToStartSpectreSession;
 
   /**
    * Read results from simulation

@@ -18,8 +18,13 @@ public final class SpectreFactory {
 
   private final File simDirectory;
   private File ahdlShipDbDir;
-  private long timeoutDuration = Long.MAX_VALUE;
+
+  private long timeoutDuration = 10;
   private TimeUnit timeoutTimeUnit = TimeUnit.DAYS;
+
+  private long watchogTimeoutDuration = 5;
+  private TimeUnit watchogTimeoutTimeUnit = TimeUnit.MINUTES;
+
   private String simPrefix = null;
   private String command = DEFAULT_COMMAND;
 
@@ -87,13 +92,49 @@ public final class SpectreFactory {
    * indicates that the license is never released (you must call
    * {@link SpectreInteractiveSession#stop} explicitly).
    *
-   * @param timeout timeout
-   * @param unit    time unit
+   * @param watchdogTimeout  timeout
+   * @param watchdogTimeUnit time unit
    * @return this
    */
-  public SpectreFactory setTimeout(final long timeout, final TimeUnit unit) {
-    this.timeoutDuration = timeout;
-    this.timeoutTimeUnit = unit;
+  public SpectreFactory setWatchogTimeout(final long watchdogTimeout,
+      final TimeUnit watchdogTimeUnit) {
+    this.watchogTimeoutDuration = watchdogTimeout;
+    this.watchogTimeoutTimeUnit = watchdogTimeUnit;
+    return this;
+  }
+
+  /**
+   * Get watchdog timeout duration
+   *
+   * @return timeout
+   * @see SpectreFactory#setWatchogTimeout
+   */
+  public long getWatchdogTimeoutDuration() {
+    return this.watchogTimeoutDuration;
+  }
+
+  /**
+   * Get watchdog timeout time unit
+   *
+   * @return time unit
+   * @see SpectreFactory#setWatchogTimeout
+   */
+  public TimeUnit getWatchdogTimeoutTimeUnit() {
+    return this.watchogTimeoutTimeUnit;
+  }
+
+  /**
+   * Set timeout for Spectre session. This is the maximum time the tool will
+   * wait for the simulation to finish
+   *
+   * @param watchdogTimeout  timeout
+   * @param watchdogTimeUnit time unit
+   * @return this
+   */
+  public SpectreFactory setTimeout(final long timeoutDuration,
+      final TimeUnit timeoutTimeUnit) {
+    this.timeoutDuration = timeoutDuration;
+    this.timeoutTimeUnit = timeoutTimeUnit;
     return this;
   }
 
@@ -101,7 +142,7 @@ public final class SpectreFactory {
    * Get timeout duration
    *
    * @return timeout
-   * @see SpectreFactory#setTimeout
+   * @see SpectreFactory#setWatchogTimeout
    */
   public long getTimeoutDuration() {
     return this.timeoutDuration;
@@ -111,7 +152,7 @@ public final class SpectreFactory {
    * Get timeout time unit
    *
    * @return time unit
-   * @see SpectreFactory#setTimeout
+   * @see SpectreFactory#setWatchogTimeout
    */
   public TimeUnit getTimeoutTimeUnit() {
     return this.timeoutTimeUnit;
