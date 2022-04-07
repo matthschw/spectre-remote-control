@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -295,5 +296,28 @@ public final class SpectreFactory {
     }
 
     return false;
+  }
+
+  /**
+   * Create a linter for VerilogA code
+   * 
+   * @param ahdlCode VerilogA code to be linted
+   * @return linter
+   */
+  public VerilogALinter createVerilogAlinter(String ahdlCode) {
+    return new VerilogALinter(this, ahdlCode);
+  }
+
+  /**
+   * Create a linter for VerilogA code
+   * 
+   * @param file File that contains the the VerilogA code
+   * @return linter
+   * @throws IOException is thrown when the file cannot be accessed
+   */
+  public VerilogALinter createVerilogAlinter(File file) throws IOException {
+
+    return this
+        .createVerilogAlinter(new String(Files.readAllBytes(file.toPath())));
   }
 }
