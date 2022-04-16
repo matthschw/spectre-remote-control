@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 
 import org.junit.jupiter.api.Test;
 
@@ -22,7 +21,7 @@ class LinterTest {
     linter1.run();
 
     if (!linter1.isValid()) {
-      fail("Valid AHDL code indetified as invalid");
+      fail("Valid AHDL code indentified as invalid");
     }
 
     VerilogALinter linter2 = factory
@@ -31,7 +30,7 @@ class LinterTest {
     linter2.run();
 
     if (linter2.isValid()) {
-      fail("Invalid AHDL code indetified as valid");
+      fail("Invalid AHDL code indentified as valid");
     }
   }
 }
