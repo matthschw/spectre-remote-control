@@ -1,11 +1,10 @@
 package edlab.eda.cadence.rc.spectre;
 
-import static org.junit.jupiter.api.Assertions.fail;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class BuggyNetlistBatchTest {
@@ -23,7 +22,7 @@ public class BuggyNetlistBatchTest {
 
     try {
       session.simulate();
-      fail("Bug in netlist not detected");
+      Assertions.fail("Bug in netlist not detected");
     } catch (final UnableToStartSpectreSession e) {
     }
   }

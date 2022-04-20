@@ -14,7 +14,7 @@ public class VerilogALinter {
   public static final String DUT_FILE_NAME = "test.va";
   public static final String LOG_FILE_NAME = "lint.log";
 
-  private String ahdlCode;
+  private final String ahdlCode;
   private boolean valid = false;
 
   private File workingDir;
@@ -25,7 +25,7 @@ public class VerilogALinter {
    * @param factory  Factory
    * @param ahdlCode Code to be linted
    */
-  VerilogALinter(SpectreFactory factory, String ahdlCode) {
+  VerilogALinter(final SpectreFactory factory, final String ahdlCode) {
 
     this.ahdlCode = ahdlCode;
 
@@ -47,7 +47,7 @@ public class VerilogALinter {
       this.workingDir = path.toFile();
 
       final FileWriter writer = new FileWriter(
-          new File(this.workingDir, DUT_FILE_NAME), false);
+          new File(this.workingDir, VerilogALinter.DUT_FILE_NAME), false);
 
       writer.write(this.ahdlCode);
       writer.close();
@@ -75,8 +75,8 @@ public class VerilogALinter {
 
     try {
 
-      Process process = Runtime.getRuntime().exec("spectre " + "=log "
-          + LOG_FILE_NAME + " -ahdllint=static " + DUT_FILE_NAME, null,
+      final Process process = Runtime.getRuntime().exec("spectre " + "=log "
+          + VerilogALinter.LOG_FILE_NAME + " -ahdllint=static " + VerilogALinter.DUT_FILE_NAME, null,
           this.workingDir);
 
       process.waitFor();
@@ -85,10 +85,10 @@ public class VerilogALinter {
         this.valid = true;
       }
 
-    } catch (IOException e) {
+    } catch (final IOException e) {
       e.printStackTrace();
       return null;
-    } catch (InterruptedException e) {
+    } catch (final InterruptedException e) {
       e.printStackTrace();
       return null;
     }
@@ -103,6 +103,6 @@ public class VerilogALinter {
    * @return logfile
    */
   public File getLogfile() {
-    return new File(this.workingDir, LOG_FILE_NAME);
+    return new File(this.workingDir, VerilogALinter.LOG_FILE_NAME);
   }
 }

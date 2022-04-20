@@ -89,8 +89,8 @@ public final class SpectreBatchSession extends SpectreSession {
       cmd.append(" +multithread=").append(this.noOfThreads);
     }
 
-    cmd.append(" -ahdllibdir ./").append(AHDLLIB_DIRNAME);
-    cmd.append(" =log ").append(LOG_FILENAME);
+    cmd.append(" -ahdllibdir ./").append(SpectreSession.AHDLLIB_DIRNAME);
+    cmd.append(" =log ").append(SpectreSession.LOG_FILENAME);
 
     for (final File file : this.includeDirectories) {
       cmd.append(" -I").append(file.getAbsolutePath());
@@ -123,12 +123,12 @@ public final class SpectreBatchSession extends SpectreSession {
 
       if (process.exitValue() > 0) {
         throw new UnableToStartSpectreSession(this.formatShellCommand(),
-            this.workingDir, new File(this.workingDir, LOG_FILENAME));
+            this.workingDir, new File(this.workingDir, SpectreSession.LOG_FILENAME));
       }
 
     } catch (final IOException e) {
       throw new UnableToStartSpectreSession(this.formatShellCommand(),
-          this.workingDir, new File(this.workingDir, LOG_FILENAME));
+          this.workingDir, new File(this.workingDir, SpectreSession.LOG_FILENAME));
     }
     return this;
   }

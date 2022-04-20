@@ -1,12 +1,11 @@
 package edlab.eda.cadence.rc.spectre;
 
-import static org.junit.jupiter.api.Assertions.fail;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import edlab.eda.reader.nutmeg.NutmegPlot;
@@ -28,7 +27,7 @@ public class RCLowpassBatchTest {
     final List<NutmegPlot> plots = session.simulate();
 
     if (plots.size() != 4) {
-      fail("Simulation failed");
+      Assertions.fail("Simulation failed");
     }
   }
 }

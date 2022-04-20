@@ -27,7 +27,7 @@ public final class SpectreFactory {
   private TimeUnit watchogTimeoutTimeUnit = TimeUnit.MINUTES;
 
   private String simPrefix = null;
-  private String command = DEFAULT_COMMAND;
+  private String command = SpectreFactory.DEFAULT_COMMAND;
 
   private SpectreFactory(final String command, final File simDirectory) {
     this.command = command;
@@ -43,11 +43,11 @@ public final class SpectreFactory {
    */
   public static SpectreFactory getSpectreFactory(final File simDirectory) {
 
-    if ((simDirectory != null) && isSpectreAvailable(DEFAULT_COMMAND)
+    if ((simDirectory != null) && SpectreFactory.isSpectreAvailable(SpectreFactory.DEFAULT_COMMAND)
         && simDirectory.isDirectory() && simDirectory.canRead()
         && simDirectory.canWrite()) {
 
-      return new SpectreFactory(DEFAULT_COMMAND, simDirectory);
+      return new SpectreFactory(SpectreFactory.DEFAULT_COMMAND, simDirectory);
     }
 
     return null;
@@ -259,7 +259,7 @@ public final class SpectreFactory {
    *         otherwise
    */
   public static boolean isSpectreAvailable() {
-    return SpectreFactory.isSpectreAvailable(DEFAULT_COMMAND);
+    return SpectreFactory.isSpectreAvailable(SpectreFactory.DEFAULT_COMMAND);
   }
 
   /**
@@ -304,7 +304,7 @@ public final class SpectreFactory {
    * @param ahdlCode VerilogA code to be linted
    * @return linter
    */
-  public VerilogALinter createVerilogAlinter(String ahdlCode) {
+  public VerilogALinter createVerilogAlinter(final String ahdlCode) {
     return new VerilogALinter(this, ahdlCode);
   }
 
@@ -315,7 +315,7 @@ public final class SpectreFactory {
    * @return linter
    * @throws IOException is thrown when the file cannot be accessed
    */
-  public VerilogALinter createVerilogAlinter(File file) throws IOException {
+  public VerilogALinter createVerilogAlinter(final File file) throws IOException {
 
     return this
         .createVerilogAlinter(new String(Files.readAllBytes(file.toPath())));

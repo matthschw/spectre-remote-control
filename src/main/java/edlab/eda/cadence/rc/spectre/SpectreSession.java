@@ -85,8 +85,8 @@ public abstract class SpectreSession {
     } catch (final IOException e) {
     }
 
-    this.rawFile = new File(this.workingDir.toString() + "/" + NL_FILE_NAME
-        + "." + RAW_FILE_NAME_EXTENTION);
+    this.rawFile = new File(this.workingDir.toString() + "/" + SpectreSession.NL_FILE_NAME
+        + "." + SpectreSession.RAW_FILE_NAME_EXTENTION);
   }
 
   /**
@@ -126,7 +126,7 @@ public abstract class SpectreSession {
    * @return path to netlist
    */
   protected String getNetlistPath() {
-    return this.workingDir.getAbsolutePath() + "/" + getNetlistName();
+    return this.workingDir.getAbsolutePath() + "/" + SpectreSession.getNetlistName();
   }
 
   /**
@@ -135,7 +135,7 @@ public abstract class SpectreSession {
    * @return name of netlist
    */
   protected static String getNetlistName() {
-    return NL_FILE_NAME + "." + NL_FILE_NAME_EXTENTION;
+    return SpectreSession.NL_FILE_NAME + "." + SpectreSession.NL_FILE_NAME_EXTENTION;
   }
 
   /**
