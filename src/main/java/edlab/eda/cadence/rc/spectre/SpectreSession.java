@@ -25,7 +25,14 @@ public abstract class SpectreSession {
   protected static final String AHDLLIB_DIRNAME = "ahdl";
 
   /**
-   * Mode of simulation (32bit, 64 bit)
+   * Error preset
+   */
+  public static enum ERRPRESET {
+    LIBERAL, MODERATE, CONSERVATIVE
+  }
+
+  /**
+   * Mode of simulation (32 bit, 64 bit)
    */
   protected static enum MODE {
     BIT32, BIT64
@@ -56,6 +63,11 @@ public abstract class SpectreSession {
   protected Set<File> includeDirectories = new HashSet<>();
   protected SpectreFactory factory;
 
+  protected boolean diagnoseMode = false;
+
+  protected boolean aps = false;
+  protected ERRPRESET apsErrpreset = ERRPRESET.CONSERVATIVE;
+
   protected SpectreSession(final SpectreFactory factory, final String name) {
 
     this.factory = factory;
@@ -85,8 +97,9 @@ public abstract class SpectreSession {
     } catch (final IOException e) {
     }
 
-    this.rawFile = new File(this.workingDir.toString() + "/" + SpectreSession.NL_FILE_NAME
-        + "." + SpectreSession.RAW_FILE_NAME_EXTENTION);
+    this.rawFile = new File(
+        this.workingDir.toString() + "/" + SpectreSession.NL_FILE_NAME + "."
+            + SpectreSession.RAW_FILE_NAME_EXTENTION);
   }
 
   /**
@@ -126,7 +139,8 @@ public abstract class SpectreSession {
    * @return path to netlist
    */
   protected String getNetlistPath() {
-    return this.workingDir.getAbsolutePath() + "/" + SpectreSession.getNetlistName();
+    return this.workingDir.getAbsolutePath() + "/"
+        + SpectreSession.getNetlistName();
   }
 
   /**
@@ -135,7 +149,8 @@ public abstract class SpectreSession {
    * @return name of netlist
    */
   protected static String getNetlistName() {
-    return SpectreSession.NL_FILE_NAME + "." + SpectreSession.NL_FILE_NAME_EXTENTION;
+    return SpectreSession.NL_FILE_NAME + "."
+        + SpectreSession.NL_FILE_NAME_EXTENTION;
   }
 
   /**
@@ -258,6 +273,44 @@ public abstract class SpectreSession {
    * @return this
    */
   public abstract SpectreSession setNetlist(File netlist) throws IOException;
+
+  /**
+   * Use the diagnose mode during simulation
+   * 
+   * @param diagnose <code>true</code> when the diagnose mode is enabled,
+   *                 <code>false</code> otherwise
+   * @return this
+   */
+  public SpectreSession enableDiagnoseMode(final boolean diagnose) {
+    this.diagnoseMode = diagnose;
+    return this;
+  }
+
+  /**
+   * Use Accellerated Parallel Simulation (APS) during simulation
+   * 
+   * @param aps <code>true</code> when APS is enabled, <code>false</code>
+   *            otherwise
+   * @return this
+   */
+  public SpectreSession enableAccelleratedParallelSimulation(
+      final boolean aps) {
+    this.aps = aps;
+    return this;
+  }
+
+  /**
+   * Specify the Accellerated Parallel Simulation (APS) error preset during
+   * simulation
+   * 
+   * @param errpreset error preset to be used
+   * @return this
+   */
+  public SpectreSession serAccelleratedParallelSimulationErrorPreset(
+      final ERRPRESET errpreset) {
+    this.apsErrpreset = errpreset;
+    return this;
+  }
 
   /**
    * Run a simulation, read and return results

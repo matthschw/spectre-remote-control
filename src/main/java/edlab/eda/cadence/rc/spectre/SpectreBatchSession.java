@@ -12,7 +12,7 @@ import edlab.eda.reader.nutmeg.NutReader;
 import edlab.eda.reader.nutmeg.NutmegPlot;
 
 /**
- * Batch Session for Cadence Spectre
+ * Batch session for Cadence Spectre
  */
 public final class SpectreBatchSession extends SpectreSession {
 
@@ -70,35 +70,45 @@ public final class SpectreBatchSession extends SpectreSession {
    */
   private String formatShellCommand() {
 
-    final StringBuilder cmd = new StringBuilder()
+    final StringBuilder commandBuilder = new StringBuilder()
         .append(this.factory.getCommand());
 
     if (this.mode == MODE.BIT64) {
-      cmd.append(" -64");
+      commandBuilder.append(" -64");
     } else if (this.mode == MODE.BIT32) {
-      cmd.append(" -32");
+      commandBuilder.append(" -32");
     }
 
     if (this.resultFmt == RESULT_FMT.NUTBIN) {
-      cmd.append(" -format nutbin");
+      commandBuilder.append(" -format nutbin");
     } else if (this.resultFmt == RESULT_FMT.NUTASCII) {
-      cmd.append(" -format nutascii");
+      commandBuilder.append(" -format nutascii");
+    }
+
+    if (this.diagnoseMode) {
+      commandBuilder.append(" +diagnose");
+    }
+
+    if (this.aps) {
+      commandBuilder.append(" ++aps=")
+          .append(this.apsErrpreset.toString().toLowerCase());
     }
 
     if (this.noOfThreads > 1) {
-      cmd.append(" +multithread=").append(this.noOfThreads);
+      commandBuilder.append(" +multithread=").append(this.noOfThreads);
     }
 
-    cmd.append(" -ahdllibdir ./").append(SpectreSession.AHDLLIB_DIRNAME);
-    cmd.append(" =log ").append(SpectreSession.LOG_FILENAME);
+    commandBuilder.append(" -ahdllibdir ./")
+        .append(SpectreSession.AHDLLIB_DIRNAME);
+    commandBuilder.append(" =log ").append(SpectreSession.LOG_FILENAME);
 
     for (final File file : this.includeDirectories) {
-      cmd.append(" -I").append(file.getAbsolutePath());
+      commandBuilder.append(" -I").append(file.getAbsolutePath());
     }
 
-    cmd.append(" ").append(SpectreSession.getNetlistName());
+    commandBuilder.append(" ").append(SpectreSession.getNetlistName());
 
-    return cmd.toString();
+    return commandBuilder.toString();
   }
 
   @Override
@@ -123,12 +133,14 @@ public final class SpectreBatchSession extends SpectreSession {
 
       if (process.exitValue() > 0) {
         throw new UnableToStartSpectreSession(this.formatShellCommand(),
-            this.workingDir, new File(this.workingDir, SpectreSession.LOG_FILENAME));
+            this.workingDir,
+            new File(this.workingDir, SpectreSession.LOG_FILENAME));
       }
 
     } catch (final IOException e) {
       throw new UnableToStartSpectreSession(this.formatShellCommand(),
-          this.workingDir, new File(this.workingDir, SpectreSession.LOG_FILENAME));
+          this.workingDir,
+          new File(this.workingDir, SpectreSession.LOG_FILENAME));
     }
     return this;
   }
@@ -137,6 +149,7 @@ public final class SpectreBatchSession extends SpectreSession {
   public List<NutmegPlot> readResults() {
 
     if (this.rawFile.exists()) {
+
       NutReader reader = null;
 
       if (this.resultFmt == RESULT_FMT.NUTASCII) {
