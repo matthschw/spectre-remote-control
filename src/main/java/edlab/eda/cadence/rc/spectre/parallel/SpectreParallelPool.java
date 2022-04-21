@@ -29,7 +29,7 @@ public final class SpectreParallelPool {
    * Create a {@link SpectreParallelPool} with default settings
    */
   public SpectreParallelPool() {
-    this.maxThreads = MAX_THREADS;
+    this.maxThreads = SpectreParallelPool.MAX_THREADS;
     this.sessions = new HashMap<>(this.maxThreads);
   }
 
@@ -50,7 +50,7 @@ public final class SpectreParallelPool {
    *                stdout, <code>false</code> otherwise
    */
   public SpectreParallelPool(final boolean verbose) {
-    this.maxThreads = MAX_THREADS;
+    this.maxThreads = SpectreParallelPool.MAX_THREADS;
     this.sessions = new HashMap<>(this.maxThreads);
     this.verbose = verbose;
   }

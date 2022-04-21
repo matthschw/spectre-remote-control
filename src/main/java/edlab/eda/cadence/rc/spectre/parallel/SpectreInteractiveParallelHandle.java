@@ -6,8 +6,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import edlab.eda.cadence.rc.session.UnableToStartSession;
 import edlab.eda.cadence.rc.spectre.SpectreInteractiveSession;
+import edlab.eda.cadence.rc.spectre.UnableToStartSpectreSession;
 import edlab.eda.reader.nutmeg.NutmegPlot;
 
 /**
@@ -138,20 +138,20 @@ public final class SpectreInteractiveParallelHandle
 
     try {
       this.simulateInner();
-    } catch (Exception e) {
+    } catch (final Exception e) {
       this.session.stop();
       try {
         Thread.sleep(10);
-      } catch (InterruptedException e1) {
+      } catch (final InterruptedException e1) {
       }
     }
 
-    if (this.plots == null || this.plots.isEmpty()) {
+    if ((this.plots == null) || this.plots.isEmpty()) {
       // simulate again when previous run threw an error
       try {
         this.simulateInner();
         return true;
-      } catch (Exception e) {
+      } catch (final Exception e) {
         return false;
       }
 
@@ -161,7 +161,7 @@ public final class SpectreInteractiveParallelHandle
   }
 
   private SpectreInteractiveParallelHandle simulateInner()
-      throws UnableToStartSession {
+      throws UnableToStartSpectreSession {
 
     for (final Entry<String, Object> entry : this.valueAttributes.entrySet()) {
       this.session.setValueAttribute(entry.getKey(), entry.getValue());
@@ -188,7 +188,7 @@ public final class SpectreInteractiveParallelHandle
 
   @Override
   @Deprecated
-  public void simulateOnly() throws UnableToStartSession {
+  public void simulateOnly() throws UnableToStartSpectreSession {
     this.session.simulateOnly();
   }
 }

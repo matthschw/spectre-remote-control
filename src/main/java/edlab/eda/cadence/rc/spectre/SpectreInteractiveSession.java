@@ -30,12 +30,13 @@ import edlab.eda.cadence.rc.session.EvaluableToSkill;
 import edlab.eda.cadence.rc.session.EvaluationFailedException;
 import edlab.eda.cadence.rc.session.InvalidDataobjectReferenceExecption;
 import edlab.eda.cadence.rc.session.SkillInteractiveSession;
+import edlab.eda.cadence.rc.session.UnableToStartInteractiveSession;
 import edlab.eda.cadence.rc.session.UnableToStartSession;
 import edlab.eda.reader.nutmeg.NutReader;
 import edlab.eda.reader.nutmeg.NutmegPlot;
 
 /**
- * Interactive Session for Cadence Spectre
+ * Interactive session for Cadence Spectre
  */
 public final class SpectreInteractiveSession extends SpectreSession {
 
@@ -66,6 +67,9 @@ public final class SpectreInteractiveSession extends SpectreSession {
 
     this.session.setTimeout(factory.getTimeoutDuration(),
         factory.getTimeoutTimeUnit());
+
+    this.session.setWatchdogTimeout(factory.getWatchdogTimeoutDuration(),
+        factory.getWatchdogTimeoutTimeUnit());
   }
 
   /**
@@ -108,6 +112,7 @@ public final class SpectreInteractiveSession extends SpectreSession {
       } catch (final Exception e) {
       }
     }
+
     return this;
   }
 
@@ -186,36 +191,47 @@ public final class SpectreInteractiveSession extends SpectreSession {
    */
   private String formatShellCommand() {
 
-    StringBuilder cmd = new StringBuilder().append(this.factory.getCommand());
+    final StringBuilder commandBuilder = new StringBuilder()
+        .append(this.factory.getCommand());
 
     if (this.mode == MODE.BIT64) {
-      cmd.append(" -64");
+      commandBuilder.append(" -64");
     } else if (this.mode == MODE.BIT32) {
-      cmd.append(" -32");
+      commandBuilder.append(" -32");
     }
 
-    cmd.append(" +interactive");
+    commandBuilder.append(" +interactive");
 
     if (this.resultFmt == RESULT_FMT.NUTBIN) {
-      cmd.append(" -format nutbin");
+      commandBuilder.append(" -format nutbin");
     } else if (this.resultFmt == RESULT_FMT.NUTASCII) {
-      cmd.append(" -format nutascii");
+      commandBuilder.append(" -format nutascii");
+    }
+
+    if (this.diagnoseMode) {
+      commandBuilder.append(" +diagnose");
+    }
+
+    if (this.aps) {
+      commandBuilder.append(" ++aps=")
+          .append(this.apsErrpreset.toString().toLowerCase());
     }
 
     if (this.noOfThreads > 1) {
-      cmd.append(" +multithread=").append(this.noOfThreads);
+      commandBuilder.append(" +multithread=").append(this.noOfThreads);
     }
 
-    cmd.append(" -ahdllibdir ./").append(AHDLLIB_DIRNAME);
-    cmd.append(" =log ").append(LOG_FILENAME);
+    commandBuilder.append(" -ahdllibdir ./")
+        .append(SpectreSession.AHDLLIB_DIRNAME);
+    commandBuilder.append(" =log ").append(SpectreSession.LOG_FILENAME);
 
     for (final File file : this.includeDirectories) {
-      cmd.append(" -I").append(file.getAbsolutePath());
+      commandBuilder.append(" -I").append(file.getAbsolutePath());
     }
 
-    cmd.append(" ").append(SpectreSession.getNetlistName());
+    commandBuilder.append(" ").append(SpectreSession.getNetlistName());
 
-    return cmd.toString();
+    return commandBuilder.toString();
   }
 
   /**
@@ -225,11 +241,12 @@ public final class SpectreInteractiveSession extends SpectreSession {
    *         <code>false</code> otherwise
    * @throws UnableToStartSession when the session cannot be started
    */
-  public SpectreInteractiveSession start() throws UnableToStartSession {
+  public SpectreInteractiveSession start() throws UnableToStartSpectreSession {
 
     if (!this.writeNetlist()) {
-      throw new UnableToStartSession(this.formatShellCommand(), this.workingDir,
-          new File(this.workingDir, LOG_FILENAME));
+      throw new UnableToStartSpectreSession(this.formatShellCommand(),
+          this.workingDir,
+          new File(this.workingDir, SpectreSession.LOG_FILENAME));
     }
 
     try {
@@ -242,8 +259,9 @@ public final class SpectreInteractiveSession extends SpectreSession {
       this.analysesMapping = null;
 
     } catch (final Exception e) {
-      throw new UnableToStartSession(this.formatShellCommand(), this.workingDir,
-          new File(this.workingDir, LOG_FILENAME));
+      throw new UnableToStartSpectreSession(this.formatShellCommand(),
+          this.workingDir,
+          new File(this.workingDir, SpectreSession.LOG_FILENAME));
     }
 
     for (final Entry<String, SkillDataobject> param : this.parameterValues
@@ -264,7 +282,7 @@ public final class SpectreInteractiveSession extends SpectreSession {
    * @throws UnableToStartSession when the session cannot be started
    */
   public boolean setValueAttribute(final String parameter, final String value)
-      throws UnableToStartSession {
+      throws UnableToStartSpectreSession {
     return this.setValueAttribute(parameter, new SkillString(value));
   }
 
@@ -278,7 +296,7 @@ public final class SpectreInteractiveSession extends SpectreSession {
    * @throws UnableToStartSession when the session cannot be started
    */
   public boolean setValueAttribute(final String parameter, final double value)
-      throws UnableToStartSession {
+      throws UnableToStartSpectreSession {
 
     return this.setValueAttribute(parameter,
         new SkillFlonum(new BigDecimal(value, MathContext.DECIMAL64)));
@@ -294,7 +312,7 @@ public final class SpectreInteractiveSession extends SpectreSession {
    * @throws UnableToStartSession when the session cannot be started
    */
   public boolean setValueAttribute(final String parameter, final int value)
-      throws UnableToStartSession {
+      throws UnableToStartSpectreSession {
     return this.setValueAttribute(parameter, new SkillFixnum(value));
   }
 
@@ -308,7 +326,7 @@ public final class SpectreInteractiveSession extends SpectreSession {
    * @throws UnableToStartSession when the session cannot be started
    */
   public boolean setValueAttribute(final String parameter,
-      final BigDecimal value) throws UnableToStartSession {
+      final BigDecimal value) throws UnableToStartSpectreSession {
     return this.setValueAttribute(parameter, new SkillFlonum(value));
   }
 
@@ -322,12 +340,21 @@ public final class SpectreInteractiveSession extends SpectreSession {
    * @throws UnableToStartSession when the session cannot be started
    */
   public boolean setValueAttribute(final String parameter, final Object value)
-      throws UnableToStartSession {
+      throws UnableToStartSpectreSession {
     return this.setValueAttribute(parameter, new SkillString(value.toString()));
   }
 
+  /**
+   * Set a value attribute in the session
+   * 
+   * @param parameter Name of the parameter
+   * @param value     value of the parameter
+   * @return <code>true</code> when the parameter was set, <code>false</code>
+   *         otherwise
+   * @throws UnableToStartSpectreSession when the session did not start
+   */
   private boolean setValueAttribute(final String parameter,
-      final SkillDataobject value) throws UnableToStartSession {
+      final SkillDataobject value) throws UnableToStartSpectreSession {
 
     if (!this.session.isActive()) {
       this.start();
@@ -357,7 +384,7 @@ public final class SpectreInteractiveSession extends SpectreSession {
 
         returnValue = this.session.evaluate(command, this.parentThread);
 
-      } catch (final UnableToStartSession e) {
+      } catch (final UnableToStartInteractiveSession e) {
       } catch (final EvaluationFailedException e) {
       } catch (final InvalidDataobjectReferenceExecption e) {
       }
@@ -375,24 +402,34 @@ public final class SpectreInteractiveSession extends SpectreSession {
   }
 
   /**
-   * Get a numeric value from the session
+   * Get a real or integer numeric value from the session
    *
    * @param parameter Name of the parameter
-   * @return value when parameter is valid, <code>null</code> otherwise
+   * @return value when parameter is available and a real or integer numeric,
+   *         <code>null</code> otherwise
    * @throws UnableToStartSession when the session cannot be started
    */
   public BigDecimal getNumericValueAttribute(final String parameter)
-      throws UnableToStartSession {
+      throws UnableToStartSpectreSession {
     final SkillDataobject obj = this.getValueAttribute(parameter);
     if (obj instanceof SkillFlonum) {
       return ((SkillFlonum) obj).getFlonum();
+    } else if (obj instanceof SkillFixnum) {
+      return new BigDecimal(((SkillFixnum) obj).getFixnum());
     } else {
       return null;
     }
   }
 
+  /**
+   * Get a value attribute
+   * 
+   * @param parameter Name of the parameter
+   * @return value of the parameter
+   * @throws UnableToStartSpectreSession when the session did not start
+   */
   private SkillDataobject getValueAttribute(final String parameter)
-      throws UnableToStartSession {
+      throws UnableToStartSpectreSession {
 
     if (!this.session.isActive()) {
       this.start();
@@ -421,7 +458,7 @@ public final class SpectreInteractiveSession extends SpectreSession {
 
         return this.session.evaluate(command, this.parentThread);
 
-      } catch (final UnableToStartSession e) {
+      } catch (final UnableToStartInteractiveSession e) {
       } catch (final EvaluationFailedException e) {
       } catch (final InvalidDataobjectReferenceExecption e) {
       }
@@ -433,6 +470,13 @@ public final class SpectreInteractiveSession extends SpectreSession {
 
   }
 
+  /**
+   * Get the identififer of a parameter
+   * 
+   * @param parameter Name of a parameter
+   * @return <code>true</code> when the parameter is existing,
+   *         <code>false</code> otherwise
+   */
   private boolean readParameterIdentififer(final String parameter) {
 
     SkillCommand command = null;
@@ -453,7 +497,7 @@ public final class SpectreInteractiveSession extends SpectreSession {
     SkillDataobject returnValue = null;
     try {
       returnValue = this.session.evaluate(command, this.parentThread);
-    } catch (final UnableToStartSession e) {
+    } catch (final UnableToStartInteractiveSession e) {
     } catch (final EvaluationFailedException e) {
     } catch (final InvalidDataobjectReferenceExecption e) {
     }
@@ -468,6 +512,13 @@ public final class SpectreInteractiveSession extends SpectreSession {
     }
   }
 
+  /**
+   * Set the result directory for simulation. This function is triggered every
+   * new simulation run
+   * 
+   * @return <code>true</code> when the result directory was set successfully,
+   *         <code>false</code> otherwise
+   */
   private boolean setResultDir() {
 
     SkillCommand command = null;
@@ -497,7 +548,7 @@ public final class SpectreInteractiveSession extends SpectreSession {
   }
 
   @Override
-  public List<NutmegPlot> simulate() throws UnableToStartSession {
+  public List<NutmegPlot> simulate() throws UnableToStartSpectreSession {
 
     SkillCommand command = null;
 
@@ -520,7 +571,7 @@ public final class SpectreInteractiveSession extends SpectreSession {
    * @throws UnableToStartSession when the session cannot be started
    */
   public List<NutmegPlot> simulate(final Set<String> analysesBlacklist)
-      throws UnableToStartSession {
+      throws UnableToStartSpectreSession {
 
     if (this.analysesMapping == null) {
       this.buildAnalysesMapping();
@@ -559,7 +610,7 @@ public final class SpectreInteractiveSession extends SpectreSession {
   }
 
   private List<NutmegPlot> simulate(final SkillCommand command)
-      throws UnableToStartSession {
+      throws UnableToStartSpectreSession {
 
     if (!this.session.isActive()) {
       this.start();
@@ -580,6 +631,10 @@ public final class SpectreInteractiveSession extends SpectreSession {
         resultValue = this.session.evaluate(command, this.parentThread);
       } catch (EvaluationFailedException
           | InvalidDataobjectReferenceExecption e) {
+      } catch (final UnableToStartInteractiveSession e) {
+        throw new UnableToStartSpectreSession(this.formatShellCommand(),
+            this.workingDir,
+            new File(this.workingDir, SpectreSession.LOG_FILENAME));
       }
 
       if (resultValue.isTrue()) {
@@ -604,8 +659,9 @@ public final class SpectreInteractiveSession extends SpectreSession {
         }
       } else {
         System.err.println(resultValue.toSkill());
-        throw new UnableToStartSession(this.formatShellCommand(),
-            this.workingDir, new File(this.workingDir, LOG_FILENAME));
+        throw new UnableToStartSpectreSession(this.formatShellCommand(),
+            this.workingDir,
+            new File(this.workingDir, SpectreSession.LOG_FILENAME));
       }
 
       if (this.rawFile.exists()) {
@@ -728,7 +784,7 @@ public final class SpectreInteractiveSession extends SpectreSession {
 
     } catch (final Error e) {
     } catch (final IncorrectSyntaxException e) {
-    } catch (final UnableToStartSession e) {
+    } catch (final UnableToStartInteractiveSession e) {
     } catch (final EvaluationFailedException e) {
     } catch (final InvalidDataobjectReferenceExecption e) {
     }
@@ -895,7 +951,8 @@ public final class SpectreInteractiveSession extends SpectreSession {
 
   @Override
   @Deprecated
-  public SpectreInteractiveSession simulateOnly() throws UnableToStartSession {
+  public SpectreInteractiveSession simulateOnly()
+      throws UnableToStartSpectreSession {
     System.err.println("Simulate-Only of Interactive Session not supported");
     return this;
   }
@@ -905,6 +962,6 @@ public final class SpectreInteractiveSession extends SpectreSession {
   public List<NutmegPlot> readResults() {
     System.err
         .println("Results from an interactive session are read automatically");
-    return new LinkedList<NutmegPlot>();
+    return new LinkedList<>();
   }
 }

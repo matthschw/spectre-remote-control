@@ -1,16 +1,14 @@
 package edlab.eda.cadence.rc.spectre;
 
-import static org.junit.jupiter.api.Assertions.fail;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import edlab.eda.cadence.rc.session.UnableToStartSession;
 import edlab.eda.cadence.rc.spectre.parallel.SpectreInteractiveParallelHandle;
 import edlab.eda.cadence.rc.spectre.parallel.SpectreParallelPool;
 import edlab.eda.reader.nutmeg.NutmegPlot;
@@ -21,25 +19,25 @@ class ParallelTest {
   public static final int TRIALS = 50;
 
   @Test
-  void test() throws IOException, UnableToStartSession {
+  void test() throws IOException, UnableToStartSpectreSession {
 
-    final SpectreFactory factory = SpectreFactory.getSpectreFactory(new File("/tmp"));
+    final SpectreFactory factory = SpectreFactory
+        .getSpectreFactory(new File("/tmp"));
     SpectreParallelPool framework;
     SpectreInteractiveSession session;
     List<NutmegPlot> plots;
 
-    final Set<SpectreInteractiveSession> sessions = new HashSet<>(
-        N);
+    final Set<SpectreInteractiveSession> sessions = new HashSet<>(ParallelTest.N);
     Set<SpectreInteractiveParallelHandle> parallelSessions;
     SpectreInteractiveParallelHandle parallelSession;
 
-    for (int i = 0; i < N; i++) {
+    for (int i = 0; i < ParallelTest.N; i++) {
       session = factory.createInteractiveSession("test");
       session.setNetlist(new File("./src/test/resources/rc_lowpass.scs"));
       sessions.add(session);
     }
 
-    for (int i = 0; i < TRIALS; i++) {
+    for (int i = 0; i < ParallelTest.TRIALS; i++) {
 
       framework = new SpectreParallelPool(2, false);
 
@@ -62,7 +60,7 @@ class ParallelTest {
         plots = s.getPlots();
 
         if (plots.size() != 4) {
-          fail("Simulation failed");
+          Assertions.fail("Simulation failed");
         }
       }
     }

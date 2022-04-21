@@ -2,10 +2,10 @@ package edlab.eda.cadence.rc.spectre.parallel;
 
 import java.util.List;
 
-import edlab.eda.cadence.rc.session.UnableToStartSession;
 import edlab.eda.cadence.rc.spectre.SpectreBatchSession;
 import edlab.eda.cadence.rc.spectre.SpectreSession;
 import edlab.eda.cadence.rc.spectre.SpectreSession.RESULT_FMT;
+import edlab.eda.cadence.rc.spectre.UnableToStartSpectreSession;
 import edlab.eda.reader.nutmeg.NutReader;
 import edlab.eda.reader.nutmeg.NutmegPlot;
 
@@ -33,7 +33,7 @@ public final class SpectreBatchParallelHandle implements ParallelizableSession {
   }
 
   @Override
-  public boolean simulate() throws UnableToStartSession {
+  public boolean simulate() throws UnableToStartSpectreSession {
     this.plots = this.session.simulate();
     return true;
   }
@@ -59,7 +59,7 @@ public final class SpectreBatchParallelHandle implements ParallelizableSession {
   }
 
   @Override
-  public void simulateOnly() throws UnableToStartSession {
+  public void simulateOnly() throws UnableToStartSpectreSession {
     this.session.simulateOnly();
   }
 }

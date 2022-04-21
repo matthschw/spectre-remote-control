@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -18,10 +19,15 @@ public final class SpectreFactory {
 
   private final File simDirectory;
   private File ahdlShipDbDir;
-  private long timeoutDuration = Long.MAX_VALUE;
+
+  private long timeoutDuration = 10;
   private TimeUnit timeoutTimeUnit = TimeUnit.DAYS;
+
+  private long watchogTimeoutDuration = 5;
+  private TimeUnit watchogTimeoutTimeUnit = TimeUnit.MINUTES;
+
   private String simPrefix = null;
-  private String command = DEFAULT_COMMAND;
+  private String command = SpectreFactory.DEFAULT_COMMAND;
 
   private SpectreFactory(final String command, final File simDirectory) {
     this.command = command;
@@ -37,11 +43,11 @@ public final class SpectreFactory {
    */
   public static SpectreFactory getSpectreFactory(final File simDirectory) {
 
-    if ((simDirectory != null) && isSpectreAvailable(DEFAULT_COMMAND)
+    if ((simDirectory != null) && SpectreFactory.isSpectreAvailable(SpectreFactory.DEFAULT_COMMAND)
         && simDirectory.isDirectory() && simDirectory.canRead()
         && simDirectory.canWrite()) {
 
-      return new SpectreFactory(DEFAULT_COMMAND, simDirectory);
+      return new SpectreFactory(SpectreFactory.DEFAULT_COMMAND, simDirectory);
     }
 
     return null;
@@ -87,21 +93,69 @@ public final class SpectreFactory {
    * indicates that the license is never released (you must call
    * {@link SpectreInteractiveSession#stop} explicitly).
    *
-   * @param timeout timeout
-   * @param unit    time unit
-   * @return this
+   * @param watchdogTimeout  timeout
+   * @param watchdogTimeUnit time unit
+   * @return this when the parameters are valid, <code>null</code> otherwise
    */
-  public SpectreFactory setTimeout(final long timeout, final TimeUnit unit) {
-    this.timeoutDuration = timeout;
-    this.timeoutTimeUnit = unit;
-    return this;
+  public SpectreFactory setWatchogTimeout(final long watchdogTimeout,
+      final TimeUnit watchdogTimeUnit) {
+
+    if (watchdogTimeUnit instanceof TimeUnit) {
+
+      this.watchogTimeoutDuration = watchdogTimeout;
+      this.watchogTimeoutTimeUnit = watchdogTimeUnit;
+      return this;
+    } else {
+      return null;
+    }
+  }
+
+  /**
+   * Get watchdog timeout duration
+   *
+   * @return timeout
+   * @see SpectreFactory#setWatchogTimeout
+   */
+  public long getWatchdogTimeoutDuration() {
+    return this.watchogTimeoutDuration;
+  }
+
+  /**
+   * Get watchdog timeout time unit
+   *
+   * @return time unit
+   * @see SpectreFactory#setWatchogTimeout
+   */
+  public TimeUnit getWatchdogTimeoutTimeUnit() {
+    return this.watchogTimeoutTimeUnit;
+  }
+
+  /**
+   * Set timeout for Spectre session. This is the maximum time the tool will
+   * wait for the simulation to finish
+   *
+   * @param timeoutDuration timeout
+   * @param timeoutTimeUnit time unit
+   * @return this when the parameters are valid, <code>null</code> otherwise
+   */
+  public SpectreFactory setTimeout(final long timeoutDuration,
+      final TimeUnit timeoutTimeUnit) {
+
+    if ((timeoutDuration > 0) && (timeoutTimeUnit instanceof TimeUnit)) {
+
+      this.timeoutDuration = timeoutDuration;
+      this.timeoutTimeUnit = timeoutTimeUnit;
+      return this;
+    } else {
+      return null;
+    }
   }
 
   /**
    * Get timeout duration
    *
    * @return timeout
-   * @see SpectreFactory#setTimeout
+   * @see SpectreFactory#setWatchogTimeout
    */
   public long getTimeoutDuration() {
     return this.timeoutDuration;
@@ -111,7 +165,7 @@ public final class SpectreFactory {
    * Get timeout time unit
    *
    * @return time unit
-   * @see SpectreFactory#setTimeout
+   * @see SpectreFactory#setWatchogTimeout
    */
   public TimeUnit getTimeoutTimeUnit() {
     return this.timeoutTimeUnit;
@@ -205,7 +259,7 @@ public final class SpectreFactory {
    *         otherwise
    */
   public static boolean isSpectreAvailable() {
-    return SpectreFactory.isSpectreAvailable(DEFAULT_COMMAND);
+    return SpectreFactory.isSpectreAvailable(SpectreFactory.DEFAULT_COMMAND);
   }
 
   /**
@@ -242,5 +296,28 @@ public final class SpectreFactory {
     }
 
     return false;
+  }
+
+  /**
+   * Create a linter for VerilogA code
+   * 
+   * @param ahdlCode VerilogA code to be linted
+   * @return linter
+   */
+  public VerilogALinter createVerilogAlinter(final String ahdlCode) {
+    return new VerilogALinter(this, ahdlCode);
+  }
+
+  /**
+   * Create a linter for VerilogA code
+   * 
+   * @param file File that contains the the VerilogA code
+   * @return linter
+   * @throws IOException is thrown when the file cannot be accessed
+   */
+  public VerilogALinter createVerilogAlinter(final File file) throws IOException {
+
+    return this
+        .createVerilogAlinter(new String(Files.readAllBytes(file.toPath())));
   }
 }

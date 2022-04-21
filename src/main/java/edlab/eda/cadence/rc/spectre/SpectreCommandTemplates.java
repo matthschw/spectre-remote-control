@@ -49,32 +49,32 @@ final class SpectreCommandTemplates {
 
     this.templates = new HashMap<>();
 
-    this.templates.put(SCL_GET_PARAMETER,
-        SkillCommandTemplate.build(SCL_GET_PARAMETER, 2));
+    this.templates.put(SpectreCommandTemplates.SCL_GET_PARAMETER,
+        SkillCommandTemplate.build(SpectreCommandTemplates.SCL_GET_PARAMETER, 2));
 
-    this.templates.put(SCL_GET_CIRCUT,
-        SkillCommandTemplate.build(SCL_GET_CIRCUT, 1));
+    this.templates.put(SpectreCommandTemplates.SCL_GET_CIRCUT,
+        SkillCommandTemplate.build(SpectreCommandTemplates.SCL_GET_CIRCUT, 1));
 
-    this.templates.put(SCL_SET_ATTRIBUTE,
-        SkillCommandTemplate.build(SCL_SET_ATTRIBUTE, 3));
+    this.templates.put(SpectreCommandTemplates.SCL_SET_ATTRIBUTE,
+        SkillCommandTemplate.build(SpectreCommandTemplates.SCL_SET_ATTRIBUTE, 3));
 
-    this.templates.put(SCL_GET_ATTRIBUTE,
-        SkillCommandTemplate.build(SCL_GET_ATTRIBUTE, 2));
+    this.templates.put(SpectreCommandTemplates.SCL_GET_ATTRIBUTE,
+        SkillCommandTemplate.build(SpectreCommandTemplates.SCL_GET_ATTRIBUTE, 2));
 
-    this.templates.put(SCL_GET_PID, SkillCommandTemplate.build(SCL_GET_PID));
+    this.templates.put(SpectreCommandTemplates.SCL_GET_PID, SkillCommandTemplate.build(SpectreCommandTemplates.SCL_GET_PID));
 
-    this.templates.put(SCL_LIST_NET, SkillCommandTemplate.build(SCL_LIST_NET));
+    this.templates.put(SpectreCommandTemplates.SCL_LIST_NET, SkillCommandTemplate.build(SpectreCommandTemplates.SCL_LIST_NET));
 
-    this.templates.put(SCL_LIST_INSTANCE,
-        SkillCommandTemplate.build(SCL_LIST_INSTANCE));
+    this.templates.put(SpectreCommandTemplates.SCL_LIST_INSTANCE,
+        SkillCommandTemplate.build(SpectreCommandTemplates.SCL_LIST_INSTANCE));
 
-    this.templates.put(SCL_LIST_ANALYSIS,
-        SkillCommandTemplate.build(SCL_LIST_ANALYSIS));
+    this.templates.put(SpectreCommandTemplates.SCL_LIST_ANALYSIS,
+        SkillCommandTemplate.build(SpectreCommandTemplates.SCL_LIST_ANALYSIS));
 
-    this.templates.put(SCL_SET_RES_DIR,
-        SkillCommandTemplate.build(SCL_SET_RES_DIR, 1));
+    this.templates.put(SpectreCommandTemplates.SCL_SET_RES_DIR,
+        SkillCommandTemplate.build(SpectreCommandTemplates.SCL_SET_RES_DIR, 1));
 
-    this.templates.put(SCL_RUN, SkillCommandTemplate.build(SCL_RUN, 1));
+    this.templates.put(SpectreCommandTemplates.SCL_RUN, SkillCommandTemplate.build(SpectreCommandTemplates.SCL_RUN, 1));
   }
 
   /**
@@ -84,6 +84,7 @@ final class SpectreCommandTemplates {
    * @return template when existing, <code>null</code> otherwise
    */
   static SkillCommandTemplate getTemplate(final String name) {
+
     if (SpectreCommandTemplates.commandTemplates == null) {
       SpectreCommandTemplates.commandTemplates = new SpectreCommandTemplates();
     }

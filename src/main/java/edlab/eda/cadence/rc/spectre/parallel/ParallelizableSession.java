@@ -2,8 +2,8 @@ package edlab.eda.cadence.rc.spectre.parallel;
 
 import java.util.List;
 
-import edlab.eda.cadence.rc.session.UnableToStartSession;
 import edlab.eda.cadence.rc.spectre.SpectreSession;
+import edlab.eda.cadence.rc.spectre.UnableToStartSpectreSession;
 import edlab.eda.reader.nutmeg.NutmegPlot;
 
 /**
@@ -24,16 +24,16 @@ public interface ParallelizableSession {
    * @return <code>true</code> when the simulation terminated successfully,
    *         <code>false</code> otherwise
    * 
-   * @throws UnableToStartSession when the simulation throws errors
+   * @throws UnableToStartSpectreSession when the simulation throws errors
    */
-  public boolean simulate() throws UnableToStartSession;
+  public boolean simulate() throws UnableToStartSpectreSession;
 
   /**
    * Run the simulation
    * 
-   * @throws UnableToStartSession when the simulation throws errors
+   * @throws UnableToStartSpectreSession when the simulation throws errors
    */
-  public void simulateOnly() throws UnableToStartSession;
+  public void simulateOnly() throws UnableToStartSpectreSession;
 
   /**
    * Get the plots from simulation

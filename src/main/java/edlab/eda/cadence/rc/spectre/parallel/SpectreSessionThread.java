@@ -1,6 +1,6 @@
 package edlab.eda.cadence.rc.spectre.parallel;
 
-import edlab.eda.cadence.rc.session.UnableToStartSession;
+import edlab.eda.cadence.rc.spectre.UnableToStartSpectreSession;
 
 /**
  * Thread that handles a {@link ParallelizableSession}.
@@ -43,7 +43,7 @@ final class SpectreSessionThread implements Runnable {
         this.session.simulateOnly();
       }
       this.terminated = true;
-    } catch (final UnableToStartSession e) {
+    } catch (final UnableToStartSpectreSession e) {
       this.terminated = true;
     }
   }
