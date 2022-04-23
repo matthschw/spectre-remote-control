@@ -30,6 +30,7 @@ import edlab.eda.cadence.rc.session.EvaluableToSkill;
 import edlab.eda.cadence.rc.session.EvaluationFailedException;
 import edlab.eda.cadence.rc.session.InvalidDataobjectReferenceExecption;
 import edlab.eda.cadence.rc.session.SkillInteractiveSession;
+import edlab.eda.cadence.rc.session.SkillSession;
 import edlab.eda.cadence.rc.session.UnableToStartInteractiveSession;
 import edlab.eda.cadence.rc.session.UnableToStartSession;
 import edlab.eda.reader.nutmeg.NutReader;
@@ -63,7 +64,7 @@ public final class SpectreInteractiveSession extends SpectreSession {
 
     this.session = new SkillInteractiveSession(this.workingDir);
     this.session.setCommand(this.formatShellCommand());
-    this.session.setPrompt(">");
+    this.session.setPrompt(SkillSession.PROMPT_DEFAULT);
 
     this.session.setTimeout(factory.getTimeoutDuration(),
         factory.getTimeoutTimeUnit());
