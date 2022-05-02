@@ -72,7 +72,7 @@ public class UnableToStartSpectreSession extends Exception {
   public String readLogfile() {
     try {
       return new String(FileUtils.readFileToByteArray(this.logfile));
-    } catch (IOException e) {
+    } catch (final IOException e) {
       return "No logfile available";
     }
   }

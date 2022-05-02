@@ -193,7 +193,7 @@ public final class SpectreFactory {
    * @return this
    * @see SpectreSession#getLicenseQueueTimeout()
    */
-  public SpectreFactory setLicenseQueueTimeout(int licenseQueueTimeout) {
+  public SpectreFactory setLicenseQueueTimeout(final int licenseQueueTimeout) {
     this.licenseQueueTimeout = licenseQueueTimeout;
     return this;
   }
@@ -215,7 +215,7 @@ public final class SpectreFactory {
    * @return this
    * @see SpectreSession#getLicenseQueueSleep()
    */
-  public SpectreFactory setLicenseQueueSleep(int licenseQueueSleep) {
+  public SpectreFactory setLicenseQueueSleep(final int licenseQueueSleep) {
 
     if (licenseQueueSleep < 10) {
       return null;

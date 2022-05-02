@@ -337,7 +337,7 @@ public abstract class SpectreSession {
    * @return this
    * @see SpectreSession#getLicenseQueueTimeout()
    */
-  public SpectreSession setLicenseQueueTimeout(int licenseQueueTimeout) {
+  public SpectreSession setLicenseQueueTimeout(final int licenseQueueTimeout) {
     this.licenseQueueTimeout = licenseQueueTimeout;
     return this;
   }
@@ -359,7 +359,7 @@ public abstract class SpectreSession {
    * @return this
    * @see SpectreSession#getLicenseQueueSleep()
    */
-  public SpectreSession setLicenseQueueSleep(int licenseQueueSleep) {
+  public SpectreSession setLicenseQueueSleep(final int licenseQueueSleep) {
 
     if (licenseQueueSleep < 10) {
       return null;
@@ -375,7 +375,7 @@ public abstract class SpectreSession {
    * @param licenseLog license log
    * @return this
    */
-  public SpectreSession enableLicenseLog(boolean licenseLog) {
+  public SpectreSession enableLicenseLog(final boolean licenseLog) {
     this.licenseLog = licenseLog;
     return this;
   }
