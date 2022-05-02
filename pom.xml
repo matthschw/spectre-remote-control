@@ -6,6 +6,7 @@
 	<artifactId>cadence.rc.spectre</artifactId>
 	<version>0.0.6</version>
 
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.target>1.8</maven.compiler.target>
