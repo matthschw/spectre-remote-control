@@ -15,6 +15,9 @@ import java.util.regex.Pattern;
  */
 public final class SpectreFactory {
 
+  /**
+   * Shell command that is used for invoking the simulator
+   */
   public static final String DEFAULT_COMMAND = "spectre";
 
   private final File simDirectory;
@@ -32,6 +35,12 @@ public final class SpectreFactory {
   private int licenseQueueTimeout = -1;
   private int licenseQueueSleep = 30;
 
+  /**
+   * Create a new fectory
+   * 
+   * @param command      Command for invoking the simulator
+   * @param simDirectory Simulation directory
+   */
   private SpectreFactory(final String command, final File simDirectory) {
     this.command = command;
     this.simDirectory = simDirectory;
@@ -46,7 +55,7 @@ public final class SpectreFactory {
    */
   public static SpectreFactory getSpectreFactory(final File simDirectory) {
 
-    if ((simDirectory != null)
+    if (simDirectory instanceof File
         && SpectreFactory.isSpectreAvailable(SpectreFactory.DEFAULT_COMMAND)
         && simDirectory.isDirectory() && simDirectory.canRead()
         && simDirectory.canWrite()) {
@@ -69,7 +78,7 @@ public final class SpectreFactory {
   public static SpectreFactory getSpectreFactory(final String command,
       final File simDirectory) {
 
-    if ((command != null) && (simDirectory != null)
+    if (command instanceof String && simDirectory instanceof File
         && SpectreFactory.isSpectreAvailable(command)
         && simDirectory.isDirectory() && simDirectory.canRead()
         && simDirectory.canWrite()) {
@@ -109,7 +118,9 @@ public final class SpectreFactory {
       this.watchogTimeoutDuration = watchdogTimeout;
       this.watchogTimeoutTimeUnit = watchdogTimeUnit;
       return this;
+
     } else {
+
       return null;
     }
   }
@@ -150,7 +161,9 @@ public final class SpectreFactory {
       this.timeoutDuration = timeoutDuration;
       this.timeoutTimeUnit = timeoutTimeUnit;
       return this;
+      
     } else {
+      
       return null;
     }
   }

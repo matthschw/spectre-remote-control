@@ -6,7 +6,7 @@ import java.util.Map;
 import edlab.eda.cadence.rc.api.SkillCommandTemplate;
 
 /**
- * Command Templates for Spectre Interactive
+ * Command templates for Spectre Interactive
  */
 final class SpectreCommandTemplates {
 
@@ -50,20 +50,25 @@ final class SpectreCommandTemplates {
     this.templates = new HashMap<>();
 
     this.templates.put(SpectreCommandTemplates.SCL_GET_PARAMETER,
-        SkillCommandTemplate.build(SpectreCommandTemplates.SCL_GET_PARAMETER, 2));
+        SkillCommandTemplate.build(SpectreCommandTemplates.SCL_GET_PARAMETER,
+            2));
 
     this.templates.put(SpectreCommandTemplates.SCL_GET_CIRCUT,
         SkillCommandTemplate.build(SpectreCommandTemplates.SCL_GET_CIRCUT, 1));
 
     this.templates.put(SpectreCommandTemplates.SCL_SET_ATTRIBUTE,
-        SkillCommandTemplate.build(SpectreCommandTemplates.SCL_SET_ATTRIBUTE, 3));
+        SkillCommandTemplate.build(SpectreCommandTemplates.SCL_SET_ATTRIBUTE,
+            3));
 
     this.templates.put(SpectreCommandTemplates.SCL_GET_ATTRIBUTE,
-        SkillCommandTemplate.build(SpectreCommandTemplates.SCL_GET_ATTRIBUTE, 2));
+        SkillCommandTemplate.build(SpectreCommandTemplates.SCL_GET_ATTRIBUTE,
+            2));
 
-    this.templates.put(SpectreCommandTemplates.SCL_GET_PID, SkillCommandTemplate.build(SpectreCommandTemplates.SCL_GET_PID));
+    this.templates.put(SpectreCommandTemplates.SCL_GET_PID,
+        SkillCommandTemplate.build(SpectreCommandTemplates.SCL_GET_PID));
 
-    this.templates.put(SpectreCommandTemplates.SCL_LIST_NET, SkillCommandTemplate.build(SpectreCommandTemplates.SCL_LIST_NET));
+    this.templates.put(SpectreCommandTemplates.SCL_LIST_NET,
+        SkillCommandTemplate.build(SpectreCommandTemplates.SCL_LIST_NET));
 
     this.templates.put(SpectreCommandTemplates.SCL_LIST_INSTANCE,
         SkillCommandTemplate.build(SpectreCommandTemplates.SCL_LIST_INSTANCE));
@@ -74,7 +79,8 @@ final class SpectreCommandTemplates {
     this.templates.put(SpectreCommandTemplates.SCL_SET_RES_DIR,
         SkillCommandTemplate.build(SpectreCommandTemplates.SCL_SET_RES_DIR, 1));
 
-    this.templates.put(SpectreCommandTemplates.SCL_RUN, SkillCommandTemplate.build(SpectreCommandTemplates.SCL_RUN, 1));
+    this.templates.put(SpectreCommandTemplates.SCL_RUN,
+        SkillCommandTemplate.build(SpectreCommandTemplates.SCL_RUN, 1));
   }
 
   /**
