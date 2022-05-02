@@ -29,6 +29,9 @@ public final class SpectreFactory {
   private String simPrefix = null;
   private String command = SpectreFactory.DEFAULT_COMMAND;
 
+  private int licenseQueueTimeout = -1;
+  private int licenseQueueSleep = 30;
+
   private SpectreFactory(final String command, final File simDirectory) {
     this.command = command;
     this.simDirectory = simDirectory;
@@ -43,7 +46,8 @@ public final class SpectreFactory {
    */
   public static SpectreFactory getSpectreFactory(final File simDirectory) {
 
-    if ((simDirectory != null) && SpectreFactory.isSpectreAvailable(SpectreFactory.DEFAULT_COMMAND)
+    if ((simDirectory != null)
+        && SpectreFactory.isSpectreAvailable(SpectreFactory.DEFAULT_COMMAND)
         && simDirectory.isDirectory() && simDirectory.canRead()
         && simDirectory.canWrite()) {
 
@@ -169,6 +173,56 @@ public final class SpectreFactory {
    */
   public TimeUnit getTimeoutTimeUnit() {
     return this.timeoutTimeUnit;
+  }
+
+  /**
+   * Get the license queue timeout in seconds. A timeout less than zero is
+   * ignored. When the timeout is zero, the simualator will wait indefinitely
+   * for a license.
+   * 
+   * @return queue timeout
+   */
+  public int getLicenseQueueTimeout() {
+    return this.licenseQueueTimeout;
+  }
+
+  /**
+   * Specify the license queue timeout
+   * 
+   * @param licenseQueueTimeout timeout
+   * @return this
+   * @see SpectreSession#getLicenseQueueTimeout()
+   */
+  public SpectreFactory setLicenseQueueTimeout(int licenseQueueTimeout) {
+    this.licenseQueueTimeout = licenseQueueTimeout;
+    return this;
+  }
+
+  /**
+   * Get the license queue sleep time in seconds. This time specifies the
+   * interval (in seconds) at which the Spectre checks for license availability
+   * 
+   * @return queue sleep
+   */
+  public int getLicenseQueueSleep() {
+    return this.licenseQueueSleep;
+  }
+
+  /**
+   * Specify the license queue sleep. You cannot specify less than 10 seconds
+   * 
+   * @param licenseQueueSleep timeout
+   * @return this
+   * @see SpectreSession#getLicenseQueueSleep()
+   */
+  public SpectreFactory setLicenseQueueSleep(int licenseQueueSleep) {
+
+    if (licenseQueueSleep < 10) {
+      return null;
+    } else {
+      this.licenseQueueSleep = licenseQueueSleep;
+      return this;
+    }
   }
 
   /**
@@ -315,7 +369,8 @@ public final class SpectreFactory {
    * @return linter
    * @throws IOException is thrown when the file cannot be accessed
    */
-  public VerilogALinter createVerilogAlinter(final File file) throws IOException {
+  public VerilogALinter createVerilogAlinter(final File file)
+      throws IOException {
 
     return this
         .createVerilogAlinter(new String(Files.readAllBytes(file.toPath())));

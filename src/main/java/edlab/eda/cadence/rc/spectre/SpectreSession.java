@@ -68,6 +68,9 @@ public abstract class SpectreSession {
   protected boolean aps = false;
   protected ERRPRESET apsErrpreset = ERRPRESET.CONSERVATIVE;
 
+  protected int licenseQueueTimeout = -1;
+  protected int licenseQueueSleep = 30;
+
   protected SpectreSession(final SpectreFactory factory, final String name) {
 
     this.factory = factory;
@@ -75,6 +78,9 @@ public abstract class SpectreSession {
     this.noOfThreads = 1;
 
     final String username = System.getProperty("user.name");
+
+    this.licenseQueueSleep = factory.getLicenseQueueSleep();
+    this.licenseQueueTimeout = factory.getLicenseQueueTimeout();
 
     final StringBuilder dirName = new StringBuilder();
 
@@ -306,10 +312,60 @@ public abstract class SpectreSession {
    * @param errpreset error preset to be used
    * @return this
    */
-  public SpectreSession serAccelleratedParallelSimulationErrorPreset(
+  public SpectreSession setAccelleratedParallelSimulationErrorPreset(
       final ERRPRESET errpreset) {
     this.apsErrpreset = errpreset;
     return this;
+  }
+
+  /**
+   * Get the license queue timeout in seconds. A timeout less than zero is
+   * ignored. When the timeout is zero, the simualator will wait indefinitely
+   * for a license.
+   * 
+   * @return queue timeout
+   */
+  public int getLicenseQueueTimeout() {
+    return this.licenseQueueTimeout;
+  }
+
+  /**
+   * Specify the license queue timeout
+   * 
+   * @param licenseQueueTimeout timeout
+   * @return this
+   * @see SpectreSession#getLicenseQueueTimeout()
+   */
+  public SpectreSession setLicenseQueueTimeout(int licenseQueueTimeout) {
+    this.licenseQueueTimeout = licenseQueueTimeout;
+    return this;
+  }
+
+  /**
+   * Get the license queue sleep time in seconds. This time specifies the
+   * interval (in seconds) at which the Spectre checks for license availability
+   * 
+   * @return queue sleep
+   */
+  public int getLicenseQueueSleep() {
+    return this.licenseQueueSleep;
+  }
+
+  /**
+   * Specify the license queue sleep. You cannot specify less than 10 seconds
+   * 
+   * @param licenseQueueSleep timeout
+   * @return this
+   * @see SpectreSession#getLicenseQueueSleep()
+   */
+  public SpectreSession setLicenseQueueSleep(int licenseQueueSleep) {
+
+    if (licenseQueueSleep < 10) {
+      return null;
+    } else {
+      this.licenseQueueSleep = licenseQueueSleep;
+      return this;
+    }
   }
 
   /**

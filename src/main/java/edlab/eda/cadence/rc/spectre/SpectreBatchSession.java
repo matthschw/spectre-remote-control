@@ -98,6 +98,14 @@ public final class SpectreBatchSession extends SpectreSession {
       commandBuilder.append(" +multithread=").append(this.noOfThreads);
     }
 
+    if (this.licenseQueueTimeout >= 0) {
+      commandBuilder.append(" +lqt ").append(this.licenseQueueTimeout);
+    }
+
+    if (this.licenseQueueSleep >= 0) {
+      commandBuilder.append(" +lqs ").append(this.licenseQueueSleep);
+    }
+
     commandBuilder.append(" -ahdllibdir ./")
         .append(SpectreSession.AHDLLIB_DIRNAME);
     commandBuilder.append(" =log ").append(SpectreSession.LOG_FILENAME);

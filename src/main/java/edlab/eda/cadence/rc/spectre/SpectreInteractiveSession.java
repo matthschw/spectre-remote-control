@@ -222,6 +222,14 @@ public final class SpectreInteractiveSession extends SpectreSession {
       commandBuilder.append(" +multithread=").append(this.noOfThreads);
     }
 
+    if (this.licenseQueueTimeout >= 0) {
+      commandBuilder.append(" +lqt ").append(this.licenseQueueTimeout);
+    }
+
+    if (this.licenseQueueSleep >= 0) {
+      commandBuilder.append(" +lqs ").append(this.licenseQueueSleep);
+    }
+
     commandBuilder.append(" -ahdllibdir ./")
         .append(SpectreSession.AHDLLIB_DIRNAME);
     commandBuilder.append(" =log ").append(SpectreSession.LOG_FILENAME);
@@ -835,8 +843,8 @@ public final class SpectreInteractiveSession extends SpectreSession {
 
           analysis = (SkillList) obj;
 
-          name = (SkillString) analysis.getByIndex(0);
-          type = (SkillString) analysis.getByIndex(1);
+          name = (SkillString) analysis.get(0);
+          type = (SkillString) analysis.get(1);
 
           retval.add(name.getString());
         }
@@ -893,8 +901,8 @@ public final class SpectreInteractiveSession extends SpectreSession {
 
         analysis = (SkillList) obj;
 
-        name = (SkillString) analysis.getByIndex(0);
-        type = (SkillString) analysis.getByIndex(1);
+        name = (SkillString) analysis.get(0);
+        type = (SkillString) analysis.get(1);
 
         retval.put(name.getString(), type.getString());
       }
