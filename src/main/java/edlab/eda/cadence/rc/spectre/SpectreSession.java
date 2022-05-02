@@ -70,6 +70,7 @@ public abstract class SpectreSession {
 
   protected int licenseQueueTimeout = -1;
   protected int licenseQueueSleep = 30;
+  protected boolean licenseLog = false;
 
   protected SpectreSession(final SpectreFactory factory, final String name) {
 
@@ -366,6 +367,17 @@ public abstract class SpectreSession {
       this.licenseQueueSleep = licenseQueueSleep;
       return this;
     }
+  }
+
+  /**
+   * Enable license log
+   * 
+   * @param licenseLog license log
+   * @return this
+   */
+  public SpectreSession enableLicenseLog(boolean licenseLog) {
+    this.licenseLog = licenseLog;
+    return this;
   }
 
   /**
