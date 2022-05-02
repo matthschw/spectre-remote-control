@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>edlab.eda</groupId>
 	<artifactId>cadence.rc.spectre</artifactId>
-	<version>draft</version>
+	<version>0.0.6</version>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -74,7 +74,7 @@
 		<dependency>
 			<groupId>edlab.eda</groupId>
 			<artifactId>cadence.rc</artifactId>
-			<version>draft</version>
+			<version>0.0.6</version>
 		</dependency>
 		<dependency>
 			<groupId>edlab.eda</groupId>
