@@ -10,6 +10,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.io.FileUtils;
+
 import edlab.eda.cadence.rc.session.UnableToStartSession;
 import edlab.eda.reader.nutmeg.NutmegPlot;
 
@@ -99,10 +101,24 @@ public abstract class SpectreSession {
 
       final Path path = Files.createTempDirectory(
           factory.getSimDirectory().toPath(), dirName.toString());
-
+      
       this.workingDir = path.toFile();
+      
+      if (this.factory.deleteOnExit()) {
+        
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+          public void run() {
+            try {
+              FileUtils.deleteDirectory(path.toFile());
+            } catch (IOException e) {
+            }
+          }
+        });
+      }
+      
     } catch (final IOException e) {
     }
+    
 
     this.rawFile = new File(
         this.workingDir.toString() + "/" + SpectreSession.NL_FILE_NAME + "."

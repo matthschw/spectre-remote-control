@@ -35,6 +35,8 @@ public final class SpectreFactory {
   private int licenseQueueTimeout = -1;
   private int licenseQueueSleep = 30;
 
+  private boolean deleteOnExit = false;
+
   /**
    * Create a new fectory
    * 
@@ -161,9 +163,9 @@ public final class SpectreFactory {
       this.timeoutDuration = timeoutDuration;
       this.timeoutTimeUnit = timeoutTimeUnit;
       return this;
-      
+
     } else {
-      
+
       return null;
     }
   }
@@ -236,6 +238,28 @@ public final class SpectreFactory {
       this.licenseQueueSleep = licenseQueueSleep;
       return this;
     }
+  }
+
+  /**
+   * Identify if the simulation directory is deleted when the JVM terminates.
+   * 
+   * @return queue sleep
+   */
+  public boolean deleteOnExit() {
+    return this.deleteOnExit;
+  }
+
+  /**
+   * Specify if the simulation directory should be deleted when the JVM
+   * terminates.
+   * 
+   * @param deleteOnExit deleteOnExit
+   * @return this
+   * @see SpectreSession#deleteOnExit()
+   */
+  public SpectreFactory setDeleteOnExit(boolean deleteOnExit) {
+    this.deleteOnExit = deleteOnExit;
+    return this;
   }
 
   /**
