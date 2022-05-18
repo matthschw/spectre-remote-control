@@ -71,7 +71,8 @@ public final class SpectreParallelPool {
   /**
    * Read results in parallel (this can be memory-consuming)
    * 
-   * @param parallel read results
+   * @param parallel <code>true</code> when the results are read in parallel,
+   *                 <code>false</code> otherwise
    * @return this
    */
   public SpectreParallelPool readResultsInParallel(final boolean parallel) {
@@ -173,10 +174,10 @@ public final class SpectreParallelPool {
     final ExecutorService executor = Executors
         .newFixedThreadPool(this.maxThreads);
 
-    ProgressBar pb = null;
+    ProgressBar progressBar = null;
 
     if (this.verbose) {
-      pb = new ProgressBar("Simulate", this.sessions.size(),
+      progressBar = new ProgressBar("Simulate", this.sessions.size(),
           ProgressBarStyle.ASCII);
     }
 
@@ -202,21 +203,21 @@ public final class SpectreParallelPool {
       } catch (final InterruptedException e) {
       }
 
-      for (final SpectreSessionThread thread : this.sessions.values()) {
-        if (thread.isTerminated()) {
+      for (final SpectreSessionThread sessionThread : this.sessions.values()) {
+        if (sessionThread.isTerminated()) {
           accomplished++;
         }
       }
 
       if (this.verbose) {
-        pb.stepTo(accomplished);
+        progressBar.stepTo(accomplished);
       }
     }
 
     executor.shutdown();
 
     if (this.verbose) {
-      pb.close();
+      progressBar.close();
     }
 
     try {
