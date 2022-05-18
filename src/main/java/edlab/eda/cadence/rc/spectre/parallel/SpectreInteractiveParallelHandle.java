@@ -1,6 +1,7 @@
 package edlab.eda.cadence.rc.spectre.parallel;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -18,7 +19,7 @@ public final class SpectreInteractiveParallelHandle
     implements ParallelizableSession {
 
   private final SpectreInteractiveSession session;
-  private List<NutmegPlot> plots;
+  private List<NutmegPlot> plots = new LinkedList<>();
   private Set<String> blacklistAnalyses;
   private Map<String, Object> valueAttributes;
 
@@ -160,6 +161,12 @@ public final class SpectreInteractiveParallelHandle
     }
   }
 
+  /**
+   * Inner method for calling the simulation
+   * 
+   * @return this
+   * @throws UnableToStartSpectreSession when simulation failed
+   */
   private SpectreInteractiveParallelHandle simulateInner()
       throws UnableToStartSpectreSession {
 
