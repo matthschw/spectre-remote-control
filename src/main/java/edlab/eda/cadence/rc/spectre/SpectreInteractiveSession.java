@@ -604,7 +604,6 @@ public final class SpectreInteractiveSession extends SpectreSession {
 
     for (int i = 0; i < identifiersToSimulateArray.length; i++) {
       identifiersToSimulateArray[i] = identifiersToSimulate.get(i);
-
     }
 
     try {
@@ -671,7 +670,6 @@ public final class SpectreInteractiveSession extends SpectreSession {
           return this.simulate(command);
         }
       } else {
-        System.err.println(resultValue.toSkill());
         throw new UnableToStartSpectreSession(this.formatShellCommand(),
             this.workingDir,
             new File(this.workingDir, SpectreSession.LOG_FILENAME));
