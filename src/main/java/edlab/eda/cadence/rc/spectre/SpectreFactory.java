@@ -37,6 +37,8 @@ public final class SpectreFactory {
 
   private boolean deleteOnExit = false;
 
+  private String commandLineParameters = null;
+
   /**
    * Create a new fectory
    * 
@@ -301,6 +303,27 @@ public final class SpectreFactory {
    */
   public File getAhdlShipDbdir() {
     return this.ahdlShipDbDir;
+  }
+
+  /**
+   * Get command line parameters
+   * 
+   * @return command line parameters
+   */
+  public String getCommandLineParameters() {
+    return this.commandLineParameters;
+  }
+
+  /**
+   * Set command line parameters
+   * 
+   * @param commandLineParameters command line parameters
+   * @return this
+   */
+  public SpectreFactory setCommandLineParameters(
+      final String commandLineParameters) {
+    this.commandLineParameters = commandLineParameters;
+    return this;
   }
 
   /**

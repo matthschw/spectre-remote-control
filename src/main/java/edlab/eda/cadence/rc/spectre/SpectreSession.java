@@ -73,6 +73,7 @@ public abstract class SpectreSession {
   protected int licenseQueueTimeout = -1;
   protected int licenseQueueSleep = 30;
   protected boolean licenseLog = false;
+  protected String commandLineParameters = null;
 
   protected SpectreSession(final SpectreFactory factory, final String name) {
 
@@ -84,6 +85,7 @@ public abstract class SpectreSession {
 
     this.licenseQueueSleep = factory.getLicenseQueueSleep();
     this.licenseQueueTimeout = factory.getLicenseQueueTimeout();
+    this.commandLineParameters = factory.getCommandLineParameters();
 
     final StringBuilder dirName = new StringBuilder();
 
@@ -101,11 +103,11 @@ public abstract class SpectreSession {
 
       final Path path = Files.createTempDirectory(
           factory.getSimDirectory().toPath(), dirName.toString());
-      
+
       this.workingDir = path.toFile();
-      
+
       if (this.factory.deleteOnExit()) {
-        
+
         Runtime.getRuntime().addShutdownHook(new Thread() {
           public void run() {
             try {
@@ -115,10 +117,9 @@ public abstract class SpectreSession {
           }
         });
       }
-      
+
     } catch (final IOException e) {
     }
-    
 
     this.rawFile = new File(
         this.workingDir.toString() + "/" + SpectreSession.NL_FILE_NAME + "."
@@ -393,6 +394,27 @@ public abstract class SpectreSession {
    */
   public SpectreSession enableLicenseLog(final boolean licenseLog) {
     this.licenseLog = licenseLog;
+    return this;
+  }
+
+  /**
+   * Get command line parameters
+   * 
+   * @return command line parameters
+   */
+  public String getCommandLineParameters() {
+    return this.commandLineParameters;
+  }
+
+  /**
+   * Set command line parameters
+   * 
+   * @param commandLineParameters command line parameters
+   * @return this
+   */
+  public SpectreSession setCommandLineParameters(
+      final String commandLineParameters) {
+    this.commandLineParameters = commandLineParameters;
     return this;
   }
 
