@@ -9,6 +9,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import edlab.eda.cadence.rc.spectre.va.VerilogAExtractor;
+import edlab.eda.cadence.rc.spectre.va.VerilogALinter;
+
 /**
  * Factory for setup and creating {@link SpectreInteractiveSession} and
  * {@link SpectreBatchSession}.
@@ -59,7 +62,7 @@ public final class SpectreFactory {
    */
   public static SpectreFactory getSpectreFactory(final File simDirectory) {
 
-    if (simDirectory instanceof File
+    if ((simDirectory instanceof File)
         && SpectreFactory.isSpectreAvailable(SpectreFactory.DEFAULT_COMMAND)
         && simDirectory.isDirectory() && simDirectory.canRead()
         && simDirectory.canWrite()) {
@@ -82,7 +85,7 @@ public final class SpectreFactory {
   public static SpectreFactory getSpectreFactory(final String command,
       final File simDirectory) {
 
-    if (command instanceof String && simDirectory instanceof File
+    if ((command instanceof String) && (simDirectory instanceof File)
         && SpectreFactory.isSpectreAvailable(command)
         && simDirectory.isDirectory() && simDirectory.canRead()
         && simDirectory.canWrite()) {
@@ -259,7 +262,7 @@ public final class SpectreFactory {
    * @return this
    * @see SpectreSession#deleteOnExit()
    */
-  public SpectreFactory setDeleteOnExit(boolean deleteOnExit) {
+  public SpectreFactory setDeleteOnExit(final boolean deleteOnExit) {
     this.deleteOnExit = deleteOnExit;
     return this;
   }
@@ -419,7 +422,8 @@ public final class SpectreFactory {
    * @return linter
    */
   public VerilogALinter createVerilogAlinter(final String ahdlCode) {
-    return new VerilogALinter(this, ahdlCode);
+    return VerilogALinter.getVerilogALinter(new VerilogAfactoryConnector(this),
+        ahdlCode);
   }
 
   /**
@@ -434,5 +438,30 @@ public final class SpectreFactory {
 
     return this
         .createVerilogAlinter(new String(Files.readAllBytes(file.toPath())));
+  }
+
+  /**
+   * Create a extractor for VerilogA code
+   * 
+   * @param ahdlCode VerilogA code to be linted
+   * @return extractor
+   */
+  public VerilogAExtractor createVerilogAExtractor(final String ahdlCode) {
+    return VerilogAExtractor
+        .getVerilogAExtractor(new VerilogAfactoryConnector(this), ahdlCode);
+  }
+
+  /**
+   * Create a extractor for VerilogA code
+   * 
+   * @param file File that contains the the VerilogA code
+   * @return extractor
+   * @throws IOException is thrown when the file cannot be accessed
+   */
+  public VerilogAExtractor createVerilogAExtractor(final File file)
+      throws IOException {
+
+    return this
+        .createVerilogAExtractor(new String(Files.readAllBytes(file.toPath())));
   }
 }

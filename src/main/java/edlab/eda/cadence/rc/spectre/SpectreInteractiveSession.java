@@ -242,8 +242,8 @@ public final class SpectreInteractiveSession extends SpectreSession {
       commandBuilder.append(" -I").append(file.getAbsolutePath());
     }
 
-    if (this.commandLineParameters instanceof String
-        && this.commandLineParameters.length() > 0) {
+    if ((this.commandLineParameters instanceof String)
+        && (this.commandLineParameters.length() > 0)) {
       commandBuilder.append(" ").append(this.commandLineParameters);
     }
 

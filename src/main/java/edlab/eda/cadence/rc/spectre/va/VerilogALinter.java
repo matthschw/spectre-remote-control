@@ -1,4 +1,4 @@
-package edlab.eda.cadence.rc.spectre;
+package edlab.eda.cadence.rc.spectre.va;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -6,10 +6,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import edlab.eda.cadence.rc.spectre.SpectreFactory;
+import edlab.eda.cadence.rc.spectre.VerilogAfactoryConnector;
+
 /**
  * Linter for VerilogA Code
  */
-public class VerilogALinter {
+public final class VerilogALinter {
 
   public static final String DUT_FILE_NAME = "test.va";
   public static final String LOG_FILE_NAME = "lint.log";
@@ -75,9 +78,10 @@ public class VerilogALinter {
 
     try {
 
-      final Process process = Runtime.getRuntime().exec("spectre " + "=log "
-          + VerilogALinter.LOG_FILE_NAME + " -ahdllint=static " + VerilogALinter.DUT_FILE_NAME, null,
-          this.workingDir);
+      final Process process = Runtime.getRuntime().exec(
+          "spectre " + "=log " + VerilogALinter.LOG_FILE_NAME
+              + " -ahdllint=static " + VerilogALinter.DUT_FILE_NAME,
+          null, this.workingDir);
 
       process.waitFor();
 
@@ -104,5 +108,11 @@ public class VerilogALinter {
    */
   public File getLogfile() {
     return new File(this.workingDir, VerilogALinter.LOG_FILE_NAME);
+  }
+  
+
+  public static VerilogALinter getVerilogALinter(
+      final VerilogAfactoryConnector connector, final String ahdlCode) {
+    return new VerilogALinter(connector.getFactory(), ahdlCode);
   }
 }

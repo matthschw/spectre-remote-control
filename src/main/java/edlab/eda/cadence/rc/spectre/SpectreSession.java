@@ -109,10 +109,11 @@ public abstract class SpectreSession {
       if (this.factory.deleteOnExit()) {
 
         Runtime.getRuntime().addShutdownHook(new Thread() {
+          @Override
           public void run() {
             try {
               FileUtils.deleteDirectory(path.toFile());
-            } catch (IOException e) {
+            } catch (final IOException e) {
             }
           }
         });

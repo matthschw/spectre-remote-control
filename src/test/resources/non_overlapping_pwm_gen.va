@@ -1,0 +1,94 @@
+`include "constants.vams"
+`include "disciplines.vams"
+
+module non_overlapping_pwm_gen(I,OP,ON,ENA,VDD,VSS);
+
+  input I,ENA;
+  output OP,ON;
+  inout VDD,VSS;
+
+  electrical I,OP,ON,ENA,VDD,VSS;
+
+  real parameter td=10n;
+  real parameter tpd=100p;
+  real parameter tr=1p;
+  real parameter tf=1p;
+  integer parameter n=3;
+  string parameter str="sdsd";
+
+  real vref;
+  real vena;
+
+  real voutp;
+  real voutn;
+  real vin;
+  real tpdp = tpd;
+  real tpdn = tpd;
+
+  analog begin
+
+  @(initial_step) begin
+
+    vena = V(ENA,VSS);
+    vin  = V(I,VSS);
+
+    vref=(V(VDD)+V(VSS))/2;
+
+    if (vin > vref) begin
+      if (vena > vref) begin
+        voutp=V(VDD);
+      end else begin
+        voutp=V(VSS);
+      end
+      voutn=V(VSS);
+    end else begin
+      if (vena > vref) begin
+        voutn=V(VDD);
+      end else begin
+        voutn=V(VSS);
+      end
+      voutp=V(VSS);
+    end
+  end
+
+  vref=(V(VDD)+V(VSS))/2;
+
+  @(cross(V(ENA,VSS)-vref, +1)) begin
+    vin  = V(I,VSS);
+    if (vin > vref) begin
+      voutp=V(VDD);
+      voutn=V(VSS);
+    end else begin
+      voutp=V(VSS);
+      voutn=V(VDD);
+    end
+  end
+
+  @(cross(V(I,VSS)-vref, +1)) begin
+    if (vena > vref) begin
+      voutp = V(VDD);
+    end else begin
+      voutp = V(VSS);
+    end
+    voutn = V(VSS);
+    tpdn = tpd;
+    tpdp = tpd+td;
+  end
+
+  @(cross(V(I,VSS)-vref, -1)) begin
+    if (vena > vref) begin
+      voutn = V(VDD);
+    end else begin
+      voutn = V(VSS);
+    end
+    voutp = V(VSS);
+    tpdp = tpd;
+    tpdn = tpd+td;
+  end
+
+  V(OP) <+ transition(voutp,tpdp,tr,tf);
+  V(ON) <+ transition(voutn,tpdn,tr,tf);
+
+  end
+endmodule
+

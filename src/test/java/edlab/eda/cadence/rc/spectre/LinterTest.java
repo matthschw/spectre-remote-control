@@ -6,6 +6,8 @@ import java.io.IOException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import edlab.eda.cadence.rc.spectre.va.VerilogALinter;
+
 class LinterTest {
 
   @Test
