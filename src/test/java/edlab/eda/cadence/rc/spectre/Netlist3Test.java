@@ -22,6 +22,7 @@ class Netlist3Test {
     session.setNetlist(new File("./src/test/resources/netlist3.sp"));
 
     final List<NutmegPlot> plots = session.simulate();
+
     if (plots.size() != 1) {
       fail("Simulation failed");
     }
