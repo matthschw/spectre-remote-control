@@ -19,7 +19,7 @@ class Netlist3Test {
         .getSpectreFactory(new File("/tmp"));
 
     final SpectreBatchSession session = factory.createBatchSession("test");
-    session.setNetlist(new File("./src/test/resources/netlist4.sp"));
+    session.setNetlist(new File("./src/test/resources/netlist3.sp"));
 
     final List<NutmegPlot> plots = session.simulate();
     if (plots.size() != 1) {

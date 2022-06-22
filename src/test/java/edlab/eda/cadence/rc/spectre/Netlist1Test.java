@@ -23,7 +23,7 @@ class Netlist1Test {
 
     final List<NutmegPlot> plots = session.simulate();
 
-    if (plots.size() != 2) {
+    if (plots.size() != 1) {
       fail("Simulation failed");
     }
   }
