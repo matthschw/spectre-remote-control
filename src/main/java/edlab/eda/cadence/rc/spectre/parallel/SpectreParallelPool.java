@@ -167,13 +167,10 @@ public final class SpectreParallelPool {
   /**
    * Execute the pool
    * 
+   * @param executor Executor service
    * @return this
    */
-  public SpectreParallelPool run() {
-
-    final ExecutorService executor = Executors
-        .newFixedThreadPool(this.maxThreads);
-
+  public SpectreParallelPool run(final ExecutorService executor) {
     ProgressBar progressBar = null;
 
     if (this.verbose) {
@@ -232,5 +229,14 @@ public final class SpectreParallelPool {
       }
     }
     return this;
+  }
+
+  /**
+   * Execute the pool
+   * 
+   * @return this
+   */
+  public SpectreParallelPool run() {
+    return this.run(Executors.newFixedThreadPool(this.maxThreads));
   }
 }
