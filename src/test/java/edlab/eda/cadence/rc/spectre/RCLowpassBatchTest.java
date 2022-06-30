@@ -12,6 +12,8 @@ import edlab.eda.reader.nutmeg.NutmegPlot;
 
 public class RCLowpassBatchTest {
 
+  public static final int RC_LOWPASS_ANALYSES = 5;
+
   @Test
   void test() throws IOException, UnableToStartSpectreSession {
 
@@ -26,7 +28,7 @@ public class RCLowpassBatchTest {
 
     final List<NutmegPlot> plots = session.simulate();
 
-    if (plots.size() != 4) {
+    if (plots.size() != RC_LOWPASS_ANALYSES) {
       Assertions.fail("Simulation failed");
     }
   }

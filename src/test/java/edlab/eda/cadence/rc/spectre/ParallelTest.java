@@ -59,7 +59,7 @@ class ParallelTest {
 
         plots = s.getPlots();
 
-        if (plots.size() != 4) {
+        if (plots.size() != RCLowpassBatchTest.RC_LOWPASS_ANALYSES) {
           Assertions.fail("Simulation failed");
         }
       }

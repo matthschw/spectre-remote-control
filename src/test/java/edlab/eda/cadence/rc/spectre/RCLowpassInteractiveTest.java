@@ -74,7 +74,7 @@ public class RCLowpassInteractiveTest {
 
     List<NutmegPlot> plots = session.simulate();
 
-    if (plots.size() != 4) {
+    if (plots.size() != RCLowpassBatchTest.RC_LOWPASS_ANALYSES) {
       Assertions.fail("Simulation failed");
     }
 
@@ -84,7 +84,7 @@ public class RCLowpassInteractiveTest {
 
     plots = session.simulate();
 
-    if (plots.size() != 4) {
+    if (plots.size() != RCLowpassBatchTest.RC_LOWPASS_ANALYSES) {
       Assertions.fail("Simulation failed");
     }
 
@@ -94,7 +94,7 @@ public class RCLowpassInteractiveTest {
 
     plots = session.simulate();
 
-    if (plots.size() != 4) {
+    if (plots.size() != RCLowpassBatchTest.RC_LOWPASS_ANALYSES) {
       Assertions.fail("Simulation failed");
     }
 
@@ -109,7 +109,7 @@ public class RCLowpassInteractiveTest {
 
     plots = session.simulate();
 
-    if (plots.size() != 4) {
+    if (plots.size() != RCLowpassBatchTest.RC_LOWPASS_ANALYSES) {
       Assertions.fail("Simulation failed");
     }
 
@@ -123,7 +123,7 @@ public class RCLowpassInteractiveTest {
 
     plots = session.simulate(blacklistAnalysis);
 
-    if (plots.size() != 3) {
+    if (plots.size() != RCLowpassBatchTest.RC_LOWPASS_ANALYSES - 1) {
       Assertions.fail("Simulation failed");
     }
 

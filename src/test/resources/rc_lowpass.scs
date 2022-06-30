@@ -13,3 +13,4 @@ dc1 dc
 dc2 dc param=vi start=0 stop=10
 ac ac start=1 stop=1G
 tran tran stop=5n
+pz (O 0) pz iprobe=V0
