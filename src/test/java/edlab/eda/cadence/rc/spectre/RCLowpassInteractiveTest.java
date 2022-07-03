@@ -123,7 +123,7 @@ public class RCLowpassInteractiveTest {
 
     plots = session.simulate(blacklistAnalysis);
 
-    if (plots.size() != RCLowpassBatchTest.RC_LOWPASS_ANALYSES - 1) {
+    if (plots.size() != (RCLowpassBatchTest.RC_LOWPASS_ANALYSES - 1)) {
       Assertions.fail("Simulation failed");
     }
 

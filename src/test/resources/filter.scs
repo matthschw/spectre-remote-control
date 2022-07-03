@@ -1,0 +1,19 @@
+//input.scs
+global 0
+
+parameters c1=11081.92p c2=14444.20p c3=11081.92p l1=6062.87n l2=6062.87n
+
+save I O A B
+V0 (I 0) vsource type=dc mag=1 dc=1
+C1 (I 0) capacitor c=c1
+R1 (I 0) resistor r=50
+C2 (A 0) capacitor c=c2
+R2 (A 0) resistor r=50
+C3 (O 0) capacitor c=c2
+R3 (B 0) resistor r=50
+L1 (A B) inductor l=l1
+L2 (B O) inductor l=l2
+RL (O 0) resistor r=50
+RX (I O) resistor r=50
+
+pz (O 0) pz iprobe=V0

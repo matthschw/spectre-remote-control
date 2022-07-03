@@ -1,6 +1,6 @@
 package edlab.eda.cadence.rc.spectre;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
 
@@ -13,9 +13,9 @@ class SpectrecdsRootTest {
   @Test
   void test() {
 
-    File path = new File(SkillSession.cdsRoot("spectre"));
+    final File path = new File(SkillSession.cdsRoot("spectre"));
 
-    if (path instanceof File && path.exists()) {
+    if ((path instanceof File) && path.exists()) {
 
     } else {
       fail("Cannot find spectre cds_root");
