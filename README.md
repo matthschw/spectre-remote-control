@@ -15,7 +15,7 @@ and accessed at  `./target/apidocs/index.html`.
 
 Please install the following dependencies manually:
 
-- [nutmeg-reader](https://github.com/matthschw/nutmeg-reader) 
+- [nutmeg-reader](https://github.com/electronics-and-drives/nutmeg-reader) 
 - [cadence-remote-control](https://github.com/matthschw/cadence-remote-control) 
 
 Clone the corresponding repositories, enter the directory and execute
